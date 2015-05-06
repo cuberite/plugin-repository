@@ -1,0 +1,404 @@
+body
+{
+	font-family: Segoe UI Light, Trebuchet MS;
+	background-image: url('images/background.png');
+}
+select, input:not([type=text])
+{
+	font-size: 13px;
+	height: 27px;
+}
+input[type=text] { height: 21px; }
+input[type=submit], input[type=button]
+{
+	border: none;
+	font-family: Segoe UI Light, Trebuchet MS;
+	font-weight: bold;
+}
+input[type=button], input[type=submit] { background-color: lightgrey; }
+input[type=button]:hover, input[type=submit]:hover { background-color: grey; }
+input[type=button]:active, input[type=submit]:active
+{
+	background-color: black;
+	color: white;
+}
+
+header
+{
+	display: block;
+	padding: 1px 10px 10px 10px;
+	text-align: center;
+}
+header a, nav a { text-decoration: none; }
+.vr
+{
+	vertical-align: middle;
+	display: inline-block;
+	border-left: thin black solid;
+	height: 80px;
+	animation: ColourChange 20s infinite;
+}
+.logo
+{
+	vertical-align: middle;
+	height: 90px;
+	width: auto;
+}
+@keyframes ColourChange
+{
+	0%  { border-color: crimson; }
+	12% { border-color: brown; }
+    25%  { border-color: yellow; }
+	37% { border-color: purple; }
+    50%  { border-color: blue; }
+	62% { border-color: grey; }
+    75%  { border-color: green; }
+	87 % { border-color: red; }
+    100% { border-color: crimson; }
+}
+.search
+{
+	transition: none;
+	margin-top: -33px;
+	float: right;
+	height: 0px; /* Does nothing render-wise but allows horizontal rule to extend all the way */
+}
+.profileheader
+{
+	margin-top: -100px;
+	float: right;
+	padding-bottom: 4px;
+	border-bottom: thin solid black;
+}
+.profileimage
+{
+	border-radius: 5px;
+	height: 50px;
+	width: auto;
+	vertical-align: middle;
+	margin-right: 4px;
+}
+.profileimage.set { margin-top: -38px; }
+.profilename
+{
+	text-align: left;
+	display: inline-block;
+}
+.profilename.set { font-size: 14px;}
+.profilename.set > a { font-size: 12px; }
+
+header > nav
+{
+	margin-top: -45px;
+	margin-left: -30px;
+	float: left;
+}
+nav img
+{
+	padding: 5px;
+	height: 30px;
+	width: auto;
+	transition: 100ms transform;
+}
+nav img.home { background-color: crimson; }
+nav img.addnew { background-color: chartreuse ; }
+nav img.edit { background-color: pink; }
+nav img.download { background-color: green; }
+nav img.review { background-color: skyblue; }
+nav img:hover { outline: grey 2px solid; }
+nav img:active { transform: scale(0.95); }
+
+.boundedbox { background-color: white; }
+.boundedbox.plugin
+{
+	padding: 0px 20px 0px 20px;
+	margin: 0px auto;
+}
+.boundedbox.plugin.show
+{
+	border: black solid thin;
+	border-radius: 3px;
+	width: 68%;
+	margin-bottom: 5px;
+}
+.boundedbox.plugin.show.commentbox { animation: ExpandedEntryDisplay 800ms; }
+.boundedbox.plugin.show.commentbox p
+{
+	overflow:auto;
+	font-size: 13px;
+}
+.boundedbox.plugin.show.infobox { animation: ExpandedEntryDisplay 500ms; }
+@keyframes ExpandedEntryDisplay
+{
+	from
+	{
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	to
+	{
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+.boundedbox.plugin.showcondensed
+{
+	display: inline-block;
+	width: 35.55%;
+	min-width: 150px;
+	max-width: 250px;
+	height: 60px;
+	padding: 5px;
+	animation: CondensedEntryDisplay 300ms;
+	transition: transform 100ms;
+}
+@keyframes CondensedEntryDisplay
+{
+    from
+	{
+		opacity: 0;
+        transform: scale(1.1);
+    }
+    to
+	{
+		opacity: 1;
+        transform: scale(1);
+    }
+}
+.boundedbox.plugin.showcondensed:hover
+{
+	margin: -1px;
+	outline: lightgrey solid 3px;
+	border: white solid thin;
+}
+.boundedbox.plugin.showcondensed:active { transform: scale(0.95); }
+.boundedbox.plugin.showcondensed > a { color: inherit; }
+.boundedbox.condensedicon.show
+{
+	width: 60px;
+	height: 60px;
+	float: left;
+	pointer-events: none; /* Allow the parent division to receive a click event to perform animation */
+}
+.boundedbox.condensedicon.caption
+{
+	background-color: inherit;
+	color: inherit;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	padding-left: 8px;
+	font-family: Segoe UI Light, Trebuchet MS;
+	text-align: left;
+	pointer-events: none; /* Allow the parent division to receive a click event to perform animation */
+}
+.boundedbox.condensedicon.caption.description
+{
+	font-size: 14px;
+	padding-left: 0;
+}
+.boundedbox.expandedicon.show
+{
+	width: 150px;
+	height: 150px;
+	padding: 20px 5px 0px 0px;
+}
+.boundedbox.expandedicon.caption
+{
+	display: inline-block;
+	vertical-align: top;
+	font-size: 14.5px;
+}
+.boundedbox.plugin.add
+{
+	animation-name: ColourChange, ExpandedEntryDisplay;
+    animation-duration: 40s, 500ms;
+    animation-iteration-count: infinite, initial;
+	border: black solid thin;
+	border-radius: 3px;
+	width: 42%;
+}
+.boundedbox.plugin.add > form > label
+{
+	margin-top: 8px;
+	margin-bottom: 1px;
+	display: block;
+}
+.boundedbox.plugin.add > form > input:not([type=submit]) { width: 100%; }
+.boundedbox.plugin.add > form > input[type=submit] { margin: 15px 0px; }
+.boundedbox.plugin.add > form > input[name*=Delete] { background-color: red; }
+.boundedbox.plugin.add > form > input[name*=Delete]:hover { background-color: firebrick; }
+.boundedbox.plugin.add > form > input[name*=Delete]:active { background-color: darkred; }
+.boundedbox > nav
+{
+	float: right;
+	clear: both;
+	padding-top: 20px;
+	margin-right: 30px;
+	width: 10px;
+}
+.boundedbox.screenshot
+{
+	display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+	border-radius: 5px;
+}
+
+.errormessage.greyout
+{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(80, 80, 80, 0.6);
+	animation: ErrorGreyoutFadein 300ms;
+}
+.errormessage.message
+{
+	position: absolute;
+	top: calc(50% - 370px / 2);
+	height: 370px;
+	left: 0;
+	width: 100%;
+	color: white;
+}
+.errormessage.message.error { background-color: crimson; }
+.errormessage.message.info { background-color: green; }
+.errormessage.message.form { background-color: chocolate; }
+.errormessage h1, .errormessage p, .errormessage form
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+}
+.errormessage > form > img
+{
+	height: auto;
+	margin: 20px 20px 0px 0px;
+	float: left;
+}
+.errormessage > form > label
+{
+	display: block;
+	padding-top: 4px;
+}
+.errormessage > form > input:not([type=submit]):not([type=button])
+{
+	width: 100%;
+	max-width: 370px;
+	font-size: 16px;
+	float: left;
+}
+.errormessage > form > input[type=submit], .errormessage > form > input[type=button]
+{
+	display: inline-block;
+	margin-top: 10px;
+	height: 33px;
+	width: 70px;
+}
+.errormessage > form > input[type=submit] { background-color: royalblue; }
+.errormessage > form > input[type=submit]:hover { background-color: steelblue; }
+.errormessage > form > input[type=submit]:active
+{
+	background-color: rebeccapurple;
+	color: white;
+}
+.spinner
+{
+	width: 20px;
+	height: auto;
+	margin-right: 10px;
+	vertical-align: middle;
+	margin-left: -27px;
+}
+@keyframes ErrorGreyoutFadein
+{
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+.bss-slides
+{
+	position: relative;
+	display: block;
+	background-color: lightgrey;
+	text-align: center;
+	padding-bottom: 10px;
+	max-height: 600px; /** A limit for the automatic adjustment done by the slideshow JavaScript */
+	transition: 300ms all;
+}
+.bss-slides figure img
+{
+	opacity: 0;
+	transition: all 300ms;
+	max-width: 95%;
+	max-height: 600px;
+	height: auto;
+	margin: auto;
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0;
+}
+.bss-slides .bss-show img { opacity: 1; }
+.bss-next,.bss-prev
+{
+	color: #fff;
+	position: absolute;
+	background: rgba(0,0,0,.6);
+	top: 50%;
+	z-index: 1;
+	font-size: 2em;
+	margin-top: -1.2em;
+	opacity: .3;
+	transition: all 300ms;
+}
+.bss-next:hover,.bss-prev:hover
+{
+	cursor: pointer;
+	opacity: 1;
+	transition: all 300ms;
+}
+.bss-next
+{
+	right: -1px;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	padding: 10px 5px 15px 10px;
+}
+.bss-prev
+{
+	left: 0;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	padding: 10px 10px 15px 5px;
+}
+
+@media all and (max-width: 580px)
+{
+	.profileheader { margin-top: -40px; }
+	.profileimage { height: 30px; }
+	.logo { height: 30px; }
+	.vr { height: 20px; }
+	.search
+	{
+		float: none;
+		margin: 0 auto;
+		margin-top: 20px;
+	}
+	header > h1 { font-size: 15px; }
+	header > hr { margin-top: 30px; }
+	nav { margin-top: -40px; }
+	nav img {	padding: 0px; }
+}
+@media all and (max-width: 375px)
+{
+	.profileheader { margin-top: 0px; }
+	nav { margin-top: 0px; }
+	header > hr { margin-top: 30px; }
+	.search { margin-top: 60px; }
+}
+@media all and (max-width: 361px)
+{
+	header > hr { margin-top: 57px; }
+}
