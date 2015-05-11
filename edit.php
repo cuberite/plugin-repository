@@ -50,7 +50,6 @@ if (isset($_POST["Edit$ID"]))
 		$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $ID);
 		$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $SQLLink->insert_id);
 		$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $ID);
-		$IconString = empty($IconString) ? StoreWebFile('http://www.gravatar.com/avatar/' . hash('md5', strtolower(trim($PluginName))) . '?d=retro&s=200', 'default_icon.png', $ID) : $IconString;
 
 		$SQLLink->query(
 			"UPDATE PluginData

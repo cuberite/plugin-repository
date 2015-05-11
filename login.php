@@ -4,6 +4,7 @@ session_start();
 require_once 'functions.php';
 require_once 'helpers/templater.php';
 require_once 'templates/immersiveform.php';
+require_once 'helpers/accountshelper.php';
 
 $Template = new Templater();
 $SQLLink = new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
@@ -72,22 +73,12 @@ else if (isset($_POST['Login']))
 	{
 		if (password_verify($Pass, $SQLLink->query("SELECT Password FROM Accounts WHERE Username = '$User'")->fetch_array()['Password']))
 		{
-			$Hashername = hash('md5', strtolower(trim($User)));
 			$_SESSION['Username'] = $User;
-
-			$Profile = unserialize(@file_get_contents('https://gravatar.com/' . $Hashername . '.php'));
-			if (is_array($Profile) && isset($Profile['entry']))
-			{
-				$_SESSION['ProfileImageURL'] = $Profile['entry'][0]['thumbnailUrl'];
-				$_SESSION['FullName'] = $Profile['entry'][0]['name']['formatted'];
-				$_SESSION['DisplayName'] = $Profile['entry'][0]['displayName'];
-			}
-			else
-			{
-				$_SESSION['ProfileImageURL'] = 'http://www.gravatar.com/avatar/' . $Hashername . '?d=retro';
-				$_SESSION['FullName'] = $User;
-				$_SESSION['DisplayName'] = $User;
-			}
+			list($ProfileImageURL, $FullName, $DisplayName) = AccountsHelper::GetDetailsFromUsername($User);
+			
+			$_SESSION['ProfileImageURL'] = $ProfileImageURL;
+			$_SESSION['FullName'] = $FullName;
+			$_SESSION['DisplayName'] = $DisplayName;
 		}
 		else
 		{

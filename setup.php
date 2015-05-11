@@ -165,8 +165,9 @@ class Configurator
 		// Creates the comments table
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS Comments (
 			UniqueID INT AUTO_INCREMENT,
-			LinkedPluginUniqueID INT,
-			Comment TEXT,
+			LinkedPluginUniqueID INT NOT NULL,
+			Comment TEXT NOT NULL,
+			AuthorUsername VARCHAR(255) NOT NULL,
 			PRIMARY KEY(UniqueID)
 			)'
 		);

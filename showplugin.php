@@ -30,7 +30,7 @@ if (!$Query)
 if (isset($_POST['Submit']))
 {
 	if (
-		!AccountsHelper::GetLoggedInDetails($Details) or
+		!AccountsHelper::GetLoggedInUsername($Username) or
 		GetAndVerifyPostData($Comment, 'Comment', $SQLLink)
 		)
 	{
@@ -39,8 +39,8 @@ if (isset($_POST['Submit']))
 	else
 	{
 		$SQLLink->query(
-			"INSERT INTO Comments (LinkedPluginUniqueID, Comment)
-			VALUES ('$ID', '$Comment')"
+			"INSERT INTO Comments (LinkedPluginUniqueID, Comment, AuthorUsername)
+			VALUES ('$ID', '$Comment', '$Username')"
 		);
 
 		ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'Your comment was successfully added', $Template);
@@ -51,19 +51,18 @@ if (isset($_POST['Submit']))
 
 PluginItemTemplate::AddExpandedPluginItem($Query, $Template);
 
-if (AccountsHelper::GetLoggedInDetails($Details))
+CommentBoxTemplate::BeginCommentsBox($Template);
+if (AccountsHelper::GetLoggedInUsername())
 {
-	$Query = $SQLLink->query("SELECT * FROM Comments WHERE LinkedPluginUniqueID = '$ID'");
-	CommentBoxTemplate::BeginCommentsBox($Template);
 	CommentBoxTemplate::AddCommentsPostingForm($Template, $ID, $Query);	
-	
-	for ($Value = $Query->fetch_array(); $Value !== null; $Value = $Query->fetch_array())
-	{
-		CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], $Template, $Details);
-	}
-	
-	CommentBoxTemplate::EndCommentsBox($Template);
 }
+
+$Query = $SQLLink->query("SELECT * FROM Comments WHERE LinkedPluginUniqueID = '$ID'");
+for ($Value = $Query->fetch_array(); $Value !== null; $Value = $Query->fetch_array())
+{
+	CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], AccountsHelper::GetDetailsFromUsername($Value['AuthorUsername']), $Template);
+}
+CommentBoxTemplate::EndCommentsBox($Template);
 
 $Template->BeginTag('script', array('type' => 'application/javascript', 'src' => 'slideshow.js'));
 $Template->EndLastTag();
