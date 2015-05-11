@@ -11,7 +11,7 @@ $SQLLink = new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENA
 
 if (!AccountsHelper::GetLoggedInUsername($Author, $DisplayName))
 {
-	$Template->SetRedirect('login.php?login=1', 0);
+	$Template->SetRedirect('login.php?login=1');
 	return;
 }
 
@@ -23,8 +23,8 @@ if (isset($_POST['Submit']))
 		GetAndVerifyPostData($PluginVersion, 'PluginVersion', $SQLLink)
 		)
 	{
-		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The input was invalid or malformed.', $Templater);
-		$Template->SetRedirect();
+		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The input was invalid or malformed.', $Template);
+		$Template->SetRefresh();
 	}
 	else
 	{
@@ -36,6 +36,7 @@ if (isset($_POST['Submit']))
 		$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $SQLLink->insert_id);
 		$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $SQLLink->insert_id);
 		$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $SQLLink->insert_id);
+		$IconString = empty($IconString) ? StoreWebFile('http://www.gravatar.com/avatar/' . hash('md5', strtolower(trim($PluginName))) . '?d=retro&s=200', 'default_icon.png', $SQLLink->insert_id) : $IconString;
 
 		$SQLLink->query(
 			"UPDATE PluginData
@@ -44,7 +45,7 @@ if (isset($_POST['Submit']))
 		);
 
 		ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully added', $Template);
-		$Template->SetRedirect();
+		$Template->SetRefresh();
 	}
 	return;
 }

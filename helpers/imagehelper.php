@@ -49,9 +49,9 @@ class ImageHelper
 		$ImageHeight = imagesy($Image);
 		$RGBCounter = array();
 
-		for ($X = 0; $X < $ImageWidth; $X += $ImageWidth / 1)
+		for ($X = 0; $X < $ImageWidth; $X += $ImageWidth)
 		{
-			for ($Y = 0; $Y < $ImageHeight; $Y += $ImageHeight / 1)
+			for ($Y = 0; $Y < $ImageHeight; $Y += $ImageHeight)
 			{
 				$Color = ImageColorAt($Image, $X, $Y);
 				if (isset($RGBCounter[$Color]))
@@ -67,7 +67,13 @@ class ImageHelper
 
 		$DominantRGB = '#' . dechex(array_search(max($RGBCounter), $RGBCounter));
 		$DominantRGB = str_pad($DominantRGB, 7, '0', STR_PAD_RIGHT);
-		if (hexdec(substr($DominantRGB, 0, 2)) + hexdec(substr($DominantRGB, 2, 4)) + hexdec(substr($DominantRGB, 4, 6)) > 100000)
+		if (
+			(
+				pow(hexdec(substr($DominantRGB, 0, 2)) / 255, 2.2) * 0.2126 +
+				pow(hexdec(substr($DominantRGB, 2, 4)) / 255, 2.2)* 0.7152 +
+				pow(hexdec(substr($DominantRGB, 4, 6)) / 255, 2.2) * 0.0722
+			) > 100000
+		)
 		{
 			$TextColour = '#000000';
 		}

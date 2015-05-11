@@ -34,16 +34,16 @@ if (isset($_POST["Register"]))
 		)
 	{
 		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The input was invalid or malformed', $Template);
-		$Template->SetRedirect($_SERVER['PHP_SELF']. '?register=1');
+		$Template->SetRefresh($_SERVER['PHP_SELF']. '?register=1');
 		return;
 	}
 	else
 	{
-		$HashedPassword = hash('sha512', $Pass);
+		$HashedPassword = password_hash($Pass, PASSWORD_DEFAULT, array('cost' => 12));
 		if ($SQLLink->query("SELECT * FROM Accounts WHERE Username = '$User'")->fetch_array() !== null)
 		{
 			ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'This account already exists', $Template);
-			$Template->SetRedirect($_SERVER['PHP_SELF']. '?register=1');
+			$Template->SetRefresh($_SERVER['PHP_SELF']. '?register=1');
 			return;
 		}
 		else
@@ -53,6 +53,7 @@ if (isset($_POST["Register"]))
 				VALUES ('$User', '$HashedPassword')"
 			);
 			ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'You\'ve successfully registered and can now log in', $Template);
+			$Template->SetRefresh($_SERVER['PHP_SELF'] . '?login=1');
 		}
 	}
 }
@@ -64,14 +65,12 @@ else if (isset($_POST['Login']))
 		)
 	{
 		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The input was invalid or malformed', $Template);
-		$Template->SetRedirect($_SERVER['PHP_SELF'] . '?login=1');
+		$Template->SetRefresh($_SERVER['PHP_SELF'] . '?login=1');
 		return;
 	}
 	else
 	{
-		$HashedPassword = hash("sha512", $Pass);
-
-		if ($HashedPassword == $SQLLink->query("SELECT Password FROM Accounts WHERE Username = '$User'")->fetch_array()['Password'])
+		if (password_verify($Pass, $SQLLink->query("SELECT Password FROM Accounts WHERE Username = '$User'")->fetch_array()['Password']))
 		{
 			$Hashername = hash('md5', strtolower(trim($User)));
 			$_SESSION['Username'] = $User;
@@ -85,7 +84,7 @@ else if (isset($_POST['Login']))
 			}
 			else
 			{
-				$_SESSION['ProfileImageURL'] = 'http://www.gravatar.com/avatar/' . $Hashername . '?d=retro&f=y';
+				$_SESSION['ProfileImageURL'] = 'http://www.gravatar.com/avatar/' . $Hashername . '?d=retro';
 				$_SESSION['FullName'] = $User;
 				$_SESSION['DisplayName'] = $User;
 			}
@@ -93,7 +92,7 @@ else if (isset($_POST['Login']))
 		else
 		{
 			ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The username or password was incorrect', $Template);
-			$Template->SetRedirect($_SERVER['PHP_SELF'] . '?login=1');
+			$Template->SetRefresh($_SERVER['PHP_SELF'] . '?login=1');
 			return;
 		}
 	}

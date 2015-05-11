@@ -56,6 +56,13 @@ function StoreFile($TemporaryName, $GivenName, $UniqueID)
 	return '';
 }
 
+function StoreWebFile($URL, $LocalName, $UniqueID)
+{
+	@mkdir('uploads' . DIRECTORY_SEPARATOR . $UniqueID, 0777, true);
+	file_put_contents("uploads/$UniqueID/$LocalName", file_get_contents($URL));
+	return "uploads/$UniqueID/$LocalName";
+}
+
 function SanitiseString($String)
 {
    return trim(preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $String));

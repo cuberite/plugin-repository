@@ -13,8 +13,8 @@ $SQLLink = new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENA
 
 if ($SQLLink->connect_errno || !isset($_GET['id']))
 {
-	ImmersiveFormTemplate::AddImmersiveDialog('No such entry found', IMMERSIVE_ERROR, $Template);
-	$Template->SetRedirect();
+	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'No such entry found', $Template);
+	$Template->SetRefresh();
 	return;
 }
 
@@ -22,8 +22,8 @@ $ID = $_GET['id'];
 $Query = $SQLLink->query("SELECT * FROM PluginData WHERE UniqueID = '$ID'")->fetch_array();
 if (!$Query)
 {
-	ImmersiveFormTemplate::AddImmersiveDialog('No such entry found', IMMERSIVE_ERROR, $Template);
-	$Template->SetRedirect();
+	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'No such entry found', $Template);
+	$Template->SetRefresh();
 	return;
 }
 
@@ -44,7 +44,7 @@ if (isset($_POST['Submit']))
 		);
 
 		ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'Your comment was successfully added', $Template);
-		$Template->SetRedirect($_SERVER['PHP_SELF'] . '?id=' . $Query['UniqueID']);
+		$Template->append('<script>window.setTimeout(function() { window.location = "' . $_SERVER['PHP_SELF'] . '?id=' . $Query['UniqueID'] . '" }, 1000);</script>');
 	}
 	return;
 }
@@ -55,14 +55,11 @@ if (AccountsHelper::GetLoggedInDetails($Details))
 {
 	$Query = $SQLLink->query("SELECT * FROM Comments WHERE LinkedPluginUniqueID = '$ID'");
 	CommentBoxTemplate::BeginCommentsBox($Template);
-	CommentBoxTemplate::AddCommentsPostingForm($Template, $ID, $Query);
+	CommentBoxTemplate::AddCommentsPostingForm($Template, $ID, $Query);	
 	
-	if ($Query)
+	for ($Value = $Query->fetch_array(); $Value !== null; $Value = $Query->fetch_array())
 	{
-		for ($Value = $Query->fetch_array(); $Value !== null; $Value = $Query->fetch_array())
-		{
-			CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], $Template, $Details);
-		}
+		CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], $Template, $Details);
 	}
 	
 	CommentBoxTemplate::EndCommentsBox($Template);

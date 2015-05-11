@@ -52,7 +52,12 @@ class Templater
 		$this->Append(array_pop($this->ClosingTags));
 	}
 
-	function SetRedirect($RedirectAddress = '/', $Timeout = 1)
+	function SetRedirect($RedirectAddress = '/')
+	{
+		header("Location: $RedirectAddress");
+	}
+	
+	function SetRefresh($RedirectAddress = '/', $Timeout = 1)
 	{
 		header("Refresh: $Timeout; URL=$RedirectAddress");
 	}
