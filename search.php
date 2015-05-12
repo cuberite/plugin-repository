@@ -19,8 +19,7 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 	}
 	else
 	{
-		$Response = $SQLLink->query("SELECT * FROM PluginData WHERE '$Method' LIKE '%$Query%'");
-		echo "SELECT * FROM PluginData WHERE '$Method' LIKE '%$Query%'";
+		$Response = $SQLLink->query("SELECT * FROM PluginData WHERE $Method LIKE '%$Query%'");
 		if ($SQLLink->connect_errno || ($Response->num_rows == 0))
 		{
 			$Template->BeginTag('h1', array('style' => 'text-align: center;'));
