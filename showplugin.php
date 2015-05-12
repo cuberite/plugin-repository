@@ -51,18 +51,22 @@ if (isset($_POST['Submit']))
 
 PluginItemTemplate::AddExpandedPluginItem($Query, $Template);
 
-CommentBoxTemplate::BeginCommentsBox($Template);
-if (AccountsHelper::GetLoggedInUsername())
-{
-	CommentBoxTemplate::AddCommentsPostingForm($Template, $ID, $Query);	
-}
-
+$IsLoggedIn = AccountsHelper::GetLoggedInUsername();
 $Query = $SQLLink->query("SELECT * FROM Comments WHERE LinkedPluginUniqueID = '$ID'");
-for ($Value = $Query->fetch_array(); $Value !== null; $Value = $Query->fetch_array())
+if (($Query && $Query->num_rows !== 0) || $IsLoggedIn)
 {
-	CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], AccountsHelper::GetDetailsFromUsername($Value['AuthorUsername']), $Template);
+	CommentBoxTemplate::BeginCommentsBox($Template);
+	if ($IsLoggedIn)
+	{
+		CommentBoxTemplate::AddCommentsPostingForm($Template, $ID, $Query);	
+	}
+	
+	for ($Value = $Query->fetch_array(); $Value !== null; $Value = $Query->fetch_array())
+	{
+		CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], AccountsHelper::GetDetailsFromUsername($Value['AuthorUsername']), $Template);
+	}
+	CommentBoxTemplate::EndCommentsBox($Template);	
 }
-CommentBoxTemplate::EndCommentsBox($Template);
 
 $Template->BeginTag('script', array('type' => 'application/javascript', 'src' => 'slideshow.js'));
 $Template->EndLastTag();

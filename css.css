@@ -127,6 +127,7 @@ nav img:active { transform: scale(0.95); }
 	overflow:auto;
 	font-size: 13px;
 }
+.boundedbox.plugin.show.commentbox :first-child > hr { display: none; }
 .boundedbox.plugin.show.infobox { animation: ExpandedEntryDisplay 500ms; }
 @keyframes ExpandedEntryDisplay
 {
