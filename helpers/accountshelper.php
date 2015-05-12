@@ -34,7 +34,9 @@ class AccountsHelper
 		
 		if (is_array($Profile) && isset($Profile['entry']))
 		{
-			$Details = array($Profile['entry'][0]['thumbnailUrl'], $Profile['entry'][0]['name']['formatted'], $Profile['entry'][0]['displayName']);
+			$DisplayName = empty($Profile['entry'][0]['displayName']) ? $Username : $Profile['entry'][0]['displayName'];
+			$FullName = empty($Profile['entry'][0]['name']['formatted']) ? $DisplayName : $Profile['entry'][0]['name']['formatted'];
+			$Details = array($Profile['entry'][0]['thumbnailUrl'], $FullName, $DisplayName);
 		}
 		else
 		{
