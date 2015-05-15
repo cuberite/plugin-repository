@@ -4,6 +4,7 @@ class ImmersiveFormTemplate
 	static private function BeginImmersiveForm($Templater)
 	{
 		$Templater->BeginTag('div', array('class' => 'errormessage greyout'));
+		$Templater->BeginTag('div', array('class' => 'errormessage messagestrip'));
 		$Templater->BeginTag('div', array('class' => 'errormessage message form'));
 	}
 	
@@ -17,16 +18,18 @@ class ImmersiveFormTemplate
 		}
 
 		$Templater->BeginTag('div', array('class' => 'errormessage greyout'));
-			$Templater->BeginTag('div', array('class' => 'errormessage message ' . $Subclass));
-				$Templater->BeginTag('h1');
-					$Templater->Append($Message);
-				$Templater->EndLastTag();
-				$Templater->BeginTag('p');
-					$Templater->Append($Explanation);
-				$Templater->EndLastTag();
-				$Templater->BeginTag('p');
-					$Templater->BeginTag('img', array('class' => 'spinner', 'src' => 'images/spinner.gif'), true);
-					$Templater->Append('Please wait whilst you are redirected');
+			$Templater->BeginTag('div', array('class' => 'errormessage messagestrip'));
+				$Templater->BeginTag('div', array('class' => 'errormessage message ' . $Subclass));
+					$Templater->BeginTag('h1');
+						$Templater->Append($Message);
+					$Templater->EndLastTag();
+					$Templater->BeginTag('p');
+						$Templater->Append($Explanation);
+					$Templater->EndLastTag();
+					$Templater->BeginTag('p');
+						$Templater->BeginTag('img', array('class' => 'spinner', 'src' => 'images/spinner.gif'), true);
+						$Templater->Append('Please wait whilst you are redirected');
+					$Templater->EndLastTag();
 				$Templater->EndLastTag();
 			$Templater->EndLastTag();
 		$Templater->EndLastTag();
@@ -111,6 +114,7 @@ class ImmersiveFormTemplate
 
 	static private function EndImmersiveForm($Templater)
 	{
+		$Templater->EndLastTag(); // </div>
 		$Templater->EndLastTag(); // </div>
 		$Templater->EndLastTag(); // </div>
 	}

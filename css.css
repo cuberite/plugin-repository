@@ -248,6 +248,7 @@ nav img:active { transform: scale(0.95); }
 
 .errormessage.greyout
 {
+	display: table;
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -256,12 +257,15 @@ nav img:active { transform: scale(0.95); }
 	background-color: rgba(80, 80, 80, 0.6);
 	animation: ErrorGreyoutFadein 300ms;
 }
+.errormessage.messagestrip
+{
+	display: table-cell;
+	vertical-align: middle;
+}
 .errormessage.message
 {
-	position: absolute;
-	top: calc(50% - 370px / 2);
-	height: 370px;
-	left: 0;
+	padding-top: 5px;
+	padding-bottom: 35px;
 	width: 100%;
 	color: white;
 }
