@@ -37,7 +37,7 @@ class ImmersiveFormTemplate
 		$Templater->BeginTag('script', array('type' => 'application/javascript', 'src' => 'md5.js'));
 		$Templater->EndLastTag();
 		$Templater->BeginTag('script', array('type' => 'application/javascript'));
-			$Templater->Append('function UpdateImage(InputBoxElement) {  document.getElementsByClassName("profileimage")[1].src = "http://www.gravatar.com/avatar/" + MD5(InputBoxElement.value) + "?s=140&" + (InputBoxElement.value ? "d=retro" : "d=mm"); }');
+			$Templater->Append('function UpdateImage(InputBoxElement) {  document.getElementById("profileimage").src = "http://www.gravatar.com/avatar/" + MD5(InputBoxElement.value) + "?s=140&" + (InputBoxElement.value ? "d=retro" : "d=mm"); }');
 		$Templater->EndLastTag();		
 	}
 
@@ -56,7 +56,7 @@ class ImmersiveFormTemplate
 			$Templater->EndLastTag();
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST'));
-				$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=140', 'class' => 'profileimage'), true);
+				$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=140', 'class' => 'profileimage', 'id' => 'profileimage'), true);
 				ImmersiveFormTemplate::AddLiveGravatar($Templater);
 				$Templater->BeginTag('label');
 					$Templater->Append('Email:');
@@ -88,7 +88,7 @@ class ImmersiveFormTemplate
 			$Templater->EndLastTag();
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST'));
-				$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=140', 'class' => 'profileimage'), true);
+				$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=140', 'class' => 'profileimage', 'id' => 'profileimage'), true);
 				ImmersiveFormTemplate::AddLiveGravatar($Templater);
 				$Templater->BeginTag('label');
 					$Templater->Append('Email:');

@@ -9,7 +9,7 @@ class ImageHelper
 		if (!empty($ImageArray))
 		{
 			$Templater->BeginTag('div', array('style' => 'text-align: center;'));
-				$Templater->BeginTag('div', array('class' => 'bss-slides num1', 'tabindex' => '1', 'autofocus' => 'autofocus'));
+				$Templater->BeginTag('div', array('class' => 'bss-slides num1', 'tabindex' => '1'));
 					foreach ($ImageArray as $ImageValue)
 					{
 						if (!empty($ImageValue))
