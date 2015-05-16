@@ -27,7 +27,7 @@ class ManageAccountTemplate
 
 		$Templater->BeginTag('article', array('class' => 'boundedbox plugin add'));
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST'));
-				$Templater->BeginTag('input', array('style' => 'height: 50px; margin-left: auto; margin-right: auto; display: block;', 'name' => 'Delete', 'type' => 'Submit', 'value' => 'Close account'));
+				$Templater->BeginTag('input', array('style' => 'height: 50px; margin-left: auto; margin-right: auto; display: block;', 'name' => 'Delete', 'type' => 'Submit', 'value' => 'Delete account'));
 			$Templater->EndLastTag();
 		$Templater->EndLastTag();
 	}

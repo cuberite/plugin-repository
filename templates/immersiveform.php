@@ -35,6 +35,28 @@ class ImmersiveFormTemplate
 		$Templater->EndLastTag();
 	}
 	
+	static function AddImmersiveConfirmationDialog($Message, $Explanation, $RejectRedirectLocation = '/', $Templater)
+	{		
+		ImmersiveFormTemplate::BeginImmersiveForm($Templater);
+			$Templater->BeginTag('h1');
+				$Templater->Append($Message);
+			$Templater->EndLastTag();
+			$Templater->BeginTag('p');
+				$Templater->Append($Explanation);
+			$Templater->EndLastTag();
+
+			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST'));
+				$Templater->BeginTag('br', array(), true);
+				$Templater->BeginTag('br', array(), true);
+				
+				$Templater->BeginTag('div', array('class' => 'submit'));
+					$Templater->BeginTag('input', array('type' => 'Submit', 'name' => 'DeleteConfirmed', 'value' => 'Yes'), true);
+					$Templater->BeginTag('input', array('onclick' => 'window.location.href=\'' . $RejectRedirectLocation . '\'', 'type' => 'Button', 'value' => 'No'), true);
+				$Templater->EndLastTag();
+			$Templater->EndLastTag();
+		ImmersiveFormTemplate::EndImmersiveForm($Templater);
+	}
+	
 	static function AddLiveGravatar($Templater)
 	{
 		$Templater->BeginTag('script', array('type' => 'application/javascript', 'src' => 'md5.js'));
@@ -61,21 +83,25 @@ class ImmersiveFormTemplate
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST'));
 				$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=140', 'class' => 'profileimage', 'id' => 'profileimage'), true);
 				ImmersiveFormTemplate::AddLiveGravatar($Templater);
-				$Templater->BeginTag('label');
-					$Templater->Append('Email:');
+				$Templater->BeginTag('div', array('class' => 'input'));
+					$Templater->BeginTag('label');
+						$Templater->Append('Email:');
+					$Templater->EndLastTag();
+					$Templater->BeginTag('input', array('autofocus' => 'autofocus', 'required' => 'required', 'type' => 'email', 'name' => 'Username', 'oninput' => 'UpdateImage(this);'), true);
+					$Templater->BeginTag('br', array(), true);
+					$Templater->BeginTag('label');
+						$Templater->Append('Password:');
+					$Templater->EndLastTag();
+					$Templater->BeginTag('input', array('required' => 'required', 'type' => 'password', 'name' => 'Password'), true);
 				$Templater->EndLastTag();
-				$Templater->BeginTag('input', array('autofocus' => 'autofocus', 'required' => 'required', 'type' => 'email', 'name' => 'Username', 'oninput' => 'UpdateImage(this);'), true);
-				$Templater->BeginTag('br', array(), true);
-				$Templater->BeginTag('br', array(), true);
-				$Templater->BeginTag('label');
-					$Templater->Append('Password:');
-				$Templater->EndLastTag();
-				$Templater->BeginTag('input', array('required' => 'required', 'type' => 'password', 'name' => 'Password'), true);
 
 				$Templater->BeginTag('br', array(), true);
 				$Templater->BeginTag('br', array(), true);
-				$Templater->BeginTag('input', array('type' => 'Submit', 'name' => 'Login', 'value' => 'Login'), true);
-				$Templater->BeginTag('input', array('onclick' => 'window.location.href=\'/\'', 'type' => 'Button', 'value' => 'Cancel'), true);
+				
+				$Templater->BeginTag('div', array('class' => 'submit'));
+					$Templater->BeginTag('input', array('type' => 'Submit', 'name' => 'Login', 'value' => 'Login'), true);
+					$Templater->BeginTag('input', array('onclick' => 'window.location.href=\'/\'', 'type' => 'Button', 'value' => 'Cancel'), true);
+				$Templater->EndLastTag();
 			$Templater->EndLastTag();
 		ImmersiveFormTemplate::EndImmersiveForm($Templater);
 	}
@@ -93,21 +119,25 @@ class ImmersiveFormTemplate
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST'));
 				$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=140', 'class' => 'profileimage', 'id' => 'profileimage'), true);
 				ImmersiveFormTemplate::AddLiveGravatar($Templater);
-				$Templater->BeginTag('label');
-					$Templater->Append('Email:');
+				$Templater->BeginTag('div', array('class' => 'input'));
+					$Templater->BeginTag('label');
+						$Templater->Append('Email:');
+					$Templater->EndLastTag();
+					$Templater->BeginTag('input', array('autofocus' => 'autofocus', 'required' => 'required', 'type' => 'email', 'name' => 'Username', 'oninput' => 'UpdateImage(this);'), true);
+					$Templater->BeginTag('br', array(), true);
+					$Templater->BeginTag('label');
+						$Templater->Append('Password:');
+					$Templater->EndLastTag();
+					$Templater->BeginTag('input', array('required' => 'required', 'type' => 'password', 'autocomplete' => 'off', 'name' => 'Password'), true);
 				$Templater->EndLastTag();
-				$Templater->BeginTag('input', array('autofocus' => 'autofocus', 'required' => 'required', 'type' => 'email', 'name' => 'Username', 'oninput' => 'UpdateImage(this);'), true);
-				$Templater->BeginTag('br', array(), true);
-				$Templater->BeginTag('br', array(), true);
-				$Templater->BeginTag('label');
-					$Templater->Append('Password:');
-				$Templater->EndLastTag();
-				$Templater->BeginTag('input', array('required' => 'required', 'type' => 'password', 'autocomplete' => 'off', 'name' => 'Password'), true);
 
 				$Templater->BeginTag('br', array(), true);
 				$Templater->BeginTag('br', array(), true);
-				$Templater->BeginTag('input', array('type' => 'Submit', 'name' => 'Register', 'value' => 'Register'), true);
-				$Templater->BeginTag('input', array('onclick' => 'window.location.href=\'/\'', 'type' => 'Button', 'value' => 'Cancel'), true);
+				
+				$Templater->BeginTag('div', array('class' => 'submit'));
+					$Templater->BeginTag('input', array('type' => 'Submit', 'name' => 'Register', 'value' => 'Register'), true);
+					$Templater->BeginTag('input', array('onclick' => 'window.location.href=\'/\'', 'type' => 'Button', 'value' => 'Cancel'), true);
+				$Templater->EndLastTag();
 			$Templater->EndLastTag();
 		ImmersiveFormTemplate::EndImmersiveForm($Templater);
 	}

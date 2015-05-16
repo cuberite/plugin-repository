@@ -97,14 +97,29 @@ nav img
 {
 	padding: 5px;
 	height: 30px;
-	width: auto;
+	width: 30px;
 	transition: 100ms transform;
+}
+@keyframes BackgroundColourChange
+{
+	0%  { background-color: aqua; }
+	12% { background-color: hotpink; }
+    25%  { background-color: chartreuse ; }
+	37% { background-color: slateblue ; }
+    50%  { background-color: teal; }
+	62% { background-color: tomato; }
+    75%  { background-color: yellowgreen; }
+	87 % { background-color: gold; }
+    100% { background-color: aqua; }
 }
 nav img.home { background-color: crimson; }
 nav img.addnew { background-color: chartreuse ; }
 nav img.edit { background-color: pink; }
-nav img.download { background-color: green; }
+nav img.download { animation: BackgroundColourChange 20s infinite; }
 nav img.review { background-color: skyblue; }
+nav img.rate { background-color: yellow; }
+nav img.favourite { background-color: green; }
+nav img.report { background-color: red; }
 nav img:hover { outline: grey 2px solid; }
 nav img:active { transform: scale(0.95); }
 
@@ -233,10 +248,9 @@ nav img:active { transform: scale(0.95); }
 .boundedbox > nav
 {
 	float: right;
-	clear: both;
 	padding-top: 20px;
-	margin-right: 30px;
-	width: 10px;
+	width: 90px;
+	text-align: right;
 }
 .boundedbox.screenshot
 {
@@ -282,34 +296,41 @@ nav img:active { transform: scale(0.95); }
 {
 	height: auto;
 	margin: 20px 20px 0px 0px;
-	float: left;
 }
-.errormessage > form > label
+.errormessage > form > div.input > label
 {
 	display: block;
 	padding-top: 4px;
 }
-.errormessage > form > input:not([type=submit]):not([type=button])
+.errormessage > form > div.input
+{
+	width: 370px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.errormessage > form > div.input > input:not([type=submit]):not([type=button])
 {
 	width: 100%;
-	max-width: 370px;
 	font-size: 16px;
-	float: left;
 }
-.errormessage > form > input[type=submit], .errormessage > form > input[type=button]
+.errormessage > form > div.submit
 {
-	display: inline-block;
-	margin-top: 10px;
+	text-align: right;
+	margin-bottom: -20px;
+}
+.errormessage > form > div.submit > input[type=submit], .errormessage > form > div.submit > input[type=button]
+{
 	height: 33px;
-	width: 70px;
+	width: 80px;
+	margin-left: 10px;
+	border: 2px solid white;
 }
-.errormessage > form > input[type=submit] { background-color: royalblue; }
-.errormessage > form > input[type=submit]:hover { background-color: steelblue; }
-.errormessage > form > input[type=submit]:active
-{
-	background-color: rebeccapurple;
-	color: white;
-}
+.errormessage > form > div.submit > input[type=button] { color: white; background-color: transparent; }
+.errormessage > form > div.submit > input[type=button]:hover { background-color: rgba(80, 80, 80, 0.2); }
+.errormessage > form > div.submit > input[type=button]:active { color: black; background-color: white; }
+.errormessage > form > div.submit > input[type=submit] { color: white; background-color: royalblue; }
+.errormessage > form > div.submit > input[type=submit]:hover { background-color: steelblue; }
+.errormessage > form > div.submit > input[type=submit]:active {	background-color: white; color: black; }
 .spinner
 {
 	width: 20px;
@@ -393,7 +414,7 @@ nav img:active { transform: scale(0.95); }
 	header > h1 { font-size: 15px; }
 	header > hr { margin-top: 30px; }
 	nav { margin-top: -40px; }
-	nav img {	padding: 0px; }
+	nav img { padding: 0px; }
 }
 @media all and (max-width: 375px)
 {

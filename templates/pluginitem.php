@@ -32,14 +32,27 @@ class PluginItemTemplate
 				$Templater->BeginTag('a', array('href' => $SQLEntry['PluginFile']));
 					$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download button', 'title' => 'Download'), true);
 				$Templater->EndLastTag();
-				$Templater->BeginTag('a', array('href' => '#comments'));
-					$Templater->BeginTag('img', array('src' => 'images/review.svg', 'class' => 'review', 'alt' => 'Review button', 'title' => 'Review'), true);
-				$Templater->EndLastTag();
-				if (AccountsHelper::GetLoggedInUsername($Username) && ($Username == $SQLEntry['Author']))
+				if (AccountsHelper::GetLoggedInUsername($Username))
 				{
-					$Templater->BeginTag('a', array('href' => 'edit.php?id=' . $SQLEntry['UniqueID']));
-						$Templater->BeginTag('img', array('src' => 'images/edit.svg', 'class' => 'edit', 'alt' => 'Edit button', 'title' => 'Edit'), true);
+					$Templater->BeginTag('a', array('href' => '#comments'));
+						$Templater->BeginTag('img', array('src' => 'images/review.svg', 'class' => 'review', 'alt' => 'Review button', 'title' => 'Review'), true);
 					$Templater->EndLastTag();
+					$Templater->BeginTag('a', array('href' => '#comments'));
+						$Templater->BeginTag('img', array('src' => 'images/rate.svg', 'class' => 'rate', 'alt' => 'Rate button', 'title' => 'Rate'), true);
+					$Templater->EndLastTag();
+					$Templater->BeginTag('a', array('href' => '#comments'));
+						$Templater->BeginTag('img', array('src' => 'images/favourite.svg', 'class' => 'favourite', 'alt' => 'Favourite button', 'title' => 'Favourite'), true);
+					$Templater->EndLastTag();
+					$Templater->BeginTag('a', array('href' => '#comments'));
+						$Templater->BeginTag('img', array('src' => 'images/report.svg', 'class' => 'report', 'alt' => 'Report button', 'title' => 'Report'), true);
+					$Templater->EndLastTag();
+					
+					if ($Username == $SQLEntry['Author'])
+					{
+						$Templater->BeginTag('a', array('href' => 'edit.php?id=' . $SQLEntry['UniqueID']));
+							$Templater->BeginTag('img', array('src' => 'images/edit.svg', 'class' => 'edit', 'alt' => 'Edit button', 'title' => 'Edit'), true);
+						$Templater->EndLastTag();
+					}
 				}
 			$Templater->EndLastTag();
 
