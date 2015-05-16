@@ -12,7 +12,7 @@ class StandardFormTemplate
 			$Templater->BeginTag('h2');
 				$Templater->Append('Add a new entry');
 			$Templater->EndLastTag();
-			$Templater->BeginTag('hr', array('style' => 'margin-top: -15px'));
+			$Templater->BeginTag('hr', array('style' => 'margin-top: -15px'), true);
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST', 'enctype' => 'multipart/form-data'));
 				$Templater->BeginTag('label');
@@ -43,11 +43,9 @@ class StandardFormTemplate
 				$Templater->BeginTag('label');
 					$Templater->Append('Description:');
 				$Templater->EndLastTag();
-				$Templater->BeginTag('textarea', array('required' => 'required', 'name' => 'PluginDescription', 'class' => 'ckeditor', 'rows' => 10, 'cols' => 67));
+				$Templater->BeginTag('textarea', array('required' => 'required', 'name' => 'PluginDescription', 'id' => 'ckeditor', 'rows' => 10, 'cols' => 67));
 				$Templater->EndLastTag();
-				$Templater->BeginTag('noscript');
-					$Templater->BeginTag('br', array(), true);
-				$Templater->EndLastTag();
+				$Templater->BeginTag('br', array(), true);
 
 				$Templater->BeginTag('input', array('name' => 'Submit', 'type' => 'Submit', 'value' => 'Submit entry'), true);
 			$Templater->EndLastTag();
@@ -60,7 +58,7 @@ class StandardFormTemplate
 			$Templater->BeginTag('h2');
 				$Templater->Append('Edit an existing entry');
 			$Templater->EndLastTag();
-			$Templater->BeginTag('hr', array('style' => 'margin-top: -15px'));
+			$Templater->BeginTag('hr', array('style' => 'margin-top: -15px'), true);
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'] . '?id=' . $SQLEntry['UniqueID'], 'method' => 'POST', 'enctype' => 'multipart/form-data'));
 				$Templater->BeginTag('label');
@@ -91,12 +89,10 @@ class StandardFormTemplate
 				$Templater->BeginTag('label');
 					$Templater->Append('Description:');
 				$Templater->EndLastTag();
-				$Templater->BeginTag('textarea', array('required' => 'required', 'name' => 'PluginDescription', 'class' => 'ckeditor', 'rows' => 10, 'cols' => 67));
-					$Templater->Append($SQLEntry['PluginDescription']);
+				$Templater->BeginTag('textarea', array('required' => 'required', 'name' => 'PluginDescription', 'id' => 'ckeditor', 'rows' => 10, 'cols' => 67));
+					$Templater->Append(str_replace('&lt;', '&amp;lt;', str_replace('&gt;', '&amp;gt;', $SQLEntry['PluginDescription'])));
 				$Templater->EndLastTag();
-				$Templater->BeginTag('noscript');
-					$Templater->BeginTag('br', array(), true);
-				$Templater->EndLastTag();
+				$Templater->BeginTag('br', array(), true);
 
 				$Templater->BeginTag('input', array('name' => 'Edit' . $SQLEntry['UniqueID'], 'type' => 'Submit', 'value' => 'Edit entry'), true);
 				$Templater->BeginTag('input', array('name' => 'Delete' . $SQLEntry['UniqueID'], 'type' => 'Submit', 'value' => 'Delete entry'), true);

@@ -28,20 +28,14 @@ if (isset($_POST['Submit']))
 	}
 	else
 	{
-		$SQLLink->query(
-			"INSERT INTO PluginData (Author, AuthorDisplayName, PluginName, PluginDescription, PluginVersion)
-			VALUES ('$Author', '$DisplayName', '$PluginName', '$PluginDescription', '$PluginVersion')"
-		);
-
 		$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $SQLLink->insert_id);
 		$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $SQLLink->insert_id);
 		$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $SQLLink->insert_id);
 		$IconString = empty($IconString) ? StoreWebFile('http://www.gravatar.com/avatar/' . hash('md5', strtolower(trim($PluginName))) . '?d=retro&s=200', 'default_icon.png', $SQLLink->insert_id) : $IconString;
-
+		
 		$SQLLink->query(
-			"UPDATE PluginData
-				SET Icon = '$IconString', Images = '$ImagesString', PluginFile = '$PluginString'
-			WHERE UniqueID = '$SQLLink->insert_id'"
+			"INSERT INTO PluginData (Author, AuthorDisplayName, PluginName, PluginDescription, PluginVersion, Icon, Images, PluginFile)
+			VALUES ('$Author', '$DisplayName', '$PluginName', '$PluginDescription', '$PluginVersion', '$IconString', Images = '$ImagesString', PluginFile = '$PluginString')"
 		);
 
 		ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully added', $Template);
@@ -50,8 +44,13 @@ if (isset($_POST['Submit']))
 	return;
 }
 
-$Template->BeginTag('script', array('src' => 'ckeditor/ckeditor.js', 'type' => 'application/javascript'));
-$Template->EndLastTag();
 StandardFormTemplate::AddCreatePluginForm($Template);
+
+$Template->BeginTag('script', array('src' => '//cdn.ckeditor.com/4.4.7/standard/ckeditor.js'));
+$Template->EndLastTag();
+$Template->BeginTag('script');
+	$Template->Append("CKEDITOR.plugins.addExternal('iframe', '/ckeditor/iframe/', 'plugin.js');");
+	$Template->Append("CKEDITOR.replace('ckeditor', { skin : 'office2013,/ckeditor/office2013/', extraPlugins : 'iframe' } );");
+$Template->EndLastTag();
 
 ?>

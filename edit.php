@@ -68,8 +68,13 @@ if (isset($_POST["Edit$ID"]))
 	return;
 }
 
-$Template->BeginTag('script', array('src' => 'ckeditor/ckeditor.js', 'type' => 'application/javascript'));
-$Template->EndLastTag();
 StandardFormTemplate::AddEditPluginForm($Query, $Template);
+
+$Template->BeginTag('script', array('src' => '//cdn.ckeditor.com/4.4.7/standard/ckeditor.js'));
+$Template->EndLastTag();
+$Template->BeginTag('script');
+	$Template->Append("CKEDITOR.plugins.addExternal('iframe', '/ckeditor/iframe/', 'plugin.js');");
+	$Template->Append("CKEDITOR.replace('ckeditor', { skin : 'office2013,/ckeditor/office2013/', extraPlugins : 'iframe' } );");
+$Template->EndLastTag();
 
 ?>
