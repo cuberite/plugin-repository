@@ -2,7 +2,7 @@
 
 class Configurator
 {
-	static function EchoHTML($ShouldDeleteDatabase)
+	static function EchoHTML()
 	{
 		?>
 <!DOCTYPE html>
@@ -30,23 +30,7 @@ class Configurator
 		
 		<div id="configurationbox">
 			<h2>Configuration</h2>
-			<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">				
-			<?php
-
-		if ($ShouldDeleteDatabase)
-		{
-			?>
-				<style>		
-					#buttonenclosure { position: absolute; text-align: center; height: 90px; width: 350px; bottom: 10px; }
-				</style>
-				<div id="buttonenclosure">
-					<input type="Submit" value="Delete database" name="DeleteDatabase"/>
-				</div>
-			<?php
-		}
-		else
-		{
-			?>
+			<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
 				<style>		
 					#buttonenclosure { text-align: center; margin-top: 10px; }
 				</style>
@@ -65,51 +49,11 @@ class Configurator
 				<div id="buttonenclosure">
 					<input type="Submit" value="Submit" name="Submit"/>
 				</div>
-			<?php
-		}
-		
-		?>
 			</form>
 		</div>
 	</body>
 </html>
 		<?php
-	}
-	
-	private static function DeleteDatabase()
-	{
-		require_once 'functions.php';
-		
-		$SQLLink = new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
-		if ($SQLLink->connect_errno)
-		{
-			echo "Failure connecting to database: " . $SQLLink->error;
-			return false;
-		}
-		
-		if (!($Query = $SQLLink->query("DROP DATABASE " . DB_PLUGINSDATABASENAME)))
-		{
-			echo 'Failure dropping database: ' . $SQLLink->error;
-			return false;
-		}
-		
-		return true;
-	}
-	
-	static function DeleteDatabaseAndConfig()
-	{
-		if (Configurator::DeleteDatabase())
-		{		
-			if (!unlink('configuration.ini'))
-			{
-				echo 'Failure deleting configuration file. Please do so manually.';
-				return false;
-			}
-			
-			return true;
-		}
-		
-		return false;
 	}
 	
 	private static function CreateDatabase()
@@ -145,14 +89,12 @@ class Configurator
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS PluginData (
 			UniqueID INT AUTO_INCREMENT,
 			Author VARCHAR(255) NOT NULL,
-			AuthorDisplayName VARCHAR(255) NOT NULL,
 			PluginName VARCHAR(255) NOT NULL,
 			PluginDescription TEXT,
 			PluginVersion VARCHAR(255) NOT NULL,
 			Icon TEXT,
 			Images TEXT,
 			PluginFile TEXT,
-			Comments TEXT,
 			PRIMARY KEY(UniqueID)
 			)'
 		);
@@ -168,7 +110,8 @@ class Configurator
 			LinkedPluginUniqueID INT NOT NULL,
 			Comment TEXT NOT NULL,
 			AuthorUsername VARCHAR(255) NOT NULL,
-			PRIMARY KEY(UniqueID)
+			PRIMARY KEY(UniqueID),
+			FOREIGN KEY (LinkedPluginUniqueID) REFERENCES PluginData(UniqueID) ON DELETE CASCADE
 			)'
 		);
 		if (!$Query)
@@ -203,15 +146,13 @@ PluginDatabaseName=' . $_POST['DBPluginDatabaseName'];
 	}
 }
 
-if (isset($_POST['DeleteDatabase']))
+if (file_exists('configuration.ini'))
 {
-	if (Configurator::DeleteDatabaseAndConfig())
-	{
-		header('Refresh: 0');
-		return;
-	}
+	header('Location:');
+	return;
 }
-else if (isset($_POST['Submit']))
+
+if (isset($_POST['Submit']))
 {
 	if (Configurator::CreateDatabaseAndConfig())
 	{
@@ -220,6 +161,6 @@ else if (isset($_POST['Submit']))
 	}
 }
 
-Configurator::EchoHTML(file_exists('configuration.ini'));
+Configurator::EchoHTML();
 
 ?>

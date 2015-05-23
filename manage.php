@@ -4,11 +4,14 @@ session_start();
 require_once 'functions.php';
 require_once 'helpers/accountshelper.php';
 require_once 'helpers/templater.php';
+require_once 'helpers/meekrodb.php';
 require_once 'templates/manageaccount.php';
 require_once 'templates/immersiveform.php';
 
 $Template = new Templater();
-$SQLLink = new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
+$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
+$SQLLink->error_handler = false;
+$SQLLink->throw_exception_on_error = true; 
 
 if (!AccountsHelper::GetLoggedInDetails($Details))
 {
@@ -19,18 +22,20 @@ if (!AccountsHelper::GetLoggedInDetails($Details))
 if (isset($_POST['DeleteConfirmed']) && $_POST['DeleteConfirmed'])
 {
 	list($Username) = $Details;
-	$Response = $SQLLink->query("DELETE FROM Accounts WHERE Username = '$Username'");
 	
-	if ($Response)
+	try
 	{
-		session_destroy();
-		$Template->SetRedirect();
+		$Response = $SQLLink->query('DELETE FROM Accounts WHERE Username = %s', $Username);
 	}
-	else
+	catch (MeekroDBException $Exception)
 	{
-		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'MySQL errored: ' . $SQLLink->error, $Template);
+		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'MySQL errored: ' . $Exception->getMessage(), $Template);
 		$Template->SetRefresh();
+		return;
 	}
+	
+	session_destroy();
+	$Template->SetRedirect();
 	return;
 }
 

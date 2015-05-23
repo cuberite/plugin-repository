@@ -26,11 +26,20 @@ class AccountsHelper
 		return true;
 	}
 	
-	static function GetDetailsFromUsername($Username)
+	private $CURLInstance;	
+	function __construct()
+	{
+		$this->CURLInstance = curl_init();
+		curl_setopt($this->CURLInstance, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($this->CURLInstance, CURLOPT_FOLLOWLOCATION, true);
+	}	
+	
+	function GetDetailsFromUsername($Username)
 	{
 		$Details;
 		$Hashername = hash('md5', strtolower(trim($Username)));
-		$Profile = unserialize(@file_get_contents('https://gravatar.com/' . $Hashername . '.php'));
+		curl_setopt($this->CURLInstance, CURLOPT_URL, 'https://gravatar.com/' . $Hashername . '.php');
+		$Profile = unserialize(curl_exec($this->CURLInstance));
 		
 		if (is_array($Profile) && isset($Profile['entry']))
 		{

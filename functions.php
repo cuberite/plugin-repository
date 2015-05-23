@@ -14,19 +14,6 @@ define('DB_PLUGINSDATABASENAME', $INIParseResult['PluginDatabaseName']);
 const IMMERSIVE_INFO = 0;
 const IMMERSIVE_ERROR = 1;
 
-function GetAndVerifyPostData(&$Variable, $TableName, $SQLLink)
-{
-	$EscapedInput = $SQLLink->real_escape_string($_POST[$TableName]);
-	if (empty($EscapedInput))
-	{
-		$Variable = null;
-		return true;
-	}
-
-	$Variable = $EscapedInput;
-	return false;
-}
-
 function StoreAndSerialiseImages($TemporaryName, $GivenName, $UniqueID)
 {
 	if (array_filter($TemporaryName))

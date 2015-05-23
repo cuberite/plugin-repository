@@ -5,7 +5,7 @@ require_once 'helpers/imagehelper.php';
 
 class PluginItemTemplate
 {
-	static function AddCondensedPluginItem($DominantRGB, $TextRGB, $MinimumAnimationDuration, $SQLEntry, $Templater)
+	static function AddCondensedPluginItem($DominantRGB, $TextRGB, $MinimumAnimationDuration, $SQLEntry, $Templater, $AccountsHelper)
 	{
 		$Templater->BeginTag('a', array('style' => 'text-decoration: none', 'href' => 'showplugin.php?id=' . $SQLEntry['UniqueID']));
 			$Templater->BeginTag('div', array('class' => 'boundedbox plugin showcondensed', 'style' => 'background-color:' . $DominantRGB . '; color:' . $TextRGB . '; animation-duration:' . $MinimumAnimationDuration . 'ms;'));
@@ -16,7 +16,8 @@ class PluginItemTemplate
 					$Templater->EndLastTag();
 					$Templater->BeginTag('br', array(), true);
 					$Templater->BeginTag('div', array('class' => 'boundedbox condensedicon caption description'));
-						$Templater->Append('Author: ' . $SQLEntry['AuthorDisplayName']);
+						list(, , $AuthorDisplayName) = $AccountsHelper->GetDetailsFromUsername($SQLEntry['Author']);
+						$Templater->Append('Author: ' . $AuthorDisplayName);
 						$Templater->BeginTag('br', array(), true);
 						$Templater->Append('Version: ' . $SQLEntry['PluginVersion']);
 					$Templater->EndLastTag();
@@ -25,7 +26,7 @@ class PluginItemTemplate
 		$Templater->EndLastTag();
 	}
 
-	static function AddExpandedPluginItem($SQLEntry, $Templater)
+	static function AddExpandedPluginItem($SQLEntry, $Templater, $AccountsHelper)
 	{
 		$Templater->BeginTag('article', array('class' => 'boundedbox plugin show infobox'));
 			$Templater->BeginTag('nav');
@@ -61,7 +62,8 @@ class PluginItemTemplate
 				$Templater->BeginTag('h2');
 					$Templater->Append($SQLEntry['PluginName']);
 				$Templater->EndLastTag();
-				$Templater->Append('Author: ' . $SQLEntry['AuthorDisplayName']);
+				list(, , $AuthorDisplayName) = $AccountsHelper->GetDetailsFromUsername($SQLEntry['Author']);
+				$Templater->Append('Author: ' . $AuthorDisplayName);
 				$Templater->BeginTag('br', array(), true);
 				$Templater->Append('Version: ' . $SQLEntry['PluginVersion']);
 				$Templater->BeginTag('br', array(), true);

@@ -3,11 +3,13 @@ session_start();
 
 require_once 'functions.php';
 require_once 'helpers/templater.php';
+require_once 'helpers/meekrodb.php';
+require_once 'helpers/accountshelper.php';
 require_once 'templates/immersiveform.php';
 require_once 'templates/standardform.php';
 
 $Template = new Templater();
-$SQLLink = new mysqli(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
+$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (!isset($_GET['id']))
 {
@@ -16,55 +18,48 @@ if (!isset($_GET['id']))
 	return;
 }
 
-$ID = $_GET['id'];
-$Query = $SQLLink->query("SELECT * FROM PluginData WHERE UniqueID = '$ID'")->fetch_array();
-if (!$Query)
+$Query = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE UniqueID = %i', $_GET['id']);
+if ($Query === null)
 {
 	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The specified plugin ID does not exist', $Template);
 	$Template->SetRefresh();
 	return;
 }
 
-if (isset($_POST["Delete$ID"]))
+if (!AccountsHelper::GetLoggedInUsername($Username) || ($Username !== $Query['Author']))
 {
-	$SQLLink->query("DELETE FROM PluginData WHERE UniqueID = '$ID'");
-	RecursivelyDeleteDirectory('uploads' . DIRECTORY_SEPARATOR . $ID);
+	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'You can only edit your own plugins', $Template);
+	$Template->SetRefresh('showplugin.php?id=' . $_GET['id']);
+	return;	
+}
+
+if (isset($_POST['Delete' . $_GET['id']]))
+{
+	$SQLLink->query('DELETE FROM PluginData WHERE UniqueID = %i', $_GET['id']);
+	RecursivelyDeleteDirectory('uploads' . DIRECTORY_SEPARATOR . $_GET['id']);
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully deleted', $Template);
 	$Template->SetRefresh();
 	return;
 }
-if (isset($_POST["Edit$ID"]))
+if (isset($_POST['Edit' . $_GET['id']]))
 {
-	if (
-		GetAndVerifyPostData($PluginName, 'PluginName', $SQLLink) or
-		GetAndVerifyPostData($PluginDescription, 'PluginDescription', $SQLLink) or
-		GetAndVerifyPostData($PluginVersion, 'PluginVersion', $SQLLink)
-		)
-	{
-		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred',  IMMERSIVE_ERROR, 'The input was invalid or malformed', $Template);
-		$Template->SetRefresh($_SERVER['PHP_SELF'] . '?id=' . $ID);
-		return;
-	}
-	else
-	{
-		$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $ID);
-		$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $SQLLink->insert_id);
-		$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $ID);
+	$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $_GET['id']);
+	$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $SQLLink->insert_id);
+	$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $_GET['id']);
 
-		$SQLLink->query(
-			"UPDATE PluginData
-				SET
-					PluginName = '$PluginName',
-					PluginDescription = '$PluginDescription',
-					PluginVersion = '$PluginVersion',
-					Icon = IF('$IconString' = '', Icon, '$IconString'),
-					Images = IF('$ImagesString' = '', Images, '$ImagesString'),
-					PluginFile = IF('$PluginString' = '', PluginFile, '$PluginString')
-			WHERE UniqueID = '$ID'"
-		);
-	}
+	$SQLLink->update('PluginData', array(
+			'PluginName' => $_POST['PluginName'],
+			'PluginDescription' => $_POST['PluginDescription'],
+			'PluginVersion' => $_POST['PluginVersion'],
+			'Icon' => $SQLLink->sqleval('IF(%s = \'\', Icon, %s)', $IconString, $IconString),
+			'Images' => $SQLLink->sqleval('IF(%s = \'\', Images, %s)', $ImagesString, $ImagesString),
+			'PluginFile' => $SQLLink->sqleval('IF(%s = \'\', PluginFile, %s)', $PluginString, $PluginString)
+		),
+		'UniqueID = %l', $_GET['id']
+	);
+	
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully updated', $Template);
-	$Template->SetRefresh('showplugin.php?id=' . $ID);
+	$Template->SetRefresh('showplugin.php?id=' . $_GET['id']);
 	return;
 }
 

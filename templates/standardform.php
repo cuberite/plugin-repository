@@ -38,7 +38,7 @@ class StandardFormTemplate
 				$Templater->BeginTag('label');
 					$Templater->Append('The Actual Download&trade;:');
 				$Templater->EndLastTag();
-				$Templater->BeginTag('input', array('name' => 'pluginfile', 'type' => 'file', 'size' => '6'), true);
+				$Templater->BeginTag('input', array('name' => 'pluginfile', 'required' => 'required', 'type' => 'file', 'size' => '6'), true);
 
 				$Templater->BeginTag('label');
 					$Templater->Append('Description:');

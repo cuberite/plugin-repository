@@ -8,7 +8,7 @@ class CommentBoxTemplate
 		$Templater->BeginTag('article', array('class' => 'boundedbox plugin show commentbox'));
 	}
 	
-	static function AddCommentsPostingForm($Templater, $UniqueID, $Query)
+	static function AddCommentsPostingForm($Templater, $UniqueID, $FoundComments)
 	{		
 		$Templater->BeginTag('form', array('style' => 'text-align: center', 'action' => $_SERVER['PHP_SELF'] . '?id=' . $UniqueID, 'method' => 'POST'));
 			$Templater->BeginTag('textarea', array('required' => 'required', 'style' => 'margin-top: 15px;', 'rows' => '10', 'cols' => '35', 'placeholder' => 'Comment on this plugin...', 'name' => 'Comment'));
@@ -17,7 +17,7 @@ class CommentBoxTemplate
 			$Templater->BeginTag('input', array('name' => 'Submit', 'style' => 'margin: 10px 0px;', 'type' => 'Submit', 'value' => 'Submit comment'), true);
 		$Templater->EndLastTag();
 
-		if (!$Query)
+		if (!$FoundComments)
 		{
 			$Templater->BeginTag('hr', array(), true);
 			$Templater->BeginTag('h3', array('style' => 'text-align: center;'));
