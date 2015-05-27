@@ -32,7 +32,7 @@ class CommentBoxTemplate
 			$Templater->BeginTag('hr', array(), true);
 			$Templater->BeginTag('p');
 				list($ProfileImageURL, $DisplayName, $FullName) = $AuthorDetails;
-				$Templater->BeginTag('img', array('class' => 'profileimage', 'style' => 'float: left;', 'margin-top' => '8px', 'src' => $ProfileImageURL, 'alt' => 'Avatar of ' . $FullName, 'title' => 'Author of comment: ' . $FullName));
+				$Templater->BeginTag('img', array('class' => 'profileimage', 'style' => 'float: left; margin-right: 5px;', 'margin-top' => '8px', 'src' => $ProfileImageURL, 'alt' => 'Avatar of ' . $FullName, 'title' => 'Author of comment: ' . $FullName));
 					$Templater->Append($Value);
 				$Templater->EndLastTag();
 			$Templater->EndLastTag();

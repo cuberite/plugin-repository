@@ -29,27 +29,22 @@ class HeaderTemplate
 				{
 					list($Username, $ProfileImageURL, $FullName) = $Details;
 					$Templater->BeginTag('img', array('src' => $ProfileImageURL, 'class' => 'profileimage set', 'alt' => 'User Gravatar'), true);
-					$Templater->BeginTag('div', array('class' => 'profilename set'));
-						$Templater->BeginTag('b');
-							$Templater->Append($FullName);
-						$Templater->EndLastTag();
-						$Templater->BeginTag('br', array(), true);
-						$Templater->BeginTag('a', array('href' => 'manage.php'));
-							$Templater->Append('Manage account');
-						$Templater->EndLastTag();
-						$Templater->BeginTag('br', array(), true);
-						$Templater->BeginTag('a', array('href' => 'login.php?logout=1'));
-							$Templater->Append('Logout');
-						$Templater->EndLastTag();
+					$Templater->BeginTag('b');
+						$Templater->Append($FullName);
+					$Templater->EndLastTag();
+					$Templater->BeginTag('br', array(), true);
+					$Templater->BeginTag('a', array('href' => 'manage.php'));
+						$Templater->Append('Manage account');
+					$Templater->EndLastTag();
+					$Templater->BeginTag('br', array(), true);
+					$Templater->BeginTag('a', array('href' => 'login.php?logout=1'));
+						$Templater->Append('Logout');
 					$Templater->EndLastTag();
 				}
 				else
 				{
-					$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y', 'class' => 'profileimage'), true);
-					$Templater->BeginTag('div', array('class' => 'profilename'));
-						$Templater->BeginTag('a', array('href' => 'login.php?login=1'));
-							$Templater->Append('Login');
-						$Templater->EndLastTag();
+					$Templater->BeginTag('a', array('href' => 'login.php?login=1'));
+						$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y', 'class' => 'profileimage'), true);
 					$Templater->EndLastTag();
 				}
 			$Templater->EndLastTag();
@@ -72,7 +67,6 @@ class HeaderTemplate
 				$Templater->EndLastTag();
 			$Templater->EndLastTag();
 
-			$Templater->BeginTag('hr', array(), true);
 		$Templater->EndLastTag();
 	}
 }
