@@ -14,11 +14,19 @@ define('DB_PLUGINSDATABASENAME', $INIParseResult['PluginDatabaseName']);
 const IMMERSIVE_INFO = 0;
 const IMMERSIVE_ERROR = 1;
 
-function StoreAndSerialiseImages($TemporaryName, $GivenName, $UniqueID)
+function StoreAndSerialiseImages($TemporaryName, $GivenName, $UniqueID, $PreviousImages = '')
 {
 	if (array_filter($TemporaryName))
 	{
 		@mkdir('uploads' . DIRECTORY_SEPARATOR . $UniqueID, 0777, true);
+		if (!empty($PreviousImages))
+		{
+			foreach (unserialize($PreviousImages) as $PreviousImage)
+			{
+				DeleteFile($PreviousImage);
+			}
+		}
+		
 		$Names = array();
 		foreach ($TemporaryName as $Index => $Value)
 		{
@@ -31,11 +39,16 @@ function StoreAndSerialiseImages($TemporaryName, $GivenName, $UniqueID)
 	return '';
 }
 
-function StoreFile($TemporaryName, $GivenName, $UniqueID)
+function StoreFile($TemporaryName, $GivenName, $UniqueID, $PreviousFileName = '')
 {
 	if (!empty($TemporaryName))
 	{
 		@mkdir('uploads' . DIRECTORY_SEPARATOR . $UniqueID, 0777, true);
+		if (!empty($PreviousFileName))
+		{
+			DeleteFile($PreviousFileName);
+		}
+		
 		$Name = "uploads/$UniqueID/" . SanitiseString(str_replace(" ", "_", $GivenName)); // No usage of DIRECTORY_SEPARATOR because other parts of PHP do not like Windows' backslashes
 		move_uploaded_file($TemporaryName, $Name);
 		return $Name;
@@ -53,6 +66,11 @@ function StoreWebFile($URL, $LocalName, $UniqueID)
 function SanitiseString($String)
 {
    return trim(preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $String));
+}
+
+function DeleteFile($File)
+{
+	unlink($File);
 }
 
 function RecursivelyDeleteDirectory($Directory)

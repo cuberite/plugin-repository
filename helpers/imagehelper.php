@@ -72,7 +72,7 @@ class ImageHelper
 				pow(hexdec(substr($DominantRGB, 0, 2)) / 255, 2.2) * 0.2126 +
 				pow(hexdec(substr($DominantRGB, 2, 4)) / 255, 2.2)* 0.7152 +
 				pow(hexdec(substr($DominantRGB, 4, 6)) / 255, 2.2) * 0.0722
-			) > 100000
+			) > 130000
 		)
 		{
 			$TextColour = '#000000';

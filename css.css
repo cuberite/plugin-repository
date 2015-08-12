@@ -27,8 +27,16 @@ header
 {
 	padding: 1px 10px 8px 10px;
 	text-align: center;
-	margin-bottom: 10px;
-	background-color: gainsboro;
+	margin-bottom: 200px;
+}
+
+body { margin: 0; }
+header
+{
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: lightgrey;
 }
 header a, nav a { text-decoration: none; }
 .vr

@@ -43,9 +43,10 @@ if (isset($_POST['Delete' . $_GET['id']]))
 }
 if (isset($_POST['Edit' . $_GET['id']]))
 {
-	$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $_GET['id']);
-	$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $SQLLink->insert_id);
-	$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $_GET['id']);
+	$IconString = StoreFile($_FILES['icon']['tmp_name'], $_FILES['icon']['name'], $_GET['id'], $Query['Icon']);
+	$PluginString = StoreFile($_FILES['pluginfile']['tmp_name'], $_FILES['pluginfile']['name'], $_GET['id'], $Query['PluginFile']);
+	$ImagesString = StoreAndSerialiseImages($_FILES['images']['tmp_name'], $_FILES['images']['name'], $_GET['id'], $Query['Images']);
+	echo $ImagesString;
 
 	$SQLLink->update('PluginData', array(
 			'PluginName' => $_POST['PluginName'],
