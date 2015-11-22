@@ -17,9 +17,8 @@ class StandardFormTemplate
 			$Templater->BeginTag('hr', array('style' => 'margin-top: -15px'), true);
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST', 'enctype' => 'multipart/form-data'));
-			
-				$Client = GitHubAPI::GetInstance();
-				foreach ($Client->api('me')->repositories() as $Repository)
+				
+				foreach (GitHubAPI::GetAllUserRepositories(GitHubAPI::GetInstance()->api('me')) as $Repository)
 				{
 					$Templater->BeginTag('input', array('required' => 'required', 'type' => 'radio', 'name' => 'RepositoryID', 'value' => $Repository['id']), true);
 					$Templater->BeginTag('label');
