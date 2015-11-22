@@ -30,12 +30,12 @@ class ImageHelper
 	static function GetDominantColorAndTextColour($ImageLocation, &$DominantRGB, &$TextColour)
 	{
 		$Image;
-		switch (strtolower(pathinfo($ImageLocation, PATHINFO_EXTENSION)))
+		switch ((new finfo(FILEINFO_MIME_TYPE))->buffer(file_get_contents($ImageLocation)))
 		{
-			case 'jpeg':
-			case 'jpg': $Image = imagecreatefromjpeg($ImageLocation); break;
-			case 'png': $Image = imagecreatefrompng($ImageLocation); break;
-			case 'gif': $Image = imagecreatefromgif($ImageLocation); break;
+			case 'image/jpeg':
+			case 'image/jpg': $Image = imagecreatefromjpeg($ImageLocation); break;
+			case 'image/png': $Image = imagecreatefrompng($ImageLocation); break;
+			case 'image/gif': $Image = imagecreatefromgif($ImageLocation); break;
 
 			default:
 			{

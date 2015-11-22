@@ -27,13 +27,13 @@ class HeaderTemplate
 			$Templater->BeginTag('div', array('class' => 'profileheader'));
 				if (AccountsHelper::GetLoggedInDetails($Details))
 				{
-					list($Username, $ProfileImageURL, $FullName) = $Details;
+					list(, $Username, $FullName, $ProfileImageURL) = $Details;
 					$Templater->BeginTag('img', array('src' => $ProfileImageURL, 'class' => 'profileimage set', 'alt' => 'User Gravatar'), true);
 					$Templater->BeginTag('b');
 						$Templater->Append($FullName);
 					$Templater->EndLastTag();
 					$Templater->BeginTag('br', array(), true);
-					$Templater->BeginTag('a', array('href' => 'manage.php'));
+					$Templater->BeginTag('a', array('href' => 'https://github.com/settings/profile'));
 						$Templater->Append('Manage account');
 					$Templater->EndLastTag();
 					$Templater->BeginTag('br', array(), true);

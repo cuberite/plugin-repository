@@ -245,13 +245,11 @@ nav img:active { transform: scale(0.95); }
 	border-radius: 3px;
 	width: 42%;
 }
-.boundedbox.plugin.add > form > label
+.boundedbox.plugin.add > form > p
 {
-	margin-top: 8px;
-	margin-bottom: 1px;
-	display: block;
+	margin: 0px;
 }
-.boundedbox.plugin.add > form > input:not([type=submit]) { width: 100%; }
+.boundedbox.plugin.add > form > input[type=radio] { vertical-align: middle; margin-top: -1px; }
 .boundedbox.plugin.add > form > input[type=submit] { margin: 15px 0px; }
 .boundedbox.plugin.add > form > input[name*=Delete] { background-color: red; }
 .boundedbox.plugin.add > form > input[name*=Delete]:hover { background-color: firebrick; }

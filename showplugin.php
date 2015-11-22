@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'functions.php';
 require_once 'helpers/accountshelper.php';
 require_once 'helpers/templater.php';
@@ -19,7 +23,7 @@ if (!isset($_GET['id']))
 	return;
 }
 
-$Query = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE UniqueID = %i', $_GET['id']);
+$Query = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE RepositoryID = %i', $_GET['id']);
 if ($Query === null)
 {
 	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'No such entry found', $Template);
@@ -29,30 +33,30 @@ if ($Query === null)
 
 if (isset($_POST['Submit']))
 {
-	if (!AccountsHelper::GetLoggedInUsername($Username))
+	if (!AccountsHelper::GetLoggedInDetails($Details))
 	{
 		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'You must be logged in to submit a comment', $Template);
 	}
 	else
 	{
+		list($AuthorName) = $Details;
 		$SQLLink->insert('Comments', array(
-			'LinkedPluginUniqueID' => $_GET['id'],
-			'Comment' => $_POST['Comment'],
-			'AuthorUsername' => $Username
+				'LinkedRepositoryID' => $_GET['id'],
+				'Comment' => $_POST['Comment'],
+				'AuthorID' => $AuthorName
 			)
 		);
 
 		ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'Your comment was successfully added', $Template);
-		$Template->SetRefresh($_SERVER['PHP_SELF']);
+		$Template->SetRefresh($_SERVER['PHP_SELF'] . '?id=' . $_GET['id']);
 	}
 	return;
 }
 
-$AccountsHelper = new AccountsHelper;
-PluginItemTemplate::AddExpandedPluginItem($Query, $Template, $AccountsHelper);
+PluginItemTemplate::AddExpandedPluginItem($Query, $Template);
 
-$IsLoggedIn = AccountsHelper::GetLoggedInUsername();
-$Query = $SQLLink->query('SELECT * FROM Comments WHERE LinkedPluginUniqueID = %i', $_GET['id']);
+$IsLoggedIn = AccountsHelper::GetLoggedInDetails();
+$Query = $SQLLink->query('SELECT * FROM Comments WHERE LinkedRepositoryID = %i', $_GET['id']);
 if (($SQLLink->count() !== 0) || $IsLoggedIn)
 {
 	CommentBoxTemplate::BeginCommentsBox($Template);
@@ -63,7 +67,7 @@ if (($SQLLink->count() !== 0) || $IsLoggedIn)
 	
 	foreach ($Query as $Value)
 	{
-		CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], $AccountsHelper->GetDetailsFromUsername($Value['AuthorUsername']), $Template);
+		CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], AccountsHelper::GetDetailsFromID($Value['AuthorID']), $Template);
 	}
 	CommentBoxTemplate::EndCommentsBox($Template);	
 }

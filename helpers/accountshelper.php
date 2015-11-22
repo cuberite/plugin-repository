@@ -1,58 +1,110 @@
 <?php
+require_once 'helpers/githubapihelper.php';
+
 class AccountsHelper
 {
-	static function GetLoggedInUsername(&$Username = NULL, &$DisplayName = NULL)
+	const OAUTH_CLIENT_ID = "69910aa840cf39d66311";
+	const OAUTH_CLIENT_SECRET = "51634cd4c8225dab2b75eb6a6e5659bd4c88da38";
+
+	static function GetLoggedInDetails(&$Details = null)
 	{
-		if (!isset($_SESSION['Username']))
+		if (!isset($_SESSION['OAuthToken']))
 		{
 			return false;
 		}
 		else
 		{
-			$Username = $_SESSION['Username'];
-			$DisplayName = $_SESSION['DisplayName'];
+			$Client = GitHubAPI::GetInstance();
+			$Client->authenticate($_SESSION['OAuthToken'], '', $Client::AUTH_HTTP_TOKEN);
+			
+			try
+			{
+				$Profile = $Client->api('me')->show();
+			}
+			catch (Github\Exception\RuntimeException $AuthenticationError)
+			{
+				session_unset();
+				session_destroy();
+				return false;
+			}
+			
+			$Details = array($Profile['id'], $Profile['login'], $Profile['name'], $Profile['avatar_url']);
 			return true;
 		}
 	}
-
-	static function GetLoggedInDetails(&$Details)
+	
+	static function GetDetailsFromID($ID)
 	{
-		if (!AccountsHelper::GetLoggedInUsername($Username))
-		{
-			return false;
-		}
-
-		$Details = array($Username, $_SESSION['ProfileImageURL'], $_SESSION['FullName'], $_SESSION['DisplayName']);
-		return true;
+		$Profile = GitHubAPI::GetUserData($ID);		
+		return array($Profile['login'], $Profile['name'], $Profile['avatar_url']);
 	}
 	
-	private $CURLInstance;	
-	function __construct()
+	static function AuthoriseViaGitHub($Templater)
 	{
-		$this->CURLInstance = curl_init();
-		curl_setopt($this->CURLInstance, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($this->CURLInstance, CURLOPT_FOLLOWLOCATION, true);
-	}	
+		$_SESSION['OAuthState'] = hash('sha512', session_id());
+		
+		$Templater->SetRedirect(
+			'https://github.com/login/oauth/authorize?' .
+			http_build_query(
+				array(
+					'client_id' => AccountsHelper::OAUTH_CLIENT_ID,
+					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
+					'state' => $_SESSION['OAuthState']
+				)
+			)
+		);
+	}
 	
-	function GetDetailsFromUsername($Username)
+	static function ExchangeGitHubToken($Templater, $AuthorisationCode)
 	{
-		$Details;
-		$Hashername = hash('md5', strtolower(trim($Username)));
-		curl_setopt($this->CURLInstance, CURLOPT_URL, 'https://gravatar.com/' . $Hashername . '.php');
-		$Profile = unserialize(curl_exec($this->CURLInstance));
+		if (
+			!isset($_GET['state']) ||
+			!isset($_SESSION['OAuthState']) ||
+			($_GET['state'] != $_SESSION['OAuthState']))
+		{
+			session_unset();
+			session_destroy();
 		
-		if (is_array($Profile) && isset($Profile['entry']))
-		{
-			$DisplayName = empty($Profile['entry'][0]['displayName']) ? $Username : $Profile['entry'][0]['displayName'];
-			$FullName = empty($Profile['entry'][0]['name']['formatted']) ? $DisplayName : $Profile['entry'][0]['name']['formatted'];
-			$Details = array($Profile['entry'][0]['thumbnailUrl'], $FullName, $DisplayName);
-		}
-		else
-		{
-			$Details = array('http://www.gravatar.com/avatar/' . $Hashername . '?d=retro', $Username, $Username);
+			ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'A potential security breach was detected; your session was reset. We\'ll try again.', $Templater);
+			return false;
 		}
 		
-		return $Details;
+		$CURLInstance = curl_init('https://github.com/login/oauth/access_token');
+		$Headers[] = 'Accept: application/json';
+		$Headers[] = 'User-Agent: Cuberite Plugin Repository';
+		
+		if (isset($_SESSION['OAuthToken']))
+		{
+			$Headers[] = 'Authorization: Bearer ' . $_SESSION['OAuthToken'];
+		}
+		
+		curl_setopt($CURLInstance, CURLOPT_HTTPHEADER, $Headers);
+		curl_setopt($CURLInstance, CURLOPT_CAINFO, getcwd() . '/ca-bundle.crt');
+		curl_setopt($CURLInstance, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($CURLInstance, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt(
+			$CURLInstance,
+			CURLOPT_POSTFIELDS,
+			http_build_query(
+				array(
+					'client_id' => AccountsHelper::OAUTH_CLIENT_ID,
+					'client_secret' => AccountsHelper::OAUTH_CLIENT_SECRET,
+					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
+					'state' => $_SESSION['OAuthState'],
+					'code' => $AuthorisationCode
+				)
+			)
+		);		
+		
+		$Response = json_decode(curl_exec($CURLInstance));
+		if (isset($Response->access_token))
+		{
+			$_SESSION['OAuthToken'] = $Response->access_token;
+			return true;
+		}
+				
+		ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'We couldn\'t verify your code with GitHub, retrying...', $Templater);
+		return false;
 	}
 }
 ?>

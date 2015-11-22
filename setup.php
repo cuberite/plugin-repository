@@ -73,29 +73,11 @@ class Configurator
 			return false;
 		}
 
-		// Create the accounts table
-		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS Accounts (
-			Username VARCHAR(255) NOT NULL,
-			Password VARCHAR(255) NOT NULL
-			)'
-		);
-		if (!$Query)
-		{
-			echo "Failure creating the accounts table: " . $SQLLink->error;
-			return false;
-		}
-
 		// Creates the plug-in data table
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS PluginData (
-			UniqueID INT AUTO_INCREMENT,
-			Author VARCHAR(255) NOT NULL,
-			PluginName VARCHAR(255) NOT NULL,
-			PluginDescription TEXT,
-			PluginVersion VARCHAR(255) NOT NULL,
-			Icon TEXT,
-			Images TEXT,
-			PluginFile TEXT,
-			PRIMARY KEY(UniqueID)
+				RepositoryID INT NOT NULL,
+				AuthorID INT NOT NULL,
+				PRIMARY KEY(RepositoryID)
 			)'
 		);
 		if (!$Query)
@@ -106,12 +88,12 @@ class Configurator
 
 		// Creates the comments table
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS Comments (
-			UniqueID INT AUTO_INCREMENT,
-			LinkedPluginUniqueID INT NOT NULL,
-			Comment TEXT NOT NULL,
-			AuthorUsername VARCHAR(255) NOT NULL,
-			PRIMARY KEY(UniqueID),
-			FOREIGN KEY (LinkedPluginUniqueID) REFERENCES PluginData(UniqueID) ON DELETE CASCADE
+				UniqueID INT AUTO_INCREMENT,
+				LinkedRepositoryID INT NOT NULL,
+				Comment TEXT NOT NULL,
+				AuthorID INT NOT NULL,
+				PRIMARY KEY(UniqueID),
+				FOREIGN KEY (LinkedRepositoryID) REFERENCES PluginData(RepositoryID) ON DELETE CASCADE
 			)'
 		);
 		if (!$Query)

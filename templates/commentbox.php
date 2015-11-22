@@ -31,7 +31,7 @@ class CommentBoxTemplate
 		$Templater->BeginTag('section'); // To provide a container to allow CSS to access the whole comment as a child, and hide its <hr> if it's the first
 			$Templater->BeginTag('hr', array(), true);
 			$Templater->BeginTag('p');
-				list($ProfileImageURL, $DisplayName, $FullName) = $AuthorDetails;
+				list($DisplayName, $FullName, $ProfileImageURL) = $AuthorDetails;
 				$Templater->BeginTag('img', array('class' => 'profileimage', 'style' => 'float: left; margin-right: 5px;', 'margin-top' => '8px', 'src' => $ProfileImageURL, 'alt' => 'Avatar of ' . $FullName, 'title' => 'Author of comment: ' . $FullName));
 					$Templater->Append($Value);
 				$Templater->EndLastTag();
