@@ -1,3 +1,4 @@
+
 body
 {
 	font-family: Segoe UI Light, Trebuchet MS;
@@ -435,4 +436,16 @@ nav img:active { transform: scale(0.95); }
 @media all and (max-width: 361px)
 {
 	header > hr { margin-top: 57px; }
+}
+
+article table
+{
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+article table *
+{
+	border: 1px solid #DDD;
+	padding: 6px 13px;
 }
