@@ -29,7 +29,8 @@ class PluginItemTemplate
 		}
 		catch (Exception $NoVersion)
 		{
-			$IconHyperlink = 'http://identicon.org/?t=' . $Data['name'];
+			$IdenticonGenerator = new Identicon\Identicon();
+			$IconHyperlink = $IdenticonGenerator->getImageDataUri($Data['name'], 60);
 		}
 		
 		$DominantRGB;
@@ -78,7 +79,8 @@ class PluginItemTemplate
 		}
 		catch (Exception $NoVersion)
 		{
-			$IconHyperlink = 'http://identicon.org/?t=' . $Data['name'];
+			$IdenticonGenerator = new Identicon\Identicon();
+			$IconHyperlink = $IdenticonGenerator->getImageDataUri($Data['name'], 150);
 		}
 		
 		$Templater->BeginTag('article', array('class' => 'boundedbox plugin show infobox'));

@@ -29,29 +29,14 @@ class ImageHelper
 	
 	static function GetDominantColorAndTextColour($ImageLocation, &$DominantRGB, &$TextColour)
 	{
-		$Image;
-		switch ((new finfo(FILEINFO_MIME_TYPE))->buffer(file_get_contents($ImageLocation)))
-		{
-			case 'image/jpeg':
-			case 'image/jpg': $Image = imagecreatefromjpeg($ImageLocation); break;
-			case 'image/png': $Image = imagecreatefrompng($ImageLocation); break;
-			case 'image/gif': $Image = imagecreatefromgif($ImageLocation); break;
-
-			default:
-			{
-				$DominantRGB = '#FFFFFF';
-				$TextColour = '#000000';
-				return;
-			}
-		}
-
+		$Image = imagecreatefromstring(base64_decode(substr($ImageLocation, 22)));
 		$ImageWidth = imagesx($Image);
 		$ImageHeight = imagesy($Image);
 		$RGBCounter = array();
 
-		for ($X = 0; $X < $ImageWidth; $X += $ImageWidth)
+		for ($X = 0; $X < $ImageWidth; $X += $ImageWidth / 10)
 		{
-			for ($Y = 0; $Y < $ImageHeight; $Y += $ImageHeight)
+			for ($Y = 0; $Y < $ImageHeight; $Y += $ImageHeight / 10)
 			{
 				$Color = ImageColorAt($Image, $X, $Y);
 				if (isset($RGBCounter[$Color]))
