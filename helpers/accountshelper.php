@@ -3,9 +3,6 @@ require_once 'helpers/githubapihelper.php';
 
 class AccountsHelper
 {
-	const OAUTH_CLIENT_ID = "69910aa840cf39d66311";
-	const OAUTH_CLIENT_SECRET = "51634cd4c8225dab2b75eb6a6e5659bd4c88da38";
-
 	static function GetLoggedInDetails(&$Details = null)
 	{
 		if (!isset($_SESSION['OAuthToken']))
@@ -35,7 +32,7 @@ class AccountsHelper
 	
 	static function GetDetailsFromID($ID)
 	{
-		$Profile = GitHubAPI::GetUserData($ID);		
+		$Profile = GitHubAPI::CustomRequest('user', $ID);		
 		return array($Profile['login'], $Profile['name'], $Profile['avatar_url']);
 	}
 	
@@ -47,7 +44,7 @@ class AccountsHelper
 			'https://github.com/login/oauth/authorize?' .
 			http_build_query(
 				array(
-					'client_id' => AccountsHelper::OAUTH_CLIENT_ID,
+					'client_id' => GitHubAPI::OAUTH_CLIENT_ID,
 					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 					'state' => $_SESSION['OAuthState']
 				)
@@ -87,8 +84,8 @@ class AccountsHelper
 			CURLOPT_POSTFIELDS,
 			http_build_query(
 				array(
-					'client_id' => AccountsHelper::OAUTH_CLIENT_ID,
-					'client_secret' => AccountsHelper::OAUTH_CLIENT_SECRET,
+					'client_id' => GitHubAPI::OAUTH_CLIENT_ID,
+					'client_secret' => GitHubAPI::OAUTH_CLIENT_SECRET,
 					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 					'state' => $_SESSION['OAuthState'],
 					'code' => $AuthorisationCode

@@ -5,6 +5,9 @@ use Github\HttpClient\Message\ResponseMediator;
 
 final class GitHubAPI
 {
+	const OAUTH_CLIENT_ID = "69910aa840cf39d66311";
+	const OAUTH_CLIENT_SECRET = "51634cd4c8225dab2b75eb6a6e5659bd4c88da38";
+	
 	private function __construct()
 	{
 	}
@@ -33,14 +36,17 @@ final class GitHubAPI
 		return $Instance;
 	}
 	
-	public static function GetRepositoryData($ID)
+	public static function CustomRequest($Prefix, $QueryID, $Postfix = '')
 	{
-		return ResponseMediator::getContent(GitHubAPI::GetInstance()->getHttpClient()->get('/repositories/' . $ID));
-	}
-	
-	public static function GetUserData($ID)
-	{
-		return ResponseMediator::getContent(GitHubAPI::GetInstance()->getHttpClient()->get('/user/' . $ID));
+		return ResponseMediator::getContent(
+			GitHubAPI::GetInstance()->getHttpClient()->get(
+				'/' . $Prefix .
+				'/' . $QueryID .
+				(empty($Postfix) ? '' : '/') . $Postfix .
+				'?client_id=' . GitHubAPI::OAUTH_CLIENT_ID .
+				'&client_secret=' . GitHubAPI::OAUTH_CLIENT_SECRET
+			)
+		);		
 	}
 	
 	public static function GetAllUserRepositories($CurrentUser)
@@ -48,9 +54,9 @@ final class GitHubAPI
 		$Client = GitHubAPI::GetInstance();
 		$Repositories = $CurrentUser->repositories();
 		
-		foreach (ResponseMediator::getContent(GitHubAPI::GetInstance()->getHttpClient()->get('/user/' . $CurrentUser->show()['id'] . '/orgs')) as $Organisation)
+		foreach (GitHubAPI::CustomRequest('user', $CurrentUser->show()['id'], 'orgs') as $Organisation)
 		{
-			$Repositories = array_merge($Repositories, ResponseMediator::getContent(GitHubAPI::GetInstance()->getHttpClient()->get('/orgs/' . $Organisation['login'] . '/repos')));
+			$Repositories = array_merge($Repositories, GitHubAPI::CustomRequest('orgs', $Organisation['login'], 'repos'));
 		}
 		
 		return $Repositories;

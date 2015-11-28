@@ -28,7 +28,7 @@ class HeaderTemplate
 				if (AccountsHelper::GetLoggedInDetails($Details))
 				{
 					list(, $Username, $FullName, $ProfileImageURL) = $Details;
-					$Templater->BeginTag('img', array('src' => $ProfileImageURL, 'class' => 'profileimage set', 'alt' => 'User Gravatar'), true);
+					$Templater->BeginTag('img', array('src' => $ProfileImageURL, 'class' => 'profileimage', 'alt' => 'User Gravatar'), true);
 					$Templater->BeginTag('b');
 						$Templater->Append($FullName);
 					$Templater->EndLastTag();
@@ -44,7 +44,7 @@ class HeaderTemplate
 				else
 				{
 					$Templater->BeginTag('a', array('href' => 'login.php?login=1'));
-						$Templater->BeginTag('img', array('src' => 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y', 'class' => 'profileimage'), true);
+						$Templater->BeginTag('img', array('src' => 'https://www.gravatar.com/avatar/?d=mm', 'class' => 'profileimage'), true);
 					$Templater->EndLastTag();
 				}
 			$Templater->EndLastTag();

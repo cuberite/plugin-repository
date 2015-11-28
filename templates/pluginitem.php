@@ -11,13 +11,12 @@ class PluginItemTemplate
 	{
 		$PluginVersion;
 		$IconHyperlink;
-		$Client = GitHubAPI::GetInstance();
-		$Data = GitHubAPI::GetRepositoryData($SQLEntry['RepositoryID']);
+		$Data = GitHubAPI::CustomRequest('repositories', $SQLEntry['RepositoryID']);
 		list($AuthorName, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
 		
 		try
 		{
-			$PluginVersion = $Client->api('repo')->releases()->latest($AuthorName, $Data['name'])['tag_name'];
+			$PluginVersion = GitHubAPI::CustomRequest('repositories', $Data['id'], 'releases/latest')['tag_name'];
 		}
 		catch (Exception $NoVersion)
 		{
@@ -26,7 +25,7 @@ class PluginItemTemplate
 		
 		try
 		{
-			$IconHyperlink = $Client->api('repo')->contents()->show($AuthorName, $Data['name'], 'Plugin Repository/favicon.png')['download_url'];
+			$IconHyperlink = GitHubAPI::CustomRequest('repositories', $Data['id'], 'Plugin Repository/favicon.png')['download_url'];
 		}
 		catch (Exception $NoVersion)
 		{
@@ -61,13 +60,12 @@ class PluginItemTemplate
 	static function AddExpandedPluginItem($SQLEntry, $Templater)
 	{
 		$PluginVersion = false;
-		$Client = GitHubAPI::GetInstance();
-		$Data = GitHubAPI::GetRepositoryData($SQLEntry['RepositoryID']);
+		$Data = GitHubAPI::CustomRequest('repositories', $SQLEntry['RepositoryID']);
 		list($AuthorName, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
 		
 		try
 		{
-			$PluginVersion = $Client->api('repo')->releases()->latest($AuthorName, $Data['name'])['tag_name'];
+			$PluginVersion = GitHubAPI::CustomRequest('repositories', $Data['id'], 'releases/latest')['tag_name'];
 		}
 		catch (Exception $NoVersion)
 		{
@@ -76,7 +74,7 @@ class PluginItemTemplate
 		
 		try
 		{
-			$IconHyperlink = $Client->api('repo')->contents()->show($AuthorName, $Data['name'], 'Plugin Repository/favicon.png')['download_url'];
+			$IconHyperlink = GitHubAPI::CustomRequest('repositories', $Data['id'], 'Plugin Repository/favicon.png')['download_url'];
 		}
 		catch (Exception $NoVersion)
 		{
@@ -118,7 +116,7 @@ class PluginItemTemplate
 					$Templater->Append($Data['name']);
 				$Templater->EndLastTag();
 				
-				$Templater->Append('Author: ' . $AuthorDisplayName);
+				$Templater->Append('Author: ' . $AuthorDisplayName . ' (' . $Data['owner']['login'] . ')');
 				
 				if ($PluginVersion)
 				{
@@ -140,8 +138,25 @@ class PluginItemTemplate
 				$Templater->BeginTag('hr', array(), true);
 			}
 			$Templater->BeginTag('p');
-				$Parser = new Parsedown();
-				$Templater->Append($Parser->text(base64_decode($Client->api('repo')->contents()->readme($AuthorName, $Data['name'])['content'])));
+				try
+				{
+					$Parser = new Parsedown();
+					$Templater->Append(
+						$Parser->text(
+							base64_decode(
+								GitHubAPI::CustomRequest(
+									'repositories',
+									$SQLEntry['RepositoryID'],
+									'readme'
+								)['content']
+							)
+						)
+					);					
+				}
+				catch (Exception $NoReadme)
+				{
+					$Templater->Append('(the plugin author has not provided a README file)');
+				}
 			$Templater->EndLastTag();
 		$Templater->EndLastTag();
 	}
