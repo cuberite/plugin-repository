@@ -3,11 +3,11 @@ require_once 'templates/header.php';
 
 class Templater
 {
-	private $Result = '<!DOCTYPE html>';
 	private $ClosingTags = array();
 
 	function __construct()
 	{
+		$this->BeginTag('!DOCTYPE html', array(), true);
 		$this->BeginTag('html');
 		$this->BeginTag('head');
 			$this->BeginTag('link', array('type' => 'text/css', 'href' => 'css.css', 'rel' => 'stylesheet'), true);
@@ -24,12 +24,11 @@ class Templater
 	{
 		$this->EndLastTag(); // </body>
 		$this->EndLastTag(); // </html>
-		echo $this->Result;
 	}
 
 	function Append($HTMLString)
 	{
-		$this->Result = $this->Result . $HTMLString;
+		echo $HTMLString;
 	}
 
 	function BeginTag($TagName, $TagData = array(), $IsSelfClosing = false)
