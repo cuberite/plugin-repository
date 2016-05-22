@@ -32,8 +32,12 @@ class AccountsHelper
 	
 	static function GetDetailsFromID($ID)
 	{
-		$Profile = GitHubAPI::CustomRequest('user', $ID);		
-		return array($Profile['login'], $Profile['name'], $Profile['avatar_url']);
+		$Profile = GitHubAPI::CustomRequest('user', $ID);
+		return array(
+			$Profile['login'],
+			isset($Profile['name']) ? $Profile['name'] : $Profile['login'],
+			$Profile['avatar_url']
+		);
 	}
 	
 	static function AuthoriseViaGitHub($Templater)

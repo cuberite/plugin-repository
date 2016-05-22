@@ -18,20 +18,27 @@ class StandardFormTemplate
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST', 'enctype' => 'multipart/form-data'));
 				
-				foreach (GitHubAPI::GetAllUserRepositories(GitHubAPI::GetInstance()->api('me')) as $Repository)
+				foreach (GitHubAPI::GetAllUserRepositories(GitHubAPI::GetInstance()->api('me')) as $RepositoryOwner => $Repositories)
 				{
-					$Templater->BeginTag('input', array('required' => 'required', 'type' => 'radio', 'name' => 'RepositoryID', 'value' => $Repository['id']), true);
-					$Templater->BeginTag('label');
-						$Templater->Append($Repository['name']);
+					$Templater->BeginTag('h3');
+						$Templater->Append($RepositoryOwner);
 					$Templater->EndLastTag();
 					
-					$Templater->BeginTag('p');
-						$Templater->BeginTag('i');
-						$Templater->Append($Repository['description']);
+					foreach ($Repositories as $Repository)
+					{
+						$Templater->BeginTag('input', array('required' => 'required', 'type' => 'radio', 'name' => 'RepositoryID', 'value' => $Repository['id']), true);
+						$Templater->BeginTag('label');
+							$Templater->Append($Repository['name']);
 						$Templater->EndLastTag();
-					$Templater->EndLastTag();
-					
-					$Templater->BeginTag('br', array(), true);
+						
+						$Templater->BeginTag('p');
+							$Templater->BeginTag('i');
+							$Templater->Append($Repository['description']);
+							$Templater->EndLastTag();
+						$Templater->EndLastTag();
+						
+						$Templater->BeginTag('br', array(), true);
+					}
 				}
 				
 				$Templater->BeginTag('input', array('name' => 'Submit', 'type' => 'Submit', 'value' => 'Submit entry'), true);

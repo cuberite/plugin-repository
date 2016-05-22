@@ -22,11 +22,20 @@ if (!AccountsHelper::GetLoggedInDetails($AuthorDetails))
 
 if (isset($_POST['Submit']))
 {
-	$SQLLink->insert('PluginData', array(
-			'RepositoryID' => $_POST['RepositoryID'],
-			'AuthorID' => $AuthorDetails[0]
-		)
-	);
+	try 
+	{
+		$SQLLink->insert('PluginData', array(
+				'RepositoryID' => $_POST['RepositoryID'],
+				'AuthorID' => $AuthorDetails[0]
+			)
+		);
+	}
+	catch (MeekroDBException $Exception)
+	{
+		ImmersiveFormTemplate::AddImmersiveDialog('The operation failed', IMMERSIVE_ERROR, $Exception->getMessage(), $Template);
+		$Template->SetRefresh();
+		return;
+	}
 
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully added', $Template);
 	$Template->SetRefresh();

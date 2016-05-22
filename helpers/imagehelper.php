@@ -29,7 +29,7 @@ class ImageHelper
 	
 	static function GetDominantColorAndTextColour($ImageLocation, &$DominantRGB, &$TextColour)
 	{
-		$Image = imagecreatefromstring(base64_decode(substr($ImageLocation, 22)));
+		$Image = imagecreatefromstring($ImageLocation);
 		$ImageWidth = imagesx($Image);
 		$ImageHeight = imagesy($Image);
 		$RGBCounter = array();

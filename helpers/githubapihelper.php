@@ -52,11 +52,11 @@ final class GitHubAPI
 	public static function GetAllUserRepositories($CurrentUser)
 	{
 		$Client = GitHubAPI::GetInstance();
-		$Repositories = $CurrentUser->repositories();
+		$Repositories = array('❣ me :)' => $CurrentUser->repositories());
 		
 		foreach (GitHubAPI::CustomRequest('user', $CurrentUser->show()['id'], 'orgs') as $Organisation)
 		{
-			$Repositories = array_merge($Repositories, GitHubAPI::CustomRequest('orgs', $Organisation['login'], 'repos'));
+			$Repositories['🏢 ' . $Organisation['login']] = GitHubAPI::CustomRequest('orgs', $Organisation['login'], 'repos');
 		}
 		
 		return $Repositories;
