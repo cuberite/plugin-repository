@@ -6,14 +6,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once 'functions.php';
-require_once 'helpers/templater.php';
 require_once 'helpers/imagehelper.php';
 require_once 'helpers/accountshelper.php';
-require_once 'helpers/meekrodb.php';
 require_once 'templates/pluginitem.php';
 
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 $Response = $SQLLink->query('SELECT * FROM PluginData');
 
 if ($SQLLink->count() === 0)

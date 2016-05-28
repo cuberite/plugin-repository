@@ -2,14 +2,9 @@
 session_start();
 
 require_once 'functions.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/meekrodb.php';
 require_once 'helpers/githubapihelper.php';
 require_once 'templates/immersiveform.php';
 require_once 'templates/standardform.php';
-
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (!AccountsHelper::GetLoggedInDetails($AuthorDetails))
 {
@@ -20,8 +15,8 @@ if (!AccountsHelper::GetLoggedInDetails($AuthorDetails))
 if (isset($_POST['Submit']))
 {
 	$HookID = GitHubAPI::CreateRepositoryUpdateHook($_POST['RepositoryID']);
-	
-	try 
+
+	try
 	{
 		$SQLLink->insert(
 			'PluginData',
@@ -39,7 +34,7 @@ if (isset($_POST['Submit']))
 		$Template->SetRefresh();
 		return;
 	}
-	
+
 	GitHubAPI::ProcessRepositoryProperties($_POST['RepositoryID']);
 
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully added', $Template);

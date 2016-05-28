@@ -1,9 +1,6 @@
 <?php
 
 require_once 'functions.php';
-require_once 'helpers/templater.php';
-
-$Template = new Templater();
 
 $Template->BeginTag('h2', array('style' => 'text-align: center;'));
 $Template->Append('Copyright');

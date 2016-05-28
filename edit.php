@@ -2,15 +2,10 @@
 session_start();
 
 require_once 'functions.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/meekrodb.php';
 require_once 'helpers/cachehelper.php';
 require_once 'helpers/accountshelper.php';
 require_once 'templates/immersiveform.php';
 require_once 'templates/standardform.php';
-
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (!isset($_GET['id']))
 {
@@ -31,12 +26,12 @@ if (!AccountsHelper::GetLoggedInDetails($Details) || ($Details[0] != $Query['Aut
 {
 	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'You can only edit your own plugins.', $Template);
 	$Template->SetRefresh('showplugin.php?id=' . $_GET['id']);
-	return;	
+	return;
 }
 
 if (isset($_POST['DeleteConfirmed' . $_GET['id']]))
 {
-	GitHubAPI::DeleteRepositoryUpdateHook($_GET['id'], $Query['UpdateHookID']);	
+	GitHubAPI::DeleteRepositoryUpdateHook($_GET['id'], $Query['UpdateHookID']);
 	$SQLLink->query('DELETE FROM PluginData WHERE RepositoryID = %i', $_GET['id']);
 	RepositoryResourcesCache::DeleteCache(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $_GET['id']);
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully deleted.', $Template);

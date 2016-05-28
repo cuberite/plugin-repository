@@ -6,19 +6,14 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once 'functions.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/meekrodb.php';
 require_once 'templates/immersiveform.php';
 require_once 'helpers/accountshelper.php';
-
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (isset($_GET['logout']) && $_GET['logout'])
 {
 	session_unset();
 	session_destroy();
-	
+
 	$Template->SetRedirect();
 	return;
 }

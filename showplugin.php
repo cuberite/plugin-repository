@@ -7,14 +7,9 @@ error_reporting(E_ALL);
 
 require_once 'functions.php';
 require_once 'helpers/accountshelper.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/meekrodb.php';
 require_once 'templates/pluginitem.php';
 require_once 'templates/commentbox.php';
 require_once 'templates/immersiveform.php';
-
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (!isset($_GET['id']))
 {
@@ -62,14 +57,14 @@ if (($SQLLink->count() !== 0) || $IsLoggedIn)
 	CommentBoxTemplate::BeginCommentsBox($Template);
 	if ($IsLoggedIn)
 	{
-		CommentBoxTemplate::AddCommentsPostingForm($Template, $_GET['id'], $SQLLink->count() !== 0);	
+		CommentBoxTemplate::AddCommentsPostingForm($Template, $_GET['id'], $SQLLink->count() !== 0);
 	}
-	
+
 	foreach ($Query as $Value)
 	{
 		CommentBoxTemplate::AddCommentsDisplay($Value['Comment'], AccountsHelper::GetDetailsFromID($Value['AuthorID']), $Template);
 	}
-	CommentBoxTemplate::EndCommentsBox($Template);	
+	CommentBoxTemplate::EndCommentsBox($Template);
 }
 
 $Template->BeginTag('script', array('type' => 'application/javascript', 'src' => 'slideshow.js'));

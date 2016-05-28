@@ -2,13 +2,8 @@
 session_start();
 
 require_once 'functions.php';
-require_once 'helpers/templater.php';
 require_once 'helpers/imagehelper.php';
-require_once 'helpers/meekrodb.php';
 require_once 'templates/pluginitem.php';
-
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (isset($_POST['Search']) && isset($_POST['Method']))
 {
@@ -19,7 +14,7 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 		case 'AuthorName': break;
 		default: return;
 	}
-	
+
 	$Response = $SQLLink->query('SELECT * FROM PluginData WHERE %l LIKE %s', $_POST['Method'], '%' . $_POST['Query'] . '%'	);
 	if ($SQLLink->count() === 0)
 	{
