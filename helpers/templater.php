@@ -17,11 +17,16 @@ class Templater
 		$this->EndLastTag();
 
 		$this->BeginTag('body');
+		$this->BeginTag('div', array('id' => 'wrapper'));
 		HeaderTemplate::AddHeader($this);
+		$this->BeginTag('div', array('id' => 'content'))
 	}
 
 	function __destruct()
 	{
+		$this->EndLastTag() // </div id="content">
+		FooterTemplate::AddFooter($this);
+		$this->EndLastTag(); // </div id="wrapper">
 		$this->EndLastTag(); // </body>
 		$this->EndLastTag(); // </html>
 	}
