@@ -46,6 +46,12 @@ class Configurator
 				<label>Plugin database name:</label>
 				<input type="text" required name="DBPluginDatabaseName"/><br/>
 				
+				<label>GitHub Application ID:</label>
+				<input type="text" required name="GHClientID"/><br/>
+				
+				<label>GitHub Application Secret:</label>
+				<input type="text" required name="GHClientSecret"/><br/>
+				
 				<div id="buttonenclosure">
 					<input type="Submit" value="Submit" name="Submit"/>
 				</div>
@@ -109,11 +115,16 @@ class Configurator
 	{
 		if (Configurator::CreateDatabase())
 		{		
-			$Configuration = '[SQL]
+			$Configuration =
+'[SQL]
 DatabaseAddress=' . $_POST['DBAddress'] . '
 DatabaseUsername=' . $_POST['DBUsername'] . '
 DatabasePassword=' . $_POST['DBPassword'] . '
-PluginDatabaseName=' . $_POST['DBPluginDatabaseName'];
+PluginDatabaseName=' . $_POST['DBPluginDatabaseName'] . '
+
+[GitHub]
+GitHubClientID=' . $_POST['GHClientID'] . '
+GitHubClientSecret=' . $_POST['GHClientSecret'];
 
 			if (!($Handle = fopen('configuration.ini', 'w')) || !fwrite($Handle, $Configuration))
 			{

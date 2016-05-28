@@ -40,7 +40,7 @@ class AccountsHelper
 			'https://github.com/login/oauth/authorize?' .
 			http_build_query(
 				array(
-					'client_id' => GitHubAPI::OAUTH_CLIENT_ID,
+					'client_id' => GH_OAUTH_CLIENT_ID,
 					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 					'scope' => 'admin:repo_hook',
 					'state' => $_SESSION['OAuthState']
@@ -80,8 +80,8 @@ class AccountsHelper
 			CURLOPT_POSTFIELDS,
 			http_build_query(
 				array(
-					'client_id' => GitHubAPI::OAUTH_CLIENT_ID,
-					'client_secret' => GitHubAPI::OAUTH_CLIENT_SECRET,
+					'client_id' => GH_OAUTH_CLIENT_ID,
+					'client_secret' => GH_OAUTH_CLIENT_SECRET,
 					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 					'state' => $_SESSION['OAuthState'],
 					'code' => $AuthorisationCode

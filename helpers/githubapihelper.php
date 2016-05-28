@@ -4,10 +4,7 @@ require_once 'cachehelper.php';
 require_once 'imagehelper.php';
 
 final class GitHubAPI
-{
-	const OAUTH_CLIENT_ID = '69910aa840cf39d66311';
-	const OAUTH_CLIENT_SECRET = '51634cd4c8225dab2b75eb6a6e5659bd4c88da38';
-	
+{	
 	const METADATA_CACHE_FILE_NAME = 'Metadata';
 	const ICONDATA_CACHE_FILE_NAME = 'IconData';
 	const README_CACHE_FILE_NAME = 'ReadMe';
@@ -40,8 +37,8 @@ final class GitHubAPI
 		{
 			$Instance = new \FlexyProject\GitHub\Client();
 			
-			$Instance->setClientId(GitHubAPI::OAUTH_CLIENT_ID);
-			$Instance->setClientSecret(GitHubAPI::OAUTH_CLIENT_SECRET);
+			$Instance->setClientId(GH_OAUTH_CLIENT_ID);
+			$Instance->setClientSecret(GH_OAUTH_CLIENT_SECRET);
 			
 			if (isset($_SESSION['OAuthToken']))
 			{
