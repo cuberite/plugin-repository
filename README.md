@@ -1,4 +1,5 @@
-# Plugin-Repository
-Repository for MCServer plugins
+# plugin-repository
 
-Demonstration: http://mcsplugins.justae.me.uk/
+A repository for Cuberite plugins.
+
+Demonstration: https://cuberiteplugins.azurewebsites.net/
