@@ -8,7 +8,7 @@ class HeaderTemplate
 		$Templater->BeginTag('header');
 			$Templater->BeginTag('h1');
 				$Templater->BeginTag('a', array('href' => '/'));
-					$Templater->BeginTag('img', array('src' => 'https://raw.githubusercontent.com/mc-server/MCServer/master/src/Resources/icon_256.png', 'alt' => 'MCServer Logo', 'class' => 'logo'), true);
+					$Templater->BeginTag('img', array('src' => 'https://raw.githubusercontent.com/cuberite/cuberite/master/src/Resources/icon_256.png', 'alt' => 'Cuberite Logo', 'class' => 'logo'), true);
 				$Templater->EndLastTag();
 				$Templater->BeginTag('div', array('class' => 'vr'));
 				$Templater->EndLastTag();

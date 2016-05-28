@@ -12,7 +12,7 @@ class Templater
 		$this->BeginTag('head');
 			$this->BeginTag('link', array('type' => 'text/css', 'href' => 'css.css', 'rel' => 'stylesheet'), true);
 			$this->BeginTag('title');
-				$this->Append('MCServer Plugins');
+				$this->Append('Cuberite Plugins');
 			$this->EndLastTag();
 		$this->EndLastTag();
 
@@ -56,7 +56,7 @@ class Templater
 	{
 		header("Location: $RedirectAddress");
 	}
-	
+
 	function SetRefresh($RedirectAddress = '/', $Timeout = 1)
 	{
 		header("Refresh: $Timeout; URL=$RedirectAddress");
