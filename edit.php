@@ -1,13 +1,10 @@
 <?php
 session_start();
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once 'functions.php';
 require_once 'helpers/templater.php';
 require_once 'helpers/meekrodb.php';
+require_once 'helpers/cachehelper.php';
 require_once 'helpers/accountshelper.php';
 require_once 'templates/immersiveform.php';
 require_once 'templates/standardform.php';
@@ -38,8 +35,10 @@ if (!AccountsHelper::GetLoggedInDetails($Details) || ($Details[0] != $Query['Aut
 }
 
 if (isset($_POST['DeleteConfirmed' . $_GET['id']]))
-{	
+{
+	GitHubAPI::DeleteRepositoryUpdateHook($_GET['id'], $Query['UpdateHookID']);	
 	$SQLLink->query('DELETE FROM PluginData WHERE RepositoryID = %i', $_GET['id']);
+	RepositoryResourcesCache::DeleteCache(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $_GET['id']);
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully deleted.', $Template);
 	$Template->SetRefresh();
 	return;

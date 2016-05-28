@@ -18,7 +18,7 @@ class StandardFormTemplate
 
 			$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'], 'method' => 'POST', 'enctype' => 'multipart/form-data'));
 				
-				foreach (GitHubAPI::GetAllUserRepositories(GitHubAPI::GetInstance()->api('me')) as $RepositoryOwner => $Repositories)
+				foreach (GitHubAPI::GetAllCurrentUserRepositories() as $RepositoryOwner => $Repositories)
 				{
 					$Templater->BeginTag('h3');
 						$Templater->Append($RepositoryOwner);

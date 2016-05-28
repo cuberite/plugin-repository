@@ -1,13 +1,10 @@
 <?php
 session_start();
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once 'functions.php';
 require_once 'helpers/templater.php';
 require_once 'helpers/meekrodb.php';
+require_once 'helpers/githubapihelper.php';
 require_once 'templates/immersiveform.php';
 require_once 'templates/standardform.php';
 
@@ -22,20 +19,28 @@ if (!AccountsHelper::GetLoggedInDetails($AuthorDetails))
 
 if (isset($_POST['Submit']))
 {
+	$HookID = GitHubAPI::CreateRepositoryUpdateHook($_POST['RepositoryID']);
+	
 	try 
 	{
-		$SQLLink->insert('PluginData', array(
+		$SQLLink->insert(
+			'PluginData',
+			array(
 				'RepositoryID' => $_POST['RepositoryID'],
-				'AuthorID' => $AuthorDetails[0]
+				'AuthorID' => $AuthorDetails[0],
+				'UpdateHookID' => $HookID
 			)
 		);
 	}
 	catch (MeekroDBException $Exception)
 	{
+		GitHubAPI::DeleteRepositoryUpdateHook($_POST['RepositoryID'], $HookID);
 		ImmersiveFormTemplate::AddImmersiveDialog('The operation failed', IMMERSIVE_ERROR, $Exception->getMessage(), $Template);
 		$Template->SetRefresh();
 		return;
 	}
+	
+	GitHubAPI::ProcessRepositoryProperties($_POST['RepositoryID']);
 
 	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully added', $Template);
 	$Template->SetRefresh();

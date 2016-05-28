@@ -1,4 +1,5 @@
 <?php
+require_once '../composer/vendor/autoload.php';
 require_once 'helpers/githubapihelper.php';
 
 class AccountsHelper
@@ -9,34 +10,25 @@ class AccountsHelper
 		{
 			return false;
 		}
-		else
+		
+		if (!isset($_SESSION['UserID']))
 		{
-			$Client = GitHubAPI::GetInstance();
-			$Client->authenticate($_SESSION['OAuthToken'], '', $Client::AUTH_HTTP_TOKEN);
-			
-			try
-			{
-				$Profile = $Client->api('me')->show();
-			}
-			catch (Github\Exception\RuntimeException $AuthenticationError)
-			{
-				session_unset();
-				session_destroy();
-				return false;
-			}
-			
-			$Details = array($Profile['id'], $Profile['login'], $Profile['name'], $Profile['avatar_url']);
-			return true;
+			session_unset();
+			session_destroy();
+			return false;
 		}
+			
+		$Details = GitHubAPI::GetCachedUserData($_SESSION['UserID']);
+		return true;
 	}
 	
-	static function GetDetailsFromID($ID)
+	static function GetDetailsFromID($UserID)
 	{
-		$Profile = GitHubAPI::CustomRequest('user', $ID);
+		$Profile = GitHubAPI::GetCachedUserData($UserID);
 		return array(
-			$Profile['login'],
-			isset($Profile['name']) ? $Profile['name'] : $Profile['login'],
-			$Profile['avatar_url']
+			$Profile[1],
+			isset($Profile[2]) ? $Profile[2] : $Profile[1],
+			$Profile[3]
 		);
 	}
 	
@@ -50,6 +42,7 @@ class AccountsHelper
 				array(
 					'client_id' => GitHubAPI::OAUTH_CLIENT_ID,
 					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
+					'scope' => 'admin:repo_hook',
 					'state' => $_SESSION['OAuthState']
 				)
 			)
@@ -80,7 +73,6 @@ class AccountsHelper
 		}
 		
 		curl_setopt($CURLInstance, CURLOPT_HTTPHEADER, $Headers);
-		curl_setopt($CURLInstance, CURLOPT_CAINFO, getcwd() . '/ca-bundle.crt');
 		curl_setopt($CURLInstance, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($CURLInstance, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt(
@@ -101,6 +93,8 @@ class AccountsHelper
 		if (isset($Response->access_token))
 		{
 			$_SESSION['OAuthToken'] = $Response->access_token;
+			$_SESSION['UserID']	= GitHubAPI::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser()['id'];
+			GitHubAPI::ProcessUserProperties($_SESSION['UserID']);
 			return true;
 		}
 				
