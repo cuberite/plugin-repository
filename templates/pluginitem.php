@@ -6,17 +6,17 @@ require_once 'helpers/githubapihelper.php';
 require_once '../composer/vendor/autoload.php';
 
 class PluginItemTemplate
-{	
+{
 	static function AddCondensedPluginItem($MinimumAnimationDuration, $SQLEntry, $Templater)
 	{
 		list($RepositoryName, , , $RepositoryVersion) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI::GetCachedRepositoryIconData($SQLEntry['RepositoryID']);
 		list(, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
-	
+
 		$Templater->BeginTag('a', array('style' => 'text-decoration: none', 'href' => 'showplugin.php?id=' . $SQLEntry['RepositoryID']));
 			$Templater->BeginTag('div', array('class' => 'boundedbox plugin showcondensed', 'style' => 'background-color:' . $DominantRGB . '; color:' . $TextRGB . '; animation-duration:' . $MinimumAnimationDuration . 'ms;'));
-				$Templater->BeginTag('img', array('class' => 'boundedbox condensedicon show', 'src' => $IconHyperlink), true);
-				$Templater->BeginTag('figcaption', array('class' => 'boundedbox condensedicon caption'));
+				$Templater->BeginTag('img', array('class' => 'boundedbox condensedicon show', 'src' => $IconHyperlink, 'alt' => $RepositoryData['name']), true);
+				$Templater->BeginTag('div', array('class' => 'boundedbox condensedicon caption'));
 					$Templater->BeginTag('b');
 						$Templater->Append($RepositoryName);
 					$Templater->EndLastTag();
@@ -39,7 +39,7 @@ class PluginItemTemplate
 		list($RepositoryName, $RepositoryFullName, $RepositoryOwnerName, $RepositoryVersion) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI::GetCachedRepositoryIconData($SQLEntry['RepositoryID']);
 		list(, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
-		
+
 		$Templater->BeginTag('article', array('class' => 'boundedbox plugin show infobox'));
 			$Templater->BeginTag('nav');
 				$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));
@@ -59,7 +59,7 @@ class PluginItemTemplate
 					$Templater->BeginTag('a', array('href' => '#comments'));
 						$Templater->BeginTag('img', array('src' => 'images/report.svg', 'class' => 'report', 'alt' => 'Report button', 'title' => 'Report'), true);
 					$Templater->EndLastTag();
-					
+
 					if ($Details[0] == $SQLEntry['AuthorID'])
 					{
 						$Templater->BeginTag('a', array('href' => 'edit.php?id=' . $SQLEntry['RepositoryID']));
@@ -69,16 +69,16 @@ class PluginItemTemplate
 				}
 			$Templater->EndLastTag();
 
-			$Templater->BeginTag('img', array('class' => 'boundedbox expandedicon show', 'src' => $IconHyperlink), true);
-			$Templater->BeginTag('figcaption', array('class' => 'boundedbox expandedicon caption'));
+			$Templater->BeginTag('img', array('class' => 'boundedbox expandedicon show', 'src' => $IconHyperlink, 'alt' => $RepositoryData['name']), true);
+			$Templater->BeginTag('div', array('class' => 'boundedbox expandedicon caption'));
 				$Templater->BeginTag('h2');
 					$Templater->Append($RepositoryName);
 				$Templater->EndLastTag();
-				
+
 				$Templater->Append('Author: ' . $AuthorDisplayName);
 				$Templater->BeginTag('br', array(), true);
 				$Templater->Append('Owned by: ' . $RepositoryOwnerName);
-				
+
 				if ($RepositoryVersion)
 				{
 					$Templater->BeginTag('br', array(), true);
