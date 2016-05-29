@@ -12,11 +12,11 @@ class FooterTemplate
 					$Templater->EndLastTag();
 				$Templater->EndLastTag();
 
-				//$Templater->BeginTag('li');
-				//	$Templater->BeginTag('a', array('href' => '/copyright.php'));
-				//		$Templater->Append('Copyright');
-				//	$Templater->EndLastTag();
-				//$Templater->EndLastTag();
+				$Templater->BeginTag('li');
+					$Templater->BeginTag('a', array('href' => '/copyright.php'));
+						$Templater->Append('Copyright');
+					$Templater->EndLastTag();
+				$Templater->EndLastTag();
 			$Templater->EndLastTag();
 
 		$Templater->EndLastTag();
