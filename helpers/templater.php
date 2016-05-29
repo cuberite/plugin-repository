@@ -19,7 +19,7 @@ class Templater
 		$this->BeginTag('body');
 		$this->BeginTag('div', array('id' => 'wrapper'));
 		HeaderTemplate::AddHeader($this);
-		$this->BeginTag('div', array('id' => 'content'))
+		$this->BeginTag('div', array('id' => 'content'));
 	}
 
 	function __destruct()
