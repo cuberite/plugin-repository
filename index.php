@@ -18,7 +18,7 @@ $Response = $SQLLink->query('SELECT * FROM PluginData');
 
 if ($SQLLink->count() === 0)
 {
-	$Template->BeginTag('h1', array('style' => 'text-align: center;'));
+	$Template->BeginTag('h2', array('style' => 'text-align: center;'));
 		$Template->Append('It\'s lonely in here; did someone remove all of my entries?');
 	$Template->EndLastTag();
 	return;
