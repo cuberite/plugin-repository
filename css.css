@@ -1,9 +1,20 @@
-
-body
+html, body
 {
 	font-family: Segoe UI Light, Trebuchet MS;
 	margin: 0;
+	padding:0;
+	height:100%;
 }
+
+#wrapper {
+	min-height: 100%;
+	position: relative;
+}
+
+#content {
+	padding-bottom: 60px;
+}
+
 select, input:not([type=text])
 {
 	font-size: 13px;
@@ -448,3 +459,35 @@ article table *
 	border: 1px solid #DDD;
 	padding: 6px 13px;
 }
+
+#footer {
+	text-align: center;
+	width: 100%;
+	height: 60px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+#footer ul {
+	display: inline-block;
+	list-style: none;
+	margin-bottom: 8px;
+	margin-top: 8px;
+	padding 0px;
+	width: 100%;
+}
+
+#footer li {
+	display: inline-block;
+}
+
+#footer a {
+	display: inline-block;
+	margin: 0px;
+	padding: 10px;
+	text-decoration: none;
+}
+
+#footer a:link {color:  lightgrey;}
+#footer a:visited {color: lightgrey;}
