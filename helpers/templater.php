@@ -1,5 +1,6 @@
 <?php
 require_once 'templates/header.php';
+require_once 'templates/footer.php';
 
 class Templater
 {
@@ -24,7 +25,7 @@ class Templater
 
 	function __destruct()
 	{
-		$this->EndLastTag() // </div id="content">
+		$this->EndLastTag(); // </div id="content">
 		FooterTemplate::AddFooter($this);
 		$this->EndLastTag(); // </div id="wrapper">
 		$this->EndLastTag(); // </body>
