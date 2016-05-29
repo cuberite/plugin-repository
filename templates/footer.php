@@ -8,7 +8,7 @@ class FooterTemplate
 			$Templater->BeginTag('ul');
 				$Templater->BeginTag('li');
 					$Templater->BeginTag('a', array('href' => 'https://github.com/cuberite/plugin-repository'));
-						$Templater->Append('Cuberite Plugin Repository is on GitHub');
+						$Templater->Append('GitHub');
 					$Templater->EndLastTag();
 				$Templater->EndLastTag();
 
