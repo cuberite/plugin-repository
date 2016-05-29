@@ -15,7 +15,7 @@ class PluginItemTemplate
 
 		$Templater->BeginTag('a', array('style' => 'text-decoration: none', 'href' => 'showplugin.php?id=' . $SQLEntry['RepositoryID']));
 			$Templater->BeginTag('div', array('class' => 'boundedbox plugin showcondensed', 'style' => 'background-color:' . $DominantRGB . '; color:' . $TextRGB . '; animation-duration:' . $MinimumAnimationDuration . 'ms;'));
-				$Templater->BeginTag('img', array('class' => 'boundedbox condensedicon show', 'src' => $IconHyperlink, 'alt' => $RepositoryData['name']), true);
+				$Templater->BeginTag('img', array('class' => 'boundedbox condensedicon show', 'src' => $IconHyperlink, 'alt' => $RepositoryName), true);
 				$Templater->BeginTag('div', array('class' => 'boundedbox condensedicon caption'));
 					$Templater->BeginTag('b');
 						$Templater->Append($RepositoryName);
@@ -69,7 +69,7 @@ class PluginItemTemplate
 				}
 			$Templater->EndLastTag();
 
-			$Templater->BeginTag('img', array('class' => 'boundedbox expandedicon show', 'src' => $IconHyperlink, 'alt' => $RepositoryData['name']), true);
+			$Templater->BeginTag('img', array('class' => 'boundedbox expandedicon show', 'src' => $IconHyperlink, 'alt' => $RepositoryName), true);
 			$Templater->BeginTag('div', array('class' => 'boundedbox expandedicon caption'));
 				$Templater->BeginTag('h2');
 					$Templater->Append($RepositoryName);
