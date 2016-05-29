@@ -486,8 +486,8 @@ article table *
 	display: inline-block;
 	margin: 0px;
 	padding: 10px;
-	text-decoration: none;
+	text-decoration: underline;
 }
 
-#footer a:link {color:  lightgrey;}
-#footer a:visited {color: lightgrey;}
+#footer a:link {color:  black;}
+#footer a:visited {color: black;}
