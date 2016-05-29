@@ -4,7 +4,7 @@ class FooterTemplate
 {
 	static function AddFooter($Templater)
 	{
-		$Templater->BeginTag('footer', array('id' -> 'footer'));
+		$Templater->BeginTag('footer', array('id' => 'footer'));
 			$Templater->BeginTag('ul');
 				$Templater->BeginTag('li');
 					$Templater->BeginTag('a', array('href' => 'https://github.com/cuberite/plugin-repository'));
