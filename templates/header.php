@@ -10,7 +10,7 @@ class HeaderTemplate
 				$Templater->BeginTag('a', array('href' => '/'));
 					$Templater->BeginTag('img', array('src' => 'https://raw.githubusercontent.com/cuberite/cuberite/master/src/Resources/icon_256.png', 'alt' => 'Cuberite Logo', 'class' => 'logo'), true);
 				$Templater->EndLastTag();
-				$Templater->BeginTag('div', array('class' => 'vr'));
+				$Templater->BeginTag('span', array('class' => 'vr'));
 				$Templater->EndLastTag();
 				$Templater->Append('Plugin Repository');
 			$Templater->EndLastTag();
@@ -28,7 +28,7 @@ class HeaderTemplate
 				if (AccountsHelper::GetLoggedInDetails($Details))
 				{
 					list(, $Username, $FullName, $ProfileImageURL) = $Details;
-					$Templater->BeginTag('img', array('src' => $ProfileImageURL, 'class' => 'profileimage', 'alt' => 'User Gravatar'), true);
+					$Templater->BeginTag('img', array('src' => $ProfileImageURL, 'class' => 'profileimage', 'alt' => $FullName), true);
 					$Templater->BeginTag('b');
 						$Templater->Append($FullName);
 					$Templater->EndLastTag();
@@ -44,7 +44,7 @@ class HeaderTemplate
 				else
 				{
 					$Templater->BeginTag('a', array('href' => 'login.php?login=1'));
-						$Templater->BeginTag('img', array('src' => 'https://www.gravatar.com/avatar/?d=mm', 'class' => 'profileimage'), true);
+						$Templater->BeginTag('img', array('src' => 'https://www.gravatar.com/avatar/?d=mm', 'class' => 'profileimage', 'alt' => 'Log In'), true);
 					$Templater->EndLastTag();
 				}
 			$Templater->EndLastTag();
