@@ -5,7 +5,7 @@ class HeaderTemplate
 {
 	static function AddHeader($Templater)
 	{
-		$Templater->BeginTag('header');
+		$Templater->BeginTag('header', array('id' => 'pageheader'));
 			$Templater->BeginTag('h1');
 				$Templater->BeginTag('a', array('href' => '/'));
 					$Templater->BeginTag('img', array('src' => 'https://raw.githubusercontent.com/cuberite/cuberite/master/src/Resources/icon_256.png', 'alt' => 'Cuberite Logo', 'class' => 'logo'), true);
@@ -53,13 +53,13 @@ class HeaderTemplate
 				$Templater->BeginTag('form', array('action' => 'search.php', 'method' => 'POST'));
 					$Templater->BeginTag('input', array('required' => 'required', 'placeholder' => 'Search by ID, title, or author', 'size' => '25', 'type' => 'text', 'name' => 'Query'), true);
 					$Templater->BeginTag('select', array('name' => 'Method'));
-						$Templater->BeginTag('option', array('value' => 'UniqueID'));
+						$Templater->BeginTag('option', array('value' => 'RepositoryID'));
 							$Templater->Append('Unique ID');
 						$Templater->EndLastTag();
 						$Templater->BeginTag('option', array('selected' => 'selected', 'value' => 'PluginName'));
 							$Templater->Append('Title');
 						$Templater->EndLastTag();
-						$Templater->BeginTag('option', array('value' => 'Author'));
+						$Templater->BeginTag('option', array('value' => 'AuthorID'));
 							$Templater->Append('Author');
 						$Templater->EndLastTag();
 					$Templater->EndLastTag();

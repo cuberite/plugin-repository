@@ -11,6 +11,8 @@ class FooterTemplate
 						$Templater->Append('GitHub');
 					$Templater->EndLastTag();
 				$Templater->EndLastTag();
+				
+				$Templater->Append('&middot;');
 
 				$Templater->BeginTag('li');
 					$Templater->BeginTag('a', array('href' => '/copyright.php'));

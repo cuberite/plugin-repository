@@ -24,7 +24,7 @@ if ($SQLLink->count() === 0)
 	return;
 }
 
-$Template->BeginTag('div', array('style' => 'text-align: center'));
+$Template->BeginTag('section', array('class' => 'boundedbox'));
 	$MinimumDuration = 100;
 	foreach ($Response as $Value)
 	{

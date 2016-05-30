@@ -4,8 +4,7 @@ class CommentBoxTemplate
 
 	static function BeginCommentsBox($Templater)
 	{
-		$Templater->BeginTag('a', array('name' => 'comments'));
-		$Templater->BeginTag('article', array('class' => 'boundedbox plugin show commentbox'));
+		$Templater->BeginTag('article', array('class' => 'boundedbox expandedplugin', 'id' => 'comments'));
 	}
 	
 	static function AddCommentsPostingForm($Templater, $UniqueID, $FoundComments)
@@ -41,7 +40,6 @@ class CommentBoxTemplate
 	
 	static function EndCommentsBox($Templater)
 	{
-		$Templater->EndLastTag();
 		$Templater->EndLastTag();
 	}
 }

@@ -6,12 +6,14 @@ html, body
 	height:100%;
 }
 
-#wrapper {
+#wrapper
+{
 	min-height: 100%;
 	position: relative;
 }
 
-#content {
+#content
+{
 	padding-bottom: 60px;
 }
 
@@ -35,20 +37,16 @@ input[type=button]:active, input[type=submit]:active
 	color: white;
 }
 
-header
-{
-	padding: 1px 10px 8px 10px;
-	text-align: center;
-	margin-bottom: 10px;
-}
-
 body { margin: 0; }
-header
+#pageheader
 {
 	top: 0;
 	left: 0;
 	right: 0;
 	background-color: lightgrey;
+	padding: 1px 10px 8px 10px;
+	text-align: center;
+	margin-bottom: 10px;
 }
 header a, nav a { text-decoration: none; }
 .vr
@@ -109,7 +107,7 @@ header a, nav a { text-decoration: none; }
 }
 .profileheader > a { font-size: 12px; }
 
-header > nav
+#pageheader > nav
 {
 	margin-top: -45px;
 	text-align: left;
@@ -145,27 +143,97 @@ nav img.report { background-color: red; }
 nav img:hover { outline: grey 2px solid; }
 nav img:active { transform: scale(0.95); }
 
-.boundedbox { background-color: white; }
-.boundedbox.plugin
+.boundedbox
 {
-	padding: 0px 20px 0px 20px;
-	margin: 0px auto;
+	background-color: white;	
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
 }
-.boundedbox.plugin.show
+.boundedbox.condensedplugin
 {
+	padding: 20px;
+	margin: 5px 5px;
+	display: flex;
+	flex-wrap: nowrap;	
+	min-width: 150px;
+	max-width: 250px;
+	animation: CondensedEntryDisplay 300ms;
+	transition: transform 100ms;
+}
+.boundedbox.condensedplugin > img
+{
+	order: -1;
+	margin-right: 2px;
+	background-color: white;
+	width: 60px;
+	height: 60px;
+}
+.boundedbox.condensedplugin > figcaption
+{
+	background-color: inherit;
+	color: inherit;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-align: left;
+	font-size: 14px;
+}
+.boundedbox.expandedplugin
+{
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
 	border: black solid thin;
 	border-radius: 3px;
 	width: 68%;
 	margin-bottom: 5px;
+	padding: 5px;
 }
-.boundedbox.plugin.show.commentbox { animation: ExpandedEntryDisplay 800ms; }
+.boundedbox.expandedplugin > hr
+{
+	/* Horizontal rule element provides a default 8px top-bottom margin.
+	Top: plugin header gives a 5px outline (to cover container padding). Shift up -3px to bring to bottom of that
+	Right: shift -5px to extend into padding
+	Down: leave as-is
+	Left: ditto Right
+	*/
+	margin: 5px -5px auto -5px;
+}
+.boundedbox.expandedplugin > header
+{
+	display: flex;
+	outline: 5px black solid;
+}
+.boundedbox.expandedplugin > header > nav
+{
+	direction: rtl;
+}
+.boundedbox.expandedplugin > header > figure
+{
+	margin-right: auto;
+	margin-left: 0px;
+}
+.boundedbox.expandedplugin > header > figure > img
+{
+	width: 150px;
+	height: 150px;
+	background-color: white;
+}
+.boundedbox.expandedplugin > header > figure > figcaption
+{
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 10px;
+}
+#content article:nth-of-type(2) { animation: ExpandedEntryDisplay 800ms; }
 .boundedbox.plugin.show.commentbox p
 {
 	overflow: auto;
 	font-size: 13px;
 }
-.boundedbox.plugin.show.commentbox :first-child > hr { display: none; }
-.boundedbox.plugin.show.infobox { animation: ExpandedEntryDisplay 500ms; }
+#content article:nth-of-type(2) :first-child > hr { display: none; }
+#content article:nth-of-type(1)  { animation: ExpandedEntryDisplay 500ms; }
 @keyframes ExpandedEntryDisplay
 {
 	from
@@ -178,18 +246,6 @@ nav img:active { transform: scale(0.95); }
 		transform: translateX(0);
 		opacity: 1;
 	}
-}
-.boundedbox.plugin.showcondensed
-{
-	display: inline-block;
-	width: 35.55%;
-	min-width: 150px;
-	max-width: 250px;
-	height: 60px;
-	padding: 8px;
-	margin: 8px;
-	animation: CondensedEntryDisplay 300ms;
-	transition: transform 100ms;
 }
 @keyframes CondensedEntryDisplay
 {
@@ -204,51 +260,26 @@ nav img:active { transform: scale(0.95); }
         transform: scale(1);
     }
 }
-.boundedbox.plugin.showcondensed:hover
+.boundedbox.condensedplugin:hover
 {
-	margin: 5px;
 	outline: lightgrey solid 3px;
-	border: white solid thin;
 }
-.boundedbox.plugin.showcondensed:active { transform: scale(0.95); }
-.boundedbox.plugin.showcondensed > a { color: inherit; }
+.boundedbox.condensedplugin:active { transform: scale(0.95); }
+.boundedbox.condensedplugin > a { color: inherit; }
 .boundedbox.condensedicon.show
 {
-	width: 60px;
-	height: 60px;
-	float: left;
-	pointer-events: none; /* Allow the parent division to receive a click event to perform animation */
 }
 .boundedbox.condensedicon.caption
 {
-	box-sizing: border-box;
-	height: 100%;
-	background-color: inherit;
-	color: inherit;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-	padding-left: 8px;
-	font-family: Segoe UI Light, Trebuchet MS;
-	text-align: left;
-	pointer-events: none; /* Allow the parent division to receive a click event to perform animation */
 }
 .boundedbox.condensedicon.caption.description
 {
-	font-size: 14px;
-	padding-left: 0;
 }
-.boundedbox.expandedicon.show
+.boundedbox.expandedplugin > img
 {
-	width: 150px;
-	height: 150px;
-	padding: 20px 5px 0px 0px;
 }
 .boundedbox.expandedicon.caption
 {
-	display: inline-block;
-	vertical-align: top;
-	font-size: 14.5px;
 }
 .boundedbox.plugin.add
 {
@@ -270,10 +301,6 @@ nav img:active { transform: scale(0.95); }
 .boundedbox.plugin.add > form > input[name*=Delete]:active { background-color: darkred; }
 .boundedbox > nav
 {
-	float: right;
-	padding-top: 20px;
-	width: 90px;
-	text-align: right;
 }
 .boundedbox.screenshot
 {
@@ -434,21 +461,21 @@ nav img:active { transform: scale(0.95); }
 		margin: 0 auto;
 		margin-top: 20px;
 	}
-	header > h1 { font-size: 15px; }
-	header > hr { margin-top: 30px; }
-	nav { margin-top: -40px; }
-	nav img { padding: 0px; }
+	#pageheader > h1 { font-size: 15px; }
+	#pageheader > hr { margin-top: 30px; }
+	#pageheader > nav { margin-top: -40px; }
+	#pageheader > nav img { padding: 0px; }
 }
 @media all and (max-width: 375px)
 {
 	.profileheader { margin-top: 0px; }
-	nav { margin-top: 0px; }
-	header > hr { margin-top: 30px; }
+	#pageheader > nav { margin-top: 0px; }
+	#pageheader > hr { margin-top: 30px; }
 	.search { margin-top: 60px; }
 }
 @media all and (max-width: 361px)
 {
-	header > hr { margin-top: 57px; }
+	#pageheader > hr { margin-top: 57px; }
 }
 
 article table
@@ -463,35 +490,33 @@ article table *
 	padding: 6px 13px;
 }
 
-#footer {
+#footer
+{
 	text-align: center;
 	width: 100%;
-	height: 60px;
 	position: absolute;
 	bottom: 0;
 	left: 0;
-}
-
-#footer ul {
-	display: inline-block;
-	list-style: none;
-	margin-bottom: 8px;
-	margin-top: 8px;
-	padding: 0px;
-	width: 100%;
 	background-color: lightgrey;
 }
 
-#footer li {
+#footer ul
+{
+	list-style: none;
+	padding: 0px;
+	width: 100%;
+	margin: 0px auto;
+}
+
+#footer li
+{
 	display: inline-block;
 }
 
-#footer a {
+#footer a
+{
 	display: inline-block;
 	margin: 0px;
 	padding: 10px;
-	text-decoration: underline;
+	text-decoration: none;
 }
-
-#footer a:link {color:  black;}
-#footer a:visited {color: black;}
