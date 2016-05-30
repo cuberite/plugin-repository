@@ -1,6 +1,7 @@
 This software is idstributed alongside third-party software components:
 
  * MeekroDB (LGPL)
+ * iconmonstr Icons (Proprietary)
 
 The licenses of these software components are attached below.
 
@@ -709,3 +710,7 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
+
+## ICONMONSTR LICENSE
+
+[visit the website](http:/iconmonstr.com/license/)
