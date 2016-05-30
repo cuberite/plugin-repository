@@ -186,7 +186,8 @@ nav img:active { transform: scale(0.95); }
 	min-width: 150px;
 	max-width: 250px;
 	height: 60px;
-	padding: 5px;
+	padding: 8px;
+	margin: 8px;
 	animation: CondensedEntryDisplay 300ms;
 	transition: transform 100ms;
 }
@@ -205,7 +206,7 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.plugin.showcondensed:hover
 {
-	margin: -1px;
+	margin: 5px;
 	outline: lightgrey solid 3px;
 	border: white solid thin;
 }
@@ -220,6 +221,8 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.condensedicon.caption
 {
+	box-sizing: border-box;
+	height: 100%;
 	background-color: inherit;
 	color: inherit;
 	text-overflow: ellipsis;
