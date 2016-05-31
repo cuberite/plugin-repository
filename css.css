@@ -67,13 +67,13 @@ header a, nav a { text-decoration: none; }
 {
 	0%  { border-color: crimson; }
 	12% { border-color: brown; }
-    25%  { border-color: yellow; }
+	25%  { border-color: yellow; }
 	37% { border-color: purple; }
-    50%  { border-color: blue; }
+	50%  { border-color: blue; }
 	62% { border-color: grey; }
-    75%  { border-color: green; }
+	75%  { border-color: green; }
 	87 % { border-color: red; }
-    100% { border-color: crimson; }
+	100% { border-color: crimson; }
 }
 .search
 {
@@ -124,13 +124,13 @@ nav img
 {
 	0%  { background-color: aqua; }
 	12% { background-color: hotpink; }
-    25%  { background-color: chartreuse ; }
+	25%  { background-color: chartreuse ; }
 	37% { background-color: slateblue ; }
-    50%  { background-color: teal; }
+	50%  { background-color: teal; }
 	62% { background-color: tomato; }
-    75%  { background-color: yellowgreen; }
+	75%  { background-color: yellowgreen; }
 	87 % { background-color: gold; }
-    100% { background-color: aqua; }
+	100% { background-color: aqua; }
 }
 nav img.home { background-color: crimson; }
 nav img.addnew { background-color: chartreuse ; }
@@ -249,16 +249,16 @@ nav img:active { transform: scale(0.95); }
 }
 @keyframes CondensedEntryDisplay
 {
-    from
+	from
 	{
 		opacity: 0;
-        transform: scale(1.1);
-    }
-    to
+		transform: scale(1.1);
+	}
+	to
 	{
 		opacity: 1;
-        transform: scale(1);
-    }
+	transform: scale(1);
+	}
 }
 .boundedbox.condensedplugin:hover
 {
@@ -284,8 +284,8 @@ nav img:active { transform: scale(0.95); }
 .boundedbox.plugin.add
 {
 	animation-name: ColourChange, ExpandedEntryDisplay;
-    animation-duration: 40s, 500ms;
-    animation-iteration-count: infinite, initial;
+	animation-duration: 40s, 500ms;
+	animation-iteration-count: infinite, initial;
 	border: black solid thin;
 	border-radius: 3px;
 	width: 42%;
@@ -305,8 +305,8 @@ nav img:active { transform: scale(0.95); }
 .boundedbox.screenshot
 {
 	display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 	border-radius: 5px;
 }
 
@@ -504,8 +504,7 @@ article table *
 {
 	list-style: none;
 	padding: 0px;
-	width: 100%;
-	margin: 0px auto;
+	margin: 0;
 }
 
 #footer li
