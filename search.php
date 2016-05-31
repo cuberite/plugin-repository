@@ -15,13 +15,28 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 	switch ($_POST['Method'])
 	{
 		case 'PluginName':
-		case 'UniqueID':
-		case 'AuthorName': break;
+		{
+			$Response = array();
+			$AllPlugins = $SQLLink->query('SELECT * FROM PluginData');
+			foreach ($AllPlugins as $Plugin)
+			{
+				if (GitHubAPI::CustomRequest('repositories', $Plugin['RepositoryID'])['name'] == $_POST['Query'])
+				{
+					$Response[] = $Plugin;
+				}
+			}
+			break;
+		}
+		case 'RepositoryID':
+		case 'AuthorID':
+		{			
+			$Response = $SQLLink->query('SELECT * FROM PluginData WHERE %l LIKE %s', $_POST['Method'], '%' . $_POST['Query'] . '%'	);
+			break;
+		}
 		default: return;
 	}
 	
-	$Response = $SQLLink->query('SELECT * FROM PluginData WHERE %l LIKE %s', $_POST['Method'], '%' . $_POST['Query'] . '%'	);
-	if ($SQLLink->count() === 0)
+	if (empty($Response))
 	{
 		$Template->BeginTag('h1', array('style' => 'text-align: center;'));
 			$Template->Append('No matching results were found');
@@ -29,13 +44,12 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 		return;
 	}
 
-	$Template->BeginTag('div', array('style' => 'text-align: center'));
+	$Template->BeginTag('section', array('class' => 'boundedbox'));
 		$MinimumDuration = 100;
 		foreach ($Response as $Value)
 		{
 			$MinimumDuration = rand($MinimumDuration, 1000);
-			ImageHelper::GetDominantColorAndTextColour($Value['Icon'], $DominantRGB, $TextColour);
-			PluginItemTemplate::AddCondensedPluginItem($DominantRGB, $TextColour, $MinimumDuration, $Value, $Template);
+			PluginItemTemplate::AddCondensedPluginItem($MinimumDuration, $Value, $Template);
 		}
 	$Template->EndLastTag();
 	return;
