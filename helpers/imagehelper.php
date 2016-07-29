@@ -50,22 +50,25 @@ class ImageHelper
 			}
 		}
 
-		$DominantRGB = '#' . dechex(array_search(max($RGBCounter), $RGBCounter));
-		$DominantRGB = str_pad($DominantRGB, 7, '0', STR_PAD_RIGHT);
+		$DominantColour = array_search(max($RGBCounter), $RGBCounter);
+				
 		if (
 			(
-				pow(hexdec(substr($DominantRGB, 0, 2)) / 255, 2.2) * 0.2126 +
-				pow(hexdec(substr($DominantRGB, 2, 4)) / 255, 2.2)* 0.7152 +
-				pow(hexdec(substr($DominantRGB, 4, 6)) / 255, 2.2) * 0.0722
-			) > 130000
+				0.21 * (($DominantColour & 0xFF0000) >> 16) +
+				0.72 * (($DominantColour & 0x00FF00) >> 8) +
+				0.07 * ($DominantColour & 0x0000FF)
+			) > 127.5
 		)
 		{
-			$TextColour = '#000000';
+			$TextRGB = '#000000';
 		}
 		else
 		{
-			$TextColour = '#FFFFFF';
+			$TextRGB = '#FFFFFF';
 		}
+				
+		$DominantRGB = '#' . dechex($DominantColour);
+		$DominantRGB = str_pad($DominantRGB, 7, '0', STR_PAD_RIGHT);
 	}
 }
 ?>
