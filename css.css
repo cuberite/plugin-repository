@@ -1,20 +1,13 @@
-html, body
+html
+{
+	position: relative;
+	min-height: 100%;
+}
+
+body
 {
 	font-family: Segoe UI Light, Trebuchet MS;
-	margin: 0;
-	padding:0;
-	height:100%;
-}
-
-#wrapper
-{
-	min-height: 100%;
-	position: relative;
-}
-
-#content
-{
-	padding-bottom: 60px;
+	margin: 0 0 100px;
 }
 
 select, input:not([type=text])
@@ -37,7 +30,6 @@ input[type=button]:active, input[type=submit]:active
 	color: white;
 }
 
-body { margin: 0; }
 #pageheader
 {
 	top: 0;
@@ -178,6 +170,7 @@ nav img:active { transform: scale(0.95); }
 	overflow: hidden;
 	text-align: left;
 	font-size: 14px;
+	margin-left: 10px;
 }
 .boundedbox.expandedplugin
 {
@@ -188,22 +181,13 @@ nav img:active { transform: scale(0.95); }
 	border-radius: 3px;
 	width: 68%;
 	margin-bottom: 5px;
-	padding: 5px;
-}
-.boundedbox.expandedplugin > hr
-{
-	/* Horizontal rule element provides a default 8px top-bottom margin.
-	Top: plugin header gives a 5px outline (to cover container padding). Shift up -3px to bring to bottom of that
-	Right: shift -5px to extend into padding
-	Down: leave as-is
-	Left: ditto Right
-	*/
-	margin: 5px -5px auto -5px;
+	padding: 15px;
 }
 .boundedbox.expandedplugin > header
 {
 	display: flex;
-	outline: 5px black solid;
+	outline: 15px black solid;
+	margin-bottom: 25px;
 }
 .boundedbox.expandedplugin > header > nav
 {
@@ -211,8 +195,7 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.expandedplugin > header > figure
 {
-	margin-right: auto;
-	margin-left: 0px;
+	margin: 0 auto 0 0;
 }
 .boundedbox.expandedplugin > header > figure > img
 {
@@ -226,14 +209,30 @@ nav img:active { transform: scale(0.95); }
 	vertical-align: top;
 	margin-left: 10px;
 }
-#content article:nth-of-type(2) { animation: ExpandedEntryDisplay 800ms; }
-.boundedbox.plugin.show.commentbox p
-{
-	overflow: auto;
-	font-size: 13px;
+.boundedbox.expandedplugin > table
+{	
+	border-collapse: collapse;
+	border-spacing: 0px;
 }
+.boundedbox.expandedplugin > table th, .boundedbox.expandedplugin > table td
+{
+	border: 1px solid #DDD;
+	padding: 6px 13px;	
+}
+.boundedbox.expandedplugin > form > p
+{
+	margin: 0px;
+}
+.boundedbox.expandedplugin > form > input[type=radio] { vertical-align: middle; margin-top: -1px; }
+.boundedbox.expandedplugin > form > input[type=submit] { margin: 15px 0px; }
+.boundedbox.expandedplugin > form > input[name*=Delete] { background-color: red; }
+.boundedbox.expandedplugin > form > input[name*=Delete]:hover { background-color: firebrick; }
+.boundedbox.expandedplugin > form > input[name*=Delete]:active { background-color: darkred; }
+
+#content article:nth-of-type(2) { animation: ExpandedEntryDisplay 800ms; }
 #content article:nth-of-type(2) :first-child > hr { display: none; }
 #content article:nth-of-type(1)  { animation: ExpandedEntryDisplay 500ms; }
+
 @keyframes ExpandedEntryDisplay
 {
 	from
@@ -265,43 +264,7 @@ nav img:active { transform: scale(0.95); }
 	outline: lightgrey solid 3px;
 }
 .boundedbox.condensedplugin:active { transform: scale(0.95); }
-.boundedbox.condensedplugin > a { color: inherit; }
-.boundedbox.condensedicon.show
-{
-}
-.boundedbox.condensedicon.caption
-{
-}
-.boundedbox.condensedicon.caption.description
-{
-}
-.boundedbox.expandedplugin > img
-{
-}
-.boundedbox.expandedicon.caption
-{
-}
-.boundedbox.plugin.add
-{
-	animation-name: ColourChange, ExpandedEntryDisplay;
-	animation-duration: 40s, 500ms;
-	animation-iteration-count: infinite, initial;
-	border: black solid thin;
-	border-radius: 3px;
-	width: 42%;
-}
-.boundedbox.plugin.add > form > p
-{
-	margin: 0px;
-}
-.boundedbox.plugin.add > form > input[type=radio] { vertical-align: middle; margin-top: -1px; }
-.boundedbox.plugin.add > form > input[type=submit] { margin: 15px 0px; }
-.boundedbox.plugin.add > form > input[name*=Delete] { background-color: red; }
-.boundedbox.plugin.add > form > input[name*=Delete]:hover { background-color: firebrick; }
-.boundedbox.plugin.add > form > input[name*=Delete]:active { background-color: darkred; }
-.boundedbox > nav
-{
-}
+
 .boundedbox.screenshot
 {
 	display: inline-block;
@@ -478,25 +441,12 @@ nav img:active { transform: scale(0.95); }
 	#pageheader > hr { margin-top: 57px; }
 }
 
-article table
-{
-	border-collapse: collapse;
-	border-spacing: 0px;
-}
-
-article table *
-{
-	border: 1px solid #DDD;
-	padding: 6px 13px;
-}
-
 #footer
 {
 	text-align: center;
+	bottom: 0px;
 	width: 100%;
 	position: absolute;
-	bottom: 0;
-	left: 0;
 	background-color: lightgrey;
 }
 

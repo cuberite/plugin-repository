@@ -18,18 +18,16 @@ class PluginItemTemplate
 
 				$Templater->BeginTag('img', array('src' => $IconHyperlink, 'alt' => $RepositoryName), true);
 				$Templater->BeginTag('figcaption');
-					$Templater->BeginTag('br', array(), true);
 					$Templater->BeginTag('strong');
 						$Templater->Append($RepositoryName);
 					$Templater->EndLastTag();
-					//$Templater->BeginTag('p', array('class' => ''));
-						$Templater->Append('Author: ' . $AuthorDisplayName);
-						$Templater->BeginTag('br', array(), true);
-						if ($RepositoryVersion)
-						{
-							$Templater->Append('Version: ' . $RepositoryVersion);
-						}
-					//$Templater->EndLastTag();
+					$Templater->BeginTag('br', array(), true);
+					$Templater->Append('Author: ' . $AuthorDisplayName);
+					$Templater->BeginTag('br', array(), true);
+					if ($RepositoryVersion)
+					{
+						$Templater->Append('Version: ' . $RepositoryVersion);
+					}
 				$Templater->EndLastTag();
 
 			$Templater->EndLastTag();
@@ -97,17 +95,14 @@ class PluginItemTemplate
 					}
 				$Templater->EndLastTag();
 			$Templater->EndLastTag();
-			
-			$Templater->BeginTag('hr', array(), true);
 
 			$ImageFound = false;//ImageHelper::DisplaySerialisedImages($SQLEntry['Images'], $Templater);
 			if ($ImageFound)
 			{
 				$Templater->BeginTag('hr', array(), true);
 			}
-			$Templater->BeginTag('p');
-				$Templater->Append((new Parsedown())->text(GitHubAPI::GetCachedRepositoryReadme($SQLEntry['RepositoryID'])));
-			$Templater->EndLastTag();
+			
+			$Templater->Append((new Parsedown())->text(GitHubAPI::GetCachedRepositoryReadme($SQLEntry['RepositoryID'])));
 		$Templater->EndLastTag();
 	}
 }

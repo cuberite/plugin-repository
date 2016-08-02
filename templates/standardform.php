@@ -1,11 +1,11 @@
 <?php
-require_once '/helpers/githubapihelper.php';
+require_once 'helpers/githubapihelper.php';
 
 class StandardFormTemplate
 {
 	static private function BeginStandardForm($Templater)
 	{
-		$Templater->BeginTag('div', array('class' => 'boundedbox plugin add'));
+		$Templater->BeginTag('div', array('class' => 'boundedbox expandedplugin'));
 	}
 
 	static function AddCreatePluginForm($Templater)
