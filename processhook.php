@@ -1,8 +1,5 @@
 <?php
 require_once 'helpers/githubapihelper.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 // Split signature into algorithm and hash
 list($Algorithm, $DeliveredHash) = explode('=', getallheaders()['X-Hub-Signature'], 2);
