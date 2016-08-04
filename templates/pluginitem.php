@@ -75,7 +75,7 @@ class PluginItemTemplate
 						$Templater->EndLastTag();
 						
 						$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));							
-							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download button', 'title' => 'Download'), true);
+							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download latest release button', 'title' => 'Download latest release'), true);
 						$Templater->EndLastTag();
 					$Templater->EndLastTag();
 					
@@ -88,17 +88,23 @@ class PluginItemTemplate
 						$Templater->EndLastTag();
 						
 						$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));							
-							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download button', 'title' => 'Download'), true);
+							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download latest commit button', 'title' => 'Download latest commit'), true);
 						$Templater->EndLastTag();
 					$Templater->EndLastTag();
 					
 					$Templater->BeginTag('div');
 					$Templater->EndLastTag();
 					
+					$Templater->BeginTag('hr', array(), true);
+					
+					$Templater->BeginTag('figure');
+						$Templater->BeginTag('a', array('href' => 'https://github.com/' . $RepositoryFullName));
+							$Templater->BeginTag('img', array('src' => 'images/github.svg', 'class' => 'github', 'alt' => 'Link to GitHub repository button', 'title' => 'Go to repository on GitHub'), true);
+						$Templater->EndLastTag();
+					$Templater->EndLastTag();
+					
 					if (AccountsHelper::GetLoggedInDetails($Details))
 					{
-						$Templater->BeginTag('hr', array(), true);
-						
 						$Templater->BeginTag('figure');
 							$Templater->BeginTag('a', array('href' => '#comments'));
 								$Templater->BeginTag('img', array('src' => 'images/review.svg', 'class' => 'review', 'alt' => 'Review button', 'title' => 'Review'), true);

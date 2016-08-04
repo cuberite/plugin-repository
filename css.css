@@ -132,6 +132,7 @@ nav img.review { background-color: skyblue; }
 nav img.rate { background-color: yellow; }
 nav img.favourite { background-color: green; }
 nav img.report { background-color: red; }
+nav img.github { background-color: mediumorchid; }
 nav img:hover { outline: grey 2px solid; }
 nav img:active { transform: scale(0.95); }
 
