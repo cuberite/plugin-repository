@@ -13,7 +13,7 @@ $SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASE
 
 if (!AccountsHelper::GetLoggedInDetails($AuthorDetails))
 {
-	$Template->SetRedirect('login.php?login=1');
+	$Template->SetRedirect('login.php?' . http_build_query(array('login' => 1, 'redirect' => $_SERVER['REQUEST_URI'])));
 	return;
 }
 

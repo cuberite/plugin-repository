@@ -32,7 +32,7 @@ class AccountsHelper
 		);
 	}
 	
-	static function AuthoriseViaGitHub($Templater)
+	static function AuthoriseViaGitHub($Templater, $AdditionalParameters)
 	{
 		$_SESSION['OAuthState'] = hash('sha512', session_id());
 		
@@ -41,7 +41,7 @@ class AccountsHelper
 			http_build_query(
 				array(
 					'client_id' => GH_OAUTH_CLIENT_ID,
-					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
+					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . $AdditionalParameters,
 					'scope' => 'admin:repo_hook',
 					'state' => $_SESSION['OAuthState']
 				)
@@ -83,7 +83,6 @@ class AccountsHelper
 				array(
 					'client_id' => GH_OAUTH_CLIENT_ID,
 					'client_secret' => GH_OAUTH_CLIENT_SECRET,
-					'redirect_uri' => 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 					'state' => $_SESSION['OAuthState'],
 					'code' => $AuthorisationCode
 				)

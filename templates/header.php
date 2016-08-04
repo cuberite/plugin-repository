@@ -43,7 +43,7 @@ class HeaderTemplate
 				}
 				else
 				{
-					$Templater->BeginTag('a', array('href' => 'login.php?login=1'));
+					$Templater->BeginTag('a', array('href' => 'login.php?' . http_build_query(array('login' => 1, 'redirect' => $_SERVER['REQUEST_URI']))));
 						$Templater->BeginTag('img', array('src' => 'https://www.gravatar.com/avatar/?d=mm', 'class' => 'profileimage', 'alt' => 'Log In'), true);
 					$Templater->EndLastTag();
 				}
