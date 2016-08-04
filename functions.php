@@ -6,6 +6,8 @@ if (!($INIParseResult = parse_ini_file('configuration.ini')))
 	return;
 }
 
+$_SERVER['SERVER_NAME'] = 'plugins.cuberite.org';
+
 define('DB_ADDRESS', $INIParseResult['DatabaseAddress']);
 define('DB_USERNAME', $INIParseResult['DatabaseUsername']);
 define('DB_PASSWORD', $INIParseResult['DatabasePassword']);

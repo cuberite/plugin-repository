@@ -54,7 +54,8 @@ class AccountsHelper
 		if (
 			!isset($_GET['state']) ||
 			!isset($_SESSION['OAuthState']) ||
-			($_GET['state'] != $_SESSION['OAuthState']))
+			($_GET['state'] != $_SESSION['OAuthState'])
+		)
 		{
 			session_unset();
 			session_destroy();
