@@ -27,7 +27,7 @@ class ImageHelper
 		return $ImageFound;
 	}
 	
-	static function GetDominantColorAndTextColour($ImageLocation, &$DominantRGB, &$TextColour)
+	static function GetDominantColorAndTextColour($ImageLocation, &$DominantRGB, &$TextRGB)
 	{
 		$Image = imagecreatefromstring($ImageLocation);
 		$ImageWidth = imagesx($Image);
