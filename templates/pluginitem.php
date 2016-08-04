@@ -68,28 +68,67 @@ class PluginItemTemplate
 				$Templater->EndLastTag();
 				
 				$Templater->BeginTag('nav');
-					$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));
-						$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download button', 'title' => 'Download'), true);
+				
+					$Templater->BeginTag('figure');
+						$Templater->BeginTag('figcaption');
+							$Templater->Append('✓ ');
+						$Templater->EndLastTag();
+						
+						$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));							
+							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download button', 'title' => 'Download'), true);
+						$Templater->EndLastTag();
 					$Templater->EndLastTag();
+					
+					$Templater->BeginTag('div');
+					$Templater->EndLastTag();
+					
+					$Templater->BeginTag('figure');
+						$Templater->BeginTag('figcaption');
+							$Templater->Append('🐜 ');
+						$Templater->EndLastTag();
+						
+						$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));							
+							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download button', 'title' => 'Download'), true);
+						$Templater->EndLastTag();
+					$Templater->EndLastTag();
+					
+					$Templater->BeginTag('div');
+					$Templater->EndLastTag();
+					
 					if (AccountsHelper::GetLoggedInDetails($Details))
 					{
-						$Templater->BeginTag('a', array('href' => '#comments'));
-							$Templater->BeginTag('img', array('src' => 'images/review.svg', 'class' => 'review', 'alt' => 'Review button', 'title' => 'Review'), true);
+						$Templater->BeginTag('hr', array(), true);
+						
+						$Templater->BeginTag('figure');
+							$Templater->BeginTag('a', array('href' => '#comments'));
+								$Templater->BeginTag('img', array('src' => 'images/review.svg', 'class' => 'review', 'alt' => 'Review button', 'title' => 'Review'), true);
+							$Templater->EndLastTag();
 						$Templater->EndLastTag();
-						$Templater->BeginTag('a', array('href' => '#comments'));
-							$Templater->BeginTag('img', array('src' => 'images/rate.svg', 'class' => 'rate', 'alt' => 'Rate button', 'title' => 'Rate'), true);
+						
+						$Templater->BeginTag('figure');
+							$Templater->BeginTag('a', array('href' => '#comments'));
+								$Templater->BeginTag('img', array('src' => 'images/rate.svg', 'class' => 'rate', 'alt' => 'Rate button', 'title' => 'Rate'), true);
+							$Templater->EndLastTag();
 						$Templater->EndLastTag();
-						$Templater->BeginTag('a', array('href' => '#comments'));
-							$Templater->BeginTag('img', array('src' => 'images/favourite.svg', 'class' => 'favourite', 'alt' => 'Favourite button', 'title' => 'Favourite'), true);
+						
+						$Templater->BeginTag('figure');
+							$Templater->BeginTag('a', array('href' => '#comments'));
+								$Templater->BeginTag('img', array('src' => 'images/favourite.svg', 'class' => 'favourite', 'alt' => 'Favourite button', 'title' => 'Favourite'), true);
+							$Templater->EndLastTag();
 						$Templater->EndLastTag();
-						$Templater->BeginTag('a', array('href' => '#comments'));
-							$Templater->BeginTag('img', array('src' => 'images/report.svg', 'class' => 'report', 'alt' => 'Report button', 'title' => 'Report'), true);
+						
+						$Templater->BeginTag('figure');
+							$Templater->BeginTag('a', array('href' => '#comments'));
+								$Templater->BeginTag('img', array('src' => 'images/report.svg', 'class' => 'report', 'alt' => 'Report button', 'title' => 'Report'), true);
+							$Templater->EndLastTag();
 						$Templater->EndLastTag();
 
 						if ($Details[0] == $SQLEntry['AuthorID'])
 						{
-							$Templater->BeginTag('a', array('href' => 'edit.php?id=' . $SQLEntry['RepositoryID']));
-								$Templater->BeginTag('img', array('src' => 'images/edit.svg', 'class' => 'edit', 'alt' => 'Edit button', 'title' => 'Edit'), true);
+							$Templater->BeginTag('figure');
+								$Templater->BeginTag('a', array('href' => 'edit.php?id=' . $SQLEntry['RepositoryID']));
+									$Templater->BeginTag('img', array('src' => 'images/edit.svg', 'class' => 'edit', 'alt' => 'Edit button', 'title' => 'Edit'), true);
+								$Templater->EndLastTag();
 							$Templater->EndLastTag();
 						}
 					}

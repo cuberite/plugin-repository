@@ -155,7 +155,6 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.condensedplugin > img
 {
-	order: -1;
 	margin-right: 2px;
 	background-color: white;
 	width: 60px;
@@ -163,8 +162,6 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.condensedplugin > figcaption
 {
-	background-color: inherit;
-	color: inherit;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -191,7 +188,34 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.expandedplugin > header > nav
 {
-	direction: rtl;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-content: flex-start;
+	width: 200px;
+}
+.boundedbox.expandedplugin > header > nav > div
+{
+	width: 100%;
+}
+.boundedbox.expandedplugin > header > nav > hr
+{
+	width: 100%;
+	border: thin solid black;
+	background-color: black; /* <hr> elements have a centre bit which needs separate styling */
+}
+.boundedbox.expandedplugin > header > nav > figure
+{
+	margin: 0 5px 5px 0;
+}
+.boundedbox.expandedplugin > header > nav > figure > figcaption
+{
+	vertical-align: middle;
+	display: inline-block;
+}
+.boundedbox.expandedplugin > header > nav > figure > a > img
+{
+	vertical-align: middle;
 }
 .boundedbox.expandedplugin > header > figure
 {
