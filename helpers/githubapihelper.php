@@ -74,7 +74,7 @@ final class GitHubAPI
 	
 	public static function CreateRepositoryUpdateHook($RepositoryID)
 	{
-		return GitHubAPI::GetInstance()->request('/repositories/' . $RepositoryID . '/hooks', \Symfony\Component\HttpFoundation\Request::METHOD_POST, array('name' => 'web', 'active' => true, 'events' => array('push', 'release'), 'config' => array('url' => 'https://cuberiteplugins.azurewebsites.net/processhook.php', 'secret' => GitHubAPI::OAUTH_CLIENT_SECRET)))['id'];
+		return GitHubAPI::GetInstance()->request('/repositories/' . $RepositoryID . '/hooks', \Symfony\Component\HttpFoundation\Request::METHOD_POST, array('name' => 'web', 'active' => true, 'events' => array('push', 'release'), 'config' => array('url' => 'https://cuberiteplugins.azurewebsites.net/processhook.php', 'secret' => GH_OAUTH_CLIENT_SECRET)))['id'];
 	}
 	
 	public static function DeleteRepositoryUpdateHook($RepositoryID, $HookID)
