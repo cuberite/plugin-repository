@@ -9,7 +9,7 @@ class PluginItemTemplate
 {
 	static function AddCondensedPluginItem($MinimumAnimationDuration, $SQLEntry, $Templater)
 	{
-		list($RepositoryName, , , $RepositoryVersion) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
+		list($RepositoryName, , , $RepositoryVersion, $Description) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI::GetCachedRepositoryIconData($SQLEntry['RepositoryID']);
 		list(, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
 
@@ -17,16 +17,27 @@ class PluginItemTemplate
 			$Templater->BeginTag('figure', array('class' => 'boundedbox condensedplugin', 'style' => 'background-color:' . $DominantRGB . '; color:' . $TextRGB . '; animation-duration:' . $MinimumAnimationDuration . 'ms;'));
 
 				$Templater->BeginTag('img', array('src' => $IconHyperlink, 'alt' => $RepositoryName), true);
+				
 				$Templater->BeginTag('figcaption');
+				
 					$Templater->BeginTag('strong');
 						$Templater->Append($RepositoryName);
 					$Templater->EndLastTag();
+					
 					$Templater->BeginTag('br', array(), true);
+					
 					$Templater->Append('Author: ' . $AuthorDisplayName);
-					$Templater->BeginTag('br', array(), true);
+					
 					if ($RepositoryVersion)
 					{
+						$Templater->BeginTag('br', array(), true);
 						$Templater->Append('Version: ' . $RepositoryVersion);
+					}
+					
+					if ($Description)
+					{
+						$Templater->BeginTag('br', array(), true);
+						$Templater->Append($Description);
 					}
 				$Templater->EndLastTag();
 

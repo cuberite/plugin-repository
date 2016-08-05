@@ -84,8 +84,6 @@ final class GitHubAPI
 	
 	public static function ProcessRepositoryProperties($RepositoryID)
 	{
-		$PluginVersion;
-		$IconHyperlink;
 		$Data = GitHubAPI::CustomRequest('repositories', $RepositoryID);	
 		
 		try
@@ -95,6 +93,40 @@ final class GitHubAPI
 		catch (Exception $NoReadme)
 		{
 			$Readme = '(the plugin author has not provided a readme)';
+		}
+		
+		try
+		{
+			$LuaInfo = base64_decode(GitHubAPI::CustomRequest('repositories', $RepositoryID, 'contents/Info.lua')['content']);
+			
+			$DescriptionKeyStart = strpos($LuaInfo, 'Description');
+			if ($DescriptionKeyStart === false)
+			{
+				throw new Exception;
+			}
+			$DescriptionKeyStart += 11;
+			
+			if (($DescriptionStart = strpos($LuaInfo, '[[', $DescriptionKeyStart)) !== false)
+			{
+				if (($DescriptionEnd = strpos($LuaInfo, ']]', $DescriptionStart + 2)) !== false)
+				{
+					$LuaInfo = substr($LuaInfo, $DescriptionStart + 2, $DescriptionEnd - $DescriptionStart - 2);
+				}
+				else
+				{
+				    throw new Exception;
+				}
+			} // TODO: fix Lua parser
+			else
+			{
+				throw new Exception;
+			}
+			
+			$Description = $LuaInfo;
+		}
+		catch (Exception $NoDescription)
+		{
+			$Description = false;
 		}
 		
 		try
@@ -131,7 +163,7 @@ final class GitHubAPI
 			ImageHelper::GetDominantColorAndTextColour(file_get_contents($IconHyperlink), $DominantRGB, $TextRGB);
 		}
 		
-		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::METADATA_CACHE_FILE_NAME, serialize(array($Data['name'], $Data['full_name'], $Data['owner']['login'], $PluginVersion)));
+		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::METADATA_CACHE_FILE_NAME, serialize(array($Data['name'], $Data['full_name'], $Data['owner']['login'], $PluginVersion, $Description)));
 		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::ICONDATA_CACHE_FILE_NAME, serialize(array($IconHyperlink, $DominantRGB, $TextRGB)));
 		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::README_CACHE_FILE_NAME, $Readme);
 	}
