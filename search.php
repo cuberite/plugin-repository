@@ -14,13 +14,29 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 {
 	switch ($_POST['Method'])
 	{
-		case 'PluginName':
+		case 'AuthorName':
 		{
-			$Response = array();
 			$AllPlugins = $SQLLink->query('SELECT * FROM PluginData');
 			foreach ($AllPlugins as $Plugin)
 			{
-				if (GitHubAPI::CustomRequest('repositories', $Plugin['RepositoryID'])['name'] == $_POST['Query'])
+				list($AuthorLogin, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($Plugin['AuthorID']);
+				if (
+					(stripos($AuthorLogin, $_POST['Query']) !== false) ||
+					(stripos($AuthorDisplayName, $_POST['Query']) !== false)
+				)
+				{
+					$Response[] = $Plugin;
+				}
+			}
+			break;
+		}
+		case 'PluginName':
+		{
+			$AllPlugins = $SQLLink->query('SELECT * FROM PluginData');
+			foreach ($AllPlugins as $Plugin)
+			{
+				list($RepositoryName) = GitHubAPI::GetCachedRepositoryMetadata($Plugin['RepositoryID']);
+				if (stripos($RepositoryName, $_POST['Query']) !== false)
 				{
 					$Response[] = $Plugin;
 				}
@@ -28,9 +44,8 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 			break;
 		}
 		case 'RepositoryID':
-		case 'AuthorID':
 		{			
-			$Response = $SQLLink->query('SELECT * FROM PluginData WHERE %l LIKE %s', $_POST['Method'], '%' . $_POST['Query'] . '%'	);
+			$Response = $SQLLink->query('SELECT * FROM PluginData WHERE %l = %s', $_POST['Method'], $_POST['Query']);
 			break;
 		}
 		default: return;

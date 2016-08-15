@@ -59,7 +59,7 @@ class HeaderTemplate
 						$Templater->BeginTag('option', array('selected' => 'selected', 'value' => 'PluginName'));
 							$Templater->Append('Title');
 						$Templater->EndLastTag();
-						$Templater->BeginTag('option', array('value' => 'AuthorID'));
+						$Templater->BeginTag('option', array('value' => 'AuthorName'));
 							$Templater->Append('Author');
 						$Templater->EndLastTag();
 					$Templater->EndLastTag();
