@@ -147,10 +147,9 @@ nav img:active { transform: scale(0.95); }
 {
 	padding: 20px;
 	margin: 5px 5px;
-	display: flex;
-	flex-wrap: nowrap;	
-	min-width: 150px;
-	max-width: 250px;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	width: 350px;
 	animation: CondensedEntryDisplay 300ms;
 	transition: transform 100ms;
 }
@@ -164,11 +163,13 @@ nav img:active { transform: scale(0.95); }
 .boundedbox.condensedplugin > figcaption
 {
 	text-overflow: ellipsis;
-	white-space: nowrap;
 	overflow: hidden;
-	text-align: left;
 	font-size: 14px;
 	margin-left: 10px;
+}
+.boundedbox.condensedplugin > figcaption > p
+{
+	font-size: 0.8em;
 }
 .boundedbox.expandedplugin
 {

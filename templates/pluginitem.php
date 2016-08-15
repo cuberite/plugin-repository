@@ -36,8 +36,9 @@ class PluginItemTemplate
 					
 					if ($Description)
 					{
-						$Templater->BeginTag('br', array(), true);
-						$Templater->Append($Description);
+						$Templater->BeginTag('p');
+							$Templater->Append($Description);
+						$Templater->EndLastTag();
 					}
 				$Templater->EndLastTag();
 
