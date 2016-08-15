@@ -98,31 +98,7 @@ final class GitHubAPI
 		try
 		{
 			$LuaInfo = base64_decode(GitHubAPI::CustomRequest('repositories', $RepositoryID, 'contents/Info.lua')['content']);
-			
-			$DescriptionKeyStart = strpos($LuaInfo, 'Description');
-			if ($DescriptionKeyStart === false)
-			{
-				throw new Exception;
-			}
-			$DescriptionKeyStart += 11;
-			
-			if (($DescriptionStart = strpos($LuaInfo, '[[', $DescriptionKeyStart)) !== false)
-			{
-				if (($DescriptionEnd = strpos($LuaInfo, ']]', $DescriptionStart + 2)) !== false)
-				{
-					$LuaInfo = substr($LuaInfo, $DescriptionStart + 2, $DescriptionEnd - $DescriptionStart - 2);
-				}
-				else
-				{
-				    throw new Exception;
-				}
-			} // TODO: fix Lua parser
-			else
-			{
-				throw new Exception;
-			}
-			
-			$Description = $LuaInfo;
+			$Description = \Vlaswinkel\Lua\Lua::deserialize(explode('=', $LuaInfo, 2)[1])['Description'];
 		}
 		catch (Exception $NoDescription)
 		{
