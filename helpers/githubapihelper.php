@@ -66,7 +66,15 @@ final class GitHubAPI
 		
 		foreach (GitHubAPI::CustomRequest('user', GitHubAPI::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser()['id'], 'orgs') as $Organisation)
 		{
-			$Repositories['🏢 ' . $Organisation['login']] = GitHubAPI::CustomRequest('orgs', $Organisation['login'], 'repos');
+			$RepositoryGroup = GitHubAPI::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::REPOSITORIES)->listOrganizationRepositories($Organisation['login']);
+			usort(
+				$RepositoryGroup,
+				function($Lhs, $Rhs)
+				{
+					return strcasecmp($Lhs['name'], $Rhs['name']);
+				}
+			);
+			$Repositories['🏢 ' . $Organisation['login']] = $RepositoryGroup;
 		}
 		
 		return $Repositories;
