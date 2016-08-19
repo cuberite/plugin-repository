@@ -28,12 +28,10 @@ class StandardFormTemplate
 					{
 						$Templater->BeginTag('input', array('required' => 'required', 'type' => 'radio', 'name' => 'RepositoryID', 'value' => $Repository['id']), true);
 						$Templater->BeginTag('label');
-							$Templater->Append($Repository['name']);
-						$Templater->EndLastTag();
-						
-						$Templater->BeginTag('p');
-							$Templater->BeginTag('i');
-							$Templater->Append($Repository['description']);
+							$Templater->Append('<strong>' . $Repository['name'] . '</strong> ');
+							
+							$Templater->BeginTag('em');
+								$Templater->Append($Repository['description']);
 							$Templater->EndLastTag();
 						$Templater->EndLastTag();
 						

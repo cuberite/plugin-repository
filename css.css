@@ -245,10 +245,6 @@ nav img:active { transform: scale(0.95); }
 	border: 1px solid #DDD;
 	padding: 6px 13px;	
 }
-.boundedbox.expandedplugin > form > p
-{
-	margin: 0px;
-}
 .boundedbox.expandedplugin > form > input[type=radio] { vertical-align: middle; margin-top: -1px; }
 .boundedbox.expandedplugin > form > input[type=submit] { margin: 15px 0px; }
 .boundedbox.expandedplugin > form > input[name*=Delete] { background-color: red; }
