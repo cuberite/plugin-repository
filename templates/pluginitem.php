@@ -9,7 +9,7 @@ class PluginItemTemplate
 {
 	static function AddCondensedPluginItem($MinimumAnimationDuration, $SQLEntry, $Templater)
 	{
-		list($RepositoryName, , , $RepositoryVersion, $Description) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
+		list($RepositoryName, , , $RepositoryVersion, $Description, $License) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI::GetCachedRepositoryIconData($SQLEntry['RepositoryID']);
 		list(, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
 
@@ -34,6 +34,12 @@ class PluginItemTemplate
 						$Templater->Append('Version: ' . $RepositoryVersion);
 					}
 					
+					if ($License)
+					{
+						$Templater->BeginTag('br', array(), true);
+						$Templater->Append('License: ' . $License);
+					}
+					
 					if ($Description)
 					{
 						$Templater->BeginTag('p');
@@ -48,7 +54,7 @@ class PluginItemTemplate
 
 	static function AddExpandedPluginItem($SQLEntry, $Templater)
 	{
-		list($RepositoryName, $RepositoryFullName, $RepositoryOwnerName, $RepositoryVersion) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
+		list($RepositoryName, $RepositoryFullName, $RepositoryOwnerName, $RepositoryVersion, , $License) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI::GetCachedRepositoryIconData($SQLEntry['RepositoryID']);
 		list(, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
 
@@ -57,6 +63,7 @@ class PluginItemTemplate
 				$Templater->BeginTag('figure');
 					$Templater->BeginTag('img', array('src' => $IconHyperlink, 'alt' => $RepositoryName), true);
 					$Templater->BeginTag('figcaption');
+					
 						$Templater->BeginTag('h2');
 							$Templater->Append($RepositoryName);
 						$Templater->EndLastTag();
@@ -64,6 +71,12 @@ class PluginItemTemplate
 						$Templater->Append('Author: ' . $AuthorDisplayName);
 						$Templater->BeginTag('br', array(), true);
 						$Templater->Append('Owned by: ' . $RepositoryOwnerName);
+						
+						if ($License)
+						{
+							$Templater->BeginTag('br', array(), true);
+							$Templater->Append('License: ' . $License);
+						}
 
 						if ($RepositoryVersion)
 						{

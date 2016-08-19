@@ -18,18 +18,6 @@ final class GitHubAPI
 	{
 	}
 	
-	private static function GetCacheInstance()
-	{
-		/*
-		static $Instance = null;
-		if ($Instance === null)
-		{
-			$Instance = new \Github\HttpClient\CachedHttpClient(array('cache_dir' => '../github-api-cache'));
-		}
-		return $Instance;
-		*/
-	}
-	
 	public static function GetInstance()
 	{
 		static $Instance = null;
@@ -39,6 +27,8 @@ final class GitHubAPI
 			
 			$Instance->setClientId(GH_OAUTH_CLIENT_ID);
 			$Instance->setClientSecret(GH_OAUTH_CLIENT_SECRET);
+			
+			$Instance->setAccept('application/vnd.github.drax-preview+json');
 			
 			if (isset($_SESSION['OAuthToken']))
 			{
@@ -113,6 +103,15 @@ final class GitHubAPI
 			$Description = false;
 		}
 		
+		if (isset($Data['license']))
+		{
+			$License = $Data['license']['name'];
+		}
+		else
+		{
+			$License = false;
+		}
+		
 		try
 		{
 			$PluginVersion = GitHubAPI::CustomRequest('repositories', $RepositoryID, 'releases/latest')['tag_name'];
@@ -147,7 +146,21 @@ final class GitHubAPI
 			ImageHelper::GetDominantColorAndTextColour(file_get_contents($IconHyperlink), $DominantRGB, $TextRGB);
 		}
 		
-		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::METADATA_CACHE_FILE_NAME, serialize(array($Data['name'], $Data['full_name'], $Data['owner']['login'], $PluginVersion, $Description)));
+		RepositoryResourcesCache::UpdateCacheEntries(
+			RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA,
+			$RepositoryID,
+			GitHubAPI::METADATA_CACHE_FILE_NAME,
+			serialize(
+				array(
+					$Data['name'],
+					$Data['full_name'],
+					$Data['owner']['login'],
+					$PluginVersion,
+					$Description,
+					$License
+				)
+			)
+		);
 		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::ICONDATA_CACHE_FILE_NAME, serialize(array($IconHyperlink, $DominantRGB, $TextRGB)));
 		RepositoryResourcesCache::UpdateCacheEntries(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $RepositoryID, GitHubAPI::README_CACHE_FILE_NAME, $Readme);
 	}
