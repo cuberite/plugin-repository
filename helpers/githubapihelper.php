@@ -118,7 +118,7 @@ final class GitHubAPI
 		try
 		{
 			throw new Exception;
-			$IconHyperlink = GitHubAPI::CustomRequest('repositories', $RepositoryID, 'contents/Plugin Repository/favicon.png')['download_url'];
+			$IconHyperlink = GitHubAPI::CustomRequest('repositories', $RepositoryID, 'contents/Favicon.png')['download_url'];
 		}
 		catch (Exception $NoIcon)
 		{

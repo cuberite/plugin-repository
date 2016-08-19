@@ -39,6 +39,16 @@ class StandardFormTemplate
 					}
 				}
 				
+				$Templater->BeginTag('hr', array(), true);
+				$Templater->BeginTag('p');
+					$Templater->Append('<strong>No organisation?</strong> Ensure that your membership of it is public.');
+				$Templater->EndLastTag();
+				$Templater->BeginTag('p');
+					$Templater->Append('<strong>Favicons:</strong> add a Favicon.png file to the base directory.');
+					$Templater->BeginTag('br', array(), true);
+					$Templater->Append('<strong>Description:</strong> add a Info.lua file to root, with a Description field.');
+				$Templater->EndLastTag();
+				
 				$Templater->BeginTag('input', array('name' => 'Submit', 'type' => 'Submit', 'value' => 'Submit entry'), true);
 			$Templater->EndLastTag();
 		StandardFormTemplate::EndStandardForm($Templater);
