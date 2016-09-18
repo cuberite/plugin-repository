@@ -26,7 +26,7 @@ list($Algorithm, $DeliveredHash) = $SplitHeader;
 $CalculatedHash = hash_hmac($Algorithm, file_get_contents('php://input'), GH_OAUTH_CLIENT_SECRET);
 
 // Check if hashes are equivalent
-// NB: if $Algorithm ∉ { hash_algos() }, $Algorithm === FALSE, and so $DeliveredHash, STRING will not be type-equivalent to FALSE
+// NB: if $Algorithm ∉ { hash_algos() }, $CalculatedHash === FALSE, and so $DeliveredHash, STRING will not be type-equivalent to FALSE
 if ($DeliveredHash !== $CalculatedHash)
 {
 	http_response_code(400);

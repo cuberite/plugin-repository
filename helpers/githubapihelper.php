@@ -114,17 +114,27 @@ final class GitHubAPI
 		
 		try
 		{
-			$PluginVersion = GitHubAPI::CustomRequest('repositories', $RepositoryID, 'releases/latest')['tag_name'];
+			$LatestRelease = GitHubAPI::CustomRequest('repositories', $RepositoryID, 'releases/latest');
+			$PluginVersion = $LatestRelease['name'] . ' (' . $LatestRelease['tag_name'] .')';
+			$PluginDownload = $LatestRelease['zipball_url'];
+			$Releases = array_map(
+				function($Release)
+				{
+					return array($Release['name'] . ' (' . $Release['tag_name'] .')', $Release['zipball_url']);
+				},
+				GitHubAPI::CustomRequest('repositories', $RepositoryID, 'releases')
+			);
 		}
 		catch (Exception $NoVersion)
 		{
 			$PluginVersion = false;
+			$PluginDownload = false;
+			$Releases = false;
 		}
 		
 		$WasIdenticon = false;
 		try
 		{
-			throw new Exception;
 			$IconHyperlink = GitHubAPI::CustomRequest('repositories', $RepositoryID, 'contents/Favicon.png')['download_url'];
 		}
 		catch (Exception $NoIcon)
@@ -157,7 +167,9 @@ final class GitHubAPI
 					$Data['owner']['login'],
 					$PluginVersion,
 					$Description,
-					$License
+					$License,
+					$PluginDownload,
+					$Releases
 				)
 			)
 		);

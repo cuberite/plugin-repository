@@ -33,7 +33,6 @@ class Templater
 	function Append($HTMLString)
 	{
 		echo $HTMLString;
-		flush();
 	}
 
 	function BeginTag($TagName, $TagData = array(), $IsSelfClosing = false)

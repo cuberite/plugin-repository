@@ -196,6 +196,17 @@ nav img:active { transform: scale(0.95); }
 	align-content: flex-start;
 	width: 200px;
 }
+.boundedbox.expandedplugin > header > nav > form > button
+{
+	vertical-align: middle;
+	color: transparent;
+	background: none;
+	cursor: pointer;
+}
+.boundedbox.expandedplugin > header > nav > form > select
+{
+	max-width: calc(100% - 61px);
+}
 .boundedbox.expandedplugin > header > nav > div
 {
 	width: 100%;
@@ -208,16 +219,7 @@ nav img:active { transform: scale(0.95); }
 }
 .boundedbox.expandedplugin > header > nav > figure
 {
-	margin: 0 5px 5px 0;
-}
-.boundedbox.expandedplugin > header > nav > figure > figcaption
-{
-	vertical-align: middle;
-	display: inline-block;
-}
-.boundedbox.expandedplugin > header > nav > figure > a > img
-{
-	vertical-align: middle;
+	margin: 5px 8px 0 0;
 }
 .boundedbox.expandedplugin > header > figure
 {

@@ -27,6 +27,13 @@ if ($Query === null)
 	return;
 }
 
+if (isset($_POST['Download']) && isset($_POST['DownloadType']))
+{
+	$SQLLink->update('PluginData', array('DownloadCount' => $SQLLink->sqleval('DownloadCount + 1')), 'RepositoryID = %i', $_GET['id']);
+	$Template->SetRedirect($_POST['DownloadType']);
+	return;
+}
+
 if (isset($_POST['Submit']))
 {
 	if (!AccountsHelper::GetLoggedInDetails($Details))

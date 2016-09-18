@@ -54,7 +54,7 @@ class PluginItemTemplate
 
 	static function AddExpandedPluginItem($SQLEntry, $Templater)
 	{
-		list($RepositoryName, $RepositoryFullName, $RepositoryOwnerName, $RepositoryVersion, , $License) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
+		list($RepositoryName, $RepositoryFullName, $RepositoryOwnerName, $RepositoryVersion, , $License, $PluginDownload, $Releases) = GitHubAPI::GetCachedRepositoryMetadata($SQLEntry['RepositoryID']);
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI::GetCachedRepositoryIconData($SQLEntry['RepositoryID']);
 		list(, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($SQLEntry['AuthorID']);
 
@@ -82,38 +82,48 @@ class PluginItemTemplate
 						{
 							$Templater->BeginTag('br', array(), true);
 							$Templater->Append('Version: ' . $RepositoryVersion);
-							$Templater->BeginTag('br', array(), true);
-							$Templater->Append('Rating: ' . $RepositoryVersion);
-							$Templater->BeginTag('br', array(), true);
-							$Templater->Append('Downloads: ' . $RepositoryVersion);
-							$Templater->BeginTag('br', array(), true);
-							$Templater->Append('Category: ' . $RepositoryVersion);
+							// $Templater->BeginTag('br', array(), true);
+							// $Templater->Append('Rating: ' . $RepositoryVersion);
+							// $Templater->BeginTag('br', array(), true);
+							// $Templater->Append('Category: ' . $RepositoryVersion);
 						}
+						
+						$Templater->BeginTag('br', array(), true);
+						$Templater->Append('Downloads: ' . $SQLEntry['DownloadCount']);
 					$Templater->EndLastTag();
 				$Templater->EndLastTag();
 				
 				$Templater->BeginTag('nav');
 				
-					$Templater->BeginTag('figure');
-						$Templater->BeginTag('figcaption');
-							$Templater->Append('✓ ');
-						$Templater->EndLastTag();
+					$Templater->BeginTag('form', array('action' => $_SERVER['PHP_SELF'] . '?id=' . $SQLEntry['RepositoryID'], 'method' => 'POST'));
+						$Templater->BeginTag('select', array('name' => 'DownloadType'));
+							if ($RepositoryVersion)
+							{
+								$Templater->BeginTag('optgroup', array('label' => 'Latest release'));
+									$Templater->BeginTag('option', array('value' => $PluginDownload));
+										$Templater->Append($RepositoryVersion);
+									$Templater->EndLastTag();
+								$Templater->EndLastTag();
+							}
+							
+							$Templater->BeginTag('optgroup', array('label' => 'Latest commit'));
+							$Templater->BeginTag('option', array('value' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));
+								$Templater->Append('Cutting bleeding edge');
+							$Templater->EndLastTag();
+							$Templater->EndLastTag();
+							
+							$Templater->BeginTag('optgroup', array('label' => 'Other releases'));
+								foreach ($Releases as $Release)
+								{
+									$Templater->BeginTag('option', array('value' => $Release[1]));
+										$Templater->Append($Release[0]);
+									$Templater->EndLastTag();
+								}
+							$Templater->EndLastTag();
+						$Templater->EndLastTag();						
 						
-						$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));							
+						$Templater->BeginTag('button', array('name' => 'Download', 'type' => 'submit'));
 							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download latest release button', 'title' => 'Download latest release'), true);
-						$Templater->EndLastTag();
-					$Templater->EndLastTag();
-					
-					$Templater->BeginTag('div');
-					$Templater->EndLastTag();
-					
-					$Templater->BeginTag('figure');
-						$Templater->BeginTag('figcaption');
-							$Templater->Append('🐜 ');
-						$Templater->EndLastTag();
-						
-						$Templater->BeginTag('a', array('href' => 'https://api.github.com/repos/' . $RepositoryFullName . '/zipball'));							
-							$Templater->BeginTag('img', array('src' => 'images/download.svg', 'class' => 'download', 'alt' => 'Download latest commit button', 'title' => 'Download latest commit'), true);
 						$Templater->EndLastTag();
 					$Templater->EndLastTag();
 					

@@ -67,15 +67,15 @@ class Configurator
 		$SQLLink = new mysqli($_POST['DBAddress'], $_POST['DBUsername'], $_POST['DBPassword']);
 		if ($SQLLink->connect_errno)
 		{
-			echo "Failure connecting to database: " . $SQLLink->error;
+			echo 'Failure connecting to database: ' . $SQLLink->error;
 			return false;
 		}
 
 		// Create the database
-		$Query = $SQLLink->query("CREATE DATABASE IF NOT EXISTS " . $_POST['DBPluginDatabaseName']);
+		$Query = $SQLLink->query('CREATE DATABASE IF NOT EXISTS ' . $_POST['DBPluginDatabaseName']);
 		if (!$Query || !$SQLLink->select_db($_POST['DBPluginDatabaseName']))
 		{
-			echo "Failure creating database: " . $SQLLink->error;
+			echo 'Failure creating database: ' . $SQLLink->error;
 			return false;
 		}
 
@@ -83,6 +83,8 @@ class Configurator
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS PluginData (
 				RepositoryID INT NOT NULL,
 				AuthorID INT NOT NULL,
+				DownloadCount INT NOT NULL,
+				UpdateHookID INT NOT NULL,
 				PRIMARY KEY(RepositoryID)
 			)'
 		);
@@ -104,7 +106,7 @@ class Configurator
 		);
 		if (!$Query)
 		{
-			echo "Failure creating the comments table: " . $SQLLink->error;
+			echo 'Failure creating the comments table: ' . $SQLLink->error;
 			return false;
 		}
 		

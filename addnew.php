@@ -28,6 +28,7 @@ if (isset($_POST['Submit']))
 			array(
 				'RepositoryID' => $_POST['RepositoryID'],
 				'AuthorID' => $AuthorDetails[0],
+				'DownloadCount' => 0,
 				'UpdateHookID' => $HookID
 			)
 		);
