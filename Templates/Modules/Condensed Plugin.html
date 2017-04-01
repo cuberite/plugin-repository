@@ -1,0 +1,37 @@
+<a style="text-decoration: none" href="/show/{{ Plugin.RepositoryID }}">
+	<figure
+		class="boundedbox condensedplugin"
+		style="
+			background-color: {{ Plugin.DominantRGB }};
+			color: {{ Plugin.TextRGB }};
+			animation-duration: {{ Plugin.MinimumAnimationDuration }}ms
+		"
+	>
+		<img src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+
+		<figcaption>
+			<strong>{{ Plugin.RepositoryName }}</strong>
+
+			<br />
+	
+			Author: {{ Plugin.AuthorDisplayName }}
+	
+			{% if Plugin.RepositoryVersion == true %}
+				<br />
+				Version: {{ Plugin.RepositoryVersion }}
+			{% endif %}
+	
+			{% if Plugin.License == true %}
+				<br />
+				License: {{ Plugin.License }}
+			{% endif %}
+	
+			{% if Plugin.Description == true %}
+				<p>
+					{{ Plugin.Description }}
+				</p>
+			{% endif %}
+		</figcaption>
+
+	</figure>
+</a>

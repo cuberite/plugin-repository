@@ -27,31 +27,31 @@ class Configurator
 				position: absolute;
 			}
 		</style>
-
+		
 		<div id="configurationbox">
 			<h2>Configuration</h2>
 			<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
-				<style>
+				<style>		
 					#buttonenclosure { text-align: center; margin-top: 10px; }
 				</style>
 				<label>Database address:	</label>
 				<input autofocus required placeholder="localhost" type="text" name="DBAddress"/><br/>
-
+				
 				<label>Database username:	</label>
 				<input type="text" required name="DBUsername"/><br/>
-
+				
 				<label>Database password:	</label>
 				<input type="text" name="DBPassword"/><br/>
-
+				
 				<label>Plugin database name:</label>
 				<input type="text" required name="DBPluginDatabaseName"/><br/>
-
+				
 				<label>GitHub Application ID:</label>
 				<input type="text" required name="GHClientID"/><br/>
-
+				
 				<label>GitHub Application Secret:</label>
 				<input type="text" required name="GHClientSecret"/><br/>
-
+				
 				<div id="buttonenclosure">
 					<input type="Submit" value="Submit" name="Submit"/>
 				</div>
@@ -61,7 +61,7 @@ class Configurator
 </html>
 		<?php
 	}
-
+	
 	private static function CreateDatabase()
 	{
 		$SQLLink = new mysqli($_POST['DBAddress'], $_POST['DBUsername'], $_POST['DBPassword']);
@@ -109,14 +109,14 @@ class Configurator
 			echo 'Failure creating the comments table: ' . $SQLLink->error;
 			return false;
 		}
-
+		
 		return true;
 	}
-
+	
 	static function CreateDatabaseAndConfig()
 	{
 		if (Configurator::CreateDatabase())
-		{
+		{		
 			$Configuration =
 '[SQL]
 DatabaseAddress=' . $_POST['DBAddress'] . '
@@ -131,44 +131,19 @@ GitHubClientSecret=' . $_POST['GHClientSecret'];
 			if (!($Handle = fopen('configuration.ini', 'w')) || !fwrite($Handle, $Configuration))
 			{
 				echo "Failure writing configuration file";
-				return false;
+				return false;	
 			}
-
+			
 			return true;
 		}
-
+		
 		return false;
 	}
 }
 
-require_once 'Globals.php';
-require_once 'Environment Interfaces/meekrodb.php';
-require_once 'Environment Interfaces/GitHub API/Users.php';
-require_once 'Environment Interfaces/Cache.php';
-require_once 'Generators/Comment.php';
-require_once 'Generators/Condensed Plugin.php';
-require_once 'Generators/Expanded Plugin.php';
-
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
-$Response = $SQLLink->query('SELECT * FROM PluginData');
-foreach ($Response as $Value)
-{
-	//CondensedPluginModuleGenerator::GenerateAndCache($Value['RepositoryID']);
-	ExpandedPluginModuleGenerator::GenerateAndCache($Value['RepositoryID']);
-}
-return;
-$Response = $SQLLink->query('SELECT * FROM Comments');
-foreach ($Response as $Value)
-{
-	$Profile = GitHubAPI\Users::GetDetailsFromID($Value['AuthorID']);
-	Cache::UpdateCacheEntry(CacheType::Users, $Profile['id'], serialize($Profile));
-
-	CommentModuleGenerator::GenerateAndCache($Value['LinkedRepositoryID']);
-}
-
 if (file_exists('configuration.ini'))
 {
-	header('Location: /');
+	header('Location:');
 	return;
 }
 

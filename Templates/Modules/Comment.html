@@ -1,0 +1,13 @@
+<section>
+	<img
+		class="profileimage"
+		style="margin-right: 5px"
+		src="{{ Comment.Author.avatar_url }}"
+		alt="Avatar of {{ Comment.Author.name }}"
+		title="Author of comment: {{ Comment.Author.name }}"
+	/>
+
+	<span style="vertical-align: middle">
+		{{ Comment.Text|escape }}
+	</span>
+</section>

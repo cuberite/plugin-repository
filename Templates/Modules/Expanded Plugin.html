@@ -1,0 +1,98 @@
+<article class="boundedbox expandedplugin">
+	<header style="background-color: {{ Plugin.DominantRGB }}; outline-color: {{ Plugin.DominantRGB }}; color: {{ Plugin.TextRGB}}">
+		<figure>
+			<img src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+
+			<figcaption>
+				<h2>{{ Plugin.RepositoryName }}</h2>
+
+				Author: {{ Plugin.AuthorDisplayName }}
+				<br />
+				Owned by: {{ Plugin.RepositoryOwnerName }}
+
+				{% if Plugin.License == true %}
+					<br />
+					License: {{ Plugin.License }}
+				{% endif %}
+
+				{% if Plugin.RepositoryVersion == true %}
+					<br />
+					Version: {{ Plugin.RepositoryVersion }}
+				{% endif %}
+
+				<!-- TODO: ratings and categories -->
+
+				<br />
+				Downloads: {{ Plugin.DownloadCount }}
+			</figcaption>
+		</figure>
+
+		<nav>
+			<form action="/download/{{ Plugin.RepositoryID }}" method="post">
+				<select name="DownloadType">
+					{% if Plugin.RepositoryVersion == true %}
+						<optgroup label="Latest release">
+							<option value="{{ Plugin.PluginDownload }}">{{ Plugin.RepositoryVersion }}</option>
+						</optgroup>
+					{% endif %}
+
+					<optgroup label="Latest commit">
+						<option value="https://api.github.com/repos/{{ Plugin.RepositoryFullName}}/zipball">Cutting bleeding edge</option>
+					</optgroup>
+
+					<optgroup label="Other releases">
+						{% for Release in Plugin.Releases %}
+							<option value="{{ Release[1] }}">{{ Release[0] }}</option>
+						{% endfor %}
+					</optgroup>
+				</select>
+
+				<button name="Download" type="submit">
+					<img src="/images/download.svg" class="download" alt="Download latest release button" title="Download latest release" />
+				</button>
+			</form>
+
+			<div></div>
+			<hr />
+
+			<figure>
+				<a href="https://github.com/{{ Plugin.RepositoryFullName }}">
+					<img src="/images/github.svg" class="github" alt="Link to GitHub repository button" title="Go to repository on GitHub" />
+				</a>
+			</figure>
+
+			<!-- TODO: comment, rate, favourite, report buttons. -->
+
+			<figure>
+				<a href="/edit/{{ Plugin.RepositoryID }}">
+					<img src="/images/edit.svg" class="edit" alt="Edit button" title="Edit" />
+				</a>
+			</figure>
+		</nav>
+	</header>
+
+	{% if Plugin.Screenshots is not empty %}
+		<link rel="stylesheet" href="/Stylesheets/Slideshow.css">
+
+		<div class="slideshow" data-transition="fade">
+			{% for Screenshot in Plugin.Screenshots %}
+				<input name="slideshow" type="radio" id="slideshow-item-{{ loop.index }}" class="slideshow--bullet" {{ (loop.index0 == 0) ? 'checked="checked"' : '' }} />
+				<div class="slideshow--item">
+					<img src="{{ Screenshot['download_url'] }}" alt="Screenshot {{ loop.index }}" title="{{ Screenshot['name'] }}" />
+
+					{% set PreviousID = ((((loop.index0 - 1) % loop.length) + loop.length) % loop.length) + 1 %}
+					<label for="slideshow-item-{{ PreviousID }}" class="slideshow--nav slideshow--nav-previous">Go to slide {{ PreviousID }}</label>
+
+					{% set NextID = ((((loop.index0 + 1) % loop.length) + loop.length) % loop.length) + 1 %}
+					<label for="slideshow-item-{{ NextID }}" class="slideshow--nav slideshow--nav-next">Go to slide {{ NextID }}</label>
+				</div>
+			{% endfor %}
+		</div>
+
+		<hr />
+	{% endif %}
+
+	{# Parsedown converts this to HTML - output as-is #}
+	{# TODO: maybe make a Twig filter to Parsedown-ify for us? #}
+	{{ Plugin.RepositoryReadme|raw }}
+</article>

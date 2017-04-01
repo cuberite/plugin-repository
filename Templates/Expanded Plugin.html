@@ -1,0 +1,22 @@
+{% extends "Bases/Base.html" %}
+
+{% block MainContent %}
+	{{ source(StaticRepositoryPath) }}
+
+	<article class="boundedbox expandedplugin" id="comments">
+		{% if LoginDetails.LoggedIn %}
+			<form style="text-align: center" action="/comment/{{ RepositoryID }}" method="post">
+				<textarea required style="margin-top: 15px" rows="10" cols="35" placeholder="Comment on this plugin..." name="Comment"></textarea>
+				<br />
+				<input name="Submit" style="margin: 10px 0px" type="submit" value="Submit comment" />
+			</form>
+			<hr />
+		{% endif %}
+
+		{% for StaticCommentPath in StaticCommentPaths %}
+			{{ source(StaticCommentPath) }}
+		{% else %}
+			<h3 style="text-align: center">No comments yet; make some comments!</h3>
+		{% endfor %}
+	</article>
+{% endblock %}

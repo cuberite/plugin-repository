@@ -1,0 +1,15 @@
+{% extends "Bases/Standard Form.html" %}
+
+{% block FormContent %}
+	<h2>Edit a existing entry</h2>
+	<hr style="margin-top: -15px" />
+
+	<form action="/edit/{{ RepositoryID }}" method="post">	
+		<input
+			style="height: 50px; margin-left: auto; margin-right: auto; display: block"
+			name="Delete{{ RepositoryID}}"
+			type="submit"
+			value="Delete entry"
+		/>
+	</form>
+{% endblock %}

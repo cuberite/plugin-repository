@@ -1,0 +1,36 @@
+{% extends "Bases/Standard Form.html" %}
+
+{% block FormContent %}
+	<h2>Add a new entry</h2>
+	<hr style="margin-top: -15px" />
+
+	<form action="{{ RedirectLocation }}" method="post">
+		{% for RepositoryOwner, Repositories in RepositoryGroup %}
+			<h3>{{ RepositoryOwner }}</h3>
+
+			{% for Repository in Repositories %}
+				<input required type="radio" name="RepositoryID" value="{{ Repository['id'] }}" />
+				<label>
+					<strong>{{ Repository['name'] }}</strong>
+					<em>{{ Repository['description'] }}</em>
+
+					<br />
+				</label>
+			{% endfor %}
+		{% endfor %}
+
+		<hr />
+		<p>
+			<strong>No organisation?</strong> Ensure that your membership of it is public.
+		</p>
+		<p>
+			<strong>Favicons:</strong> add a Favicon.png file to the base directory.
+			<br />
+			<strong>Description:</strong> add a Info.lua file to the base directory, with a Description field.
+			<br />
+			<strong>Screenshots:</strong> place images into a Screenshots directory.
+		</p>
+
+		<input name="Submit" type="submit" value="Submit entry" />
+	</form>
+{% endblock %}

@@ -1,32 +1,6 @@
 <?php
 class ImageHelper
 {
-	static function DisplaySerialisedImages($ImageArray, $Templater)
-	{
-		$ImageFound = false;
-		$ImageArray = unserialize($ImageArray);
-
-		if (!empty($ImageArray))
-		{
-			$Templater->BeginTag('div', array('style' => 'text-align: center;'));
-				$Templater->BeginTag('div', array('class' => 'bss-slides num1', 'tabindex' => '1'));
-					foreach ($ImageArray as $ImageValue)
-					{
-						if (!empty($ImageValue))
-						{
-							$ImageFound = true;
-							$Templater->BeginTag('figure');
-								$Templater->BeginTag('img', array('class' => 'boundedbox screenshot', 'src' => $ImageValue), true);
-							$Templater->EndLastTag();
-						}
-					}
-				$Templater->EndLastTag();
-			$Templater->EndLastTag();
-		}
-
-		return $ImageFound;
-	}
-	
 	static function GetDominantColorAndTextColour($ImageLocation, &$DominantRGB, &$TextRGB)
 	{
 		$Image = imagecreatefromstring($ImageLocation);
@@ -51,7 +25,7 @@ class ImageHelper
 		}
 
 		$DominantColour = array_search(max($RGBCounter), $RGBCounter);
-				
+
 		if (
 			(
 				0.21 * (($DominantColour & 0xFF0000) >> 16) +
@@ -66,9 +40,8 @@ class ImageHelper
 		{
 			$TextRGB = '#FFFFFF';
 		}
-				
-		$DominantRGB = '#' . dechex($DominantColour);
-		$DominantRGB = str_pad($DominantRGB, 7, '0', STR_PAD_RIGHT);
+
+		$DominantRGB = '#' . str_pad(dechex($DominantColour), 6, '0', STR_PAD_LEFT);
 	}
 }
 ?>

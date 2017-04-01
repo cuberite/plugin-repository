@@ -1,0 +1,13 @@
+{% extends "Bases/Base.html" %}
+
+{% block MainContent %}
+	<section class="boundedbox">
+		{% for StaticRepositoryPath in StaticRepositoryPaths %}
+			{# Load from intermediate cache. Needed so other things can selectively use condensed plugin modules. #}
+			{{ source(StaticRepositoryPath) }}
+		{% else %}
+			<!-- TODO: configurable message for i.e. search -->
+			<h2 style="text-align: center">It's lonely in here; did someone remove all of my entries?</h2>
+		{% endfor %}
+	</section>
+{% endblock %}

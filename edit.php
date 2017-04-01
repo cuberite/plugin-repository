@@ -1,61 +1,83 @@
 <?php
 session_start();
 
-require_once 'functions.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/meekrodb.php';
-require_once 'helpers/cachehelper.php';
-require_once 'helpers/accountshelper.php';
-require_once 'templates/immersiveform.php';
-require_once 'templates/standardform.php';
+require_once '../composer/vendor/autoload.php';
+require_once 'Globals.php';
+require_once 'Environment Interfaces/meekrodb.php';
+require_once 'Environment Interfaces/Session.php';
+require_once 'Environment Interfaces/GitHub API/Repositories.php';
 
-$Template = new Templater();
+if (!isset($_GET['RepositoryID']))
+{
+	http_response_code(400);
+	return;
+}
+
+if (isset($_POST['Cancel']))
+{
+	SetRedirect('//show/' . $_GET['RepositoryID']);
+	return;
+}
+
+$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates')), GetTwigOptions());
 $SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
-if (!isset($_GET['id']))
+if (!Session::GetLoggedInDetails($Details))
 {
-	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'No plugin ID was specified.', $Template);
-	$Template->SetRefresh();
+	SetRedirect('//login?' . http_build_query(array('login' => 1, 'redirect' => $_SERVER['REQUEST_URI'])));
 	return;
 }
 
-$Query = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE RepositoryID = %i', $_GET['id']);
+$Query = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE RepositoryID = %i', $_GET['RepositoryID']);
 if ($Query === null)
 {
-	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'The specified plugin ID does not exist.', $Template);
-	$Template->SetRefresh();
+	http_response_code(404);
 	return;
 }
 
-if (!AccountsHelper::GetLoggedInDetails($Details) || ($Details[0] != $Query['AuthorID']))
+if ($Details->User['id'] !== (int)$Query['AuthorID'])
 {
-	ImmersiveFormTemplate::AddImmersiveDialog('An error occurred', IMMERSIVE_ERROR, 'You can only edit your own plugins.', $Template);
-	$Template->SetRefresh('showplugin.php?id=' . $_GET['id']);
-	return;	
-}
-
-if (isset($_POST['DeleteConfirmed' . $_GET['id']]))
-{
-	GitHubAPI::DeleteRepositoryUpdateHook($_GET['id'], $Query['UpdateHookID']);	
-	$SQLLink->query('DELETE FROM PluginData WHERE RepositoryID = %i', $_GET['id']);
-	RepositoryResourcesCache::DeleteCache(RepositoryResourcesCache::CACHE_TYPE_REPOSITORYDATA, $_GET['id']);
-	ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'The entry was successfully deleted.', $Template);
-	$Template->SetRefresh();
+	http_response_code(403);
 	return;
 }
 
-if (isset($_POST['Delete' . $_GET['id']]))
+if (isset($_POST['DeleteConfirmed' . $_GET['RepositoryID']]))
 {
-	ImmersiveFormTemplate::AddImmersiveConfirmationDialog(
-		'Plugin deletion confirmation',
-		'This action will reset all ratings and comments. Are you sure?',
-		'DeleteConfirmed' . $_GET['id'],
-		$_SERVER['PHP_SELF'] . '?id=' . $_GET['id'],
-		'showplugin.php?id=' . $_GET['id'],
-		$Template
+	// TODO: catch thrown exceptions
+	// TODO (future proofing): race condition if author ever changes between the check and the delete
+	$SQLLink->query('DELETE FROM PluginData WHERE RepositoryID = %i', $_GET['RepositoryID']);
+
+	GitHubAPI\Repositories::DeleteUpdateHook($_GET['RepositoryID'], $Query['UpdateHookID']);
+	Cache::DeleteCache(CacheType::CondensedPlugins, $_GET['RepositoryID'] . '.html');
+	Cache::DeleteCache(CacheType::ExpandedPlugins, $_GET['RepositoryID'] . '.html');
+
+	$Templater->display(
+		'Immersive Dialog.html',
+		array(
+			'Message' => 'Operation successful',
+			'Explanation' => 'The entry was successfully deleted.',
+			'DialogType' => IMMERSIVE_INFO,
+			'LoginDetails' => $Details
+		)
+	);
+	SetRefresh();
+	return;
+}
+
+if (isset($_POST['Delete' . $_GET['RepositoryID']]))
+{
+	$Templater->display(
+		'Immersive Confirmation Dialog.html',
+		array(
+			'Message' => 'Plugin deletion confirmation',
+			'Explanation' => 'This action will reset all ratings and comments. Are you sure?',
+			'AcceptRedirectLocation' => '/edit/' . $_GET['RepositoryID'],
+			'ConfirmationButtonName' => 'DeleteConfirmed' . $_GET['RepositoryID'],
+			'LoginDetails' => $Details
+		)
 	);
 	return;
 }
 
-StandardFormTemplate::AddEditPluginForm($Query, $Template);
+$Templater->display('Edit Plugin Form.html', array('RepositoryID' => $_GET['RepositoryID'], 'LoginDetails' => $Details));
 ?>

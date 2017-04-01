@@ -1,7 +1,6 @@
 <?php
-require_once 'Globals.php';
-require_once 'Generators/Condensed Plugin.php';
-require_once 'Generators/Expanded Plugin.php';
+require_once 'helpers/githubapihelper.php';
+require_once 'functions.php';
 
 // Ensure appropriate header and payload are present
 if (!isset(getallheaders()['X-Hub-Signature']) || !isset($_POST['payload']))
@@ -24,7 +23,7 @@ if (count($SplitHeader) !== 2)
 list($Algorithm, $DeliveredHash) = $SplitHeader;
 
 // Calculate hash based on RAW payload and the secret
-$CalculatedHash = @hash_hmac($Algorithm, file_get_contents('php://input'), GH_OAUTH_CLIENT_SECRET);
+$CalculatedHash = hash_hmac($Algorithm, file_get_contents('php://input'), GH_OAUTH_CLIENT_SECRET);
 
 // Check if hashes are equivalent
 // NB: if $Algorithm ∉ { hash_algos() }, $CalculatedHash === FALSE, and so $DeliveredHash, STRING will not be type-equivalent to FALSE
@@ -36,12 +35,15 @@ if ($DeliveredHash !== $CalculatedHash)
 
 // Decode the PROCESSED payload, assuming that the request is genuine and the body is valid JSON
 $Data = json_decode($_POST['payload'], true);
-
-if (isset($Data['repository']['id']))
+try
 {
-	// Not a ping event
-	CondensedPluginModuleGenerator::GenerateAndCache($Data['repository']['id']);
-	ExpandedPluginModuleGenerator::GenerateAndCache($Data['repository']['id']);
+	GitHubAPI::ProcessRepositoryProperties($Data['repository']['id']);
+}
+catch (Exception $NoID)
+{
+	// Probably a ping event?
+	http_response_code(204);
+	return;
 }
 
 http_response_code(204);

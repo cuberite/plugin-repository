@@ -1,0 +1,20 @@
+{% if DialogType == IMMERSIVE_INFO %}
+	{% set Subclass = 'info' %}
+{% elseif DialogType == IMMERSIVE_ERROR %}
+	{% set Subclass = 'error' %}
+{% else %}
+	{% set Subclass = 'form' %}
+{% endif %}
+
+{% embed "Bases/Immersive Form.html" with { 'Subclass' : Subclass } %}
+
+{% block FormContent %}
+	<h1>{{ Message }}</h1>
+	<p>{{ Explanation }}</p>
+	<p>
+		<img class="spinner" src="/images/spinner.gif" />
+		Please wait whilst you are redirected
+	</p>
+{% endblock %}
+
+{% endembed %}
