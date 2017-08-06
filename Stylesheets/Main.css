@@ -178,7 +178,7 @@ nav img:active { transform: scale(0.95); }
 	flex-wrap: wrap;
 	justify-content: flex-end;
 	align-content: flex-start;
-	width: 200px;
+	width: auto;
 }
 .boundedbox.expandedplugin > header > nav > form > button
 {
