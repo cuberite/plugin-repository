@@ -143,7 +143,7 @@ GitHubClientSecret=' . $_POST['GHClientSecret'];
 
 if (file_exists('configuration.ini'))
 {
-	header('Location:');
+	header('Location: /');
 	return;
 }
 
