@@ -1,31 +1,20 @@
 <?php
 session_start();
 
-require_once 'functions.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/imagehelper.php';
-require_once 'helpers/accountshelper.php';
-require_once 'helpers/meekrodb.php';
-require_once 'templates/pluginitem.php';
+require_once '../composer/vendor/autoload.php';
+require_once 'Globals.php';
+require_once 'Environment Interfaces/Cache.php';
+require_once 'Environment Interfaces/Session.php';
 
-$Template = new Templater();
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
-$Response = $SQLLink->query('SELECT * FROM PluginData');
+$BaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::CondensedPlugins;
+$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates', $BaseDirectory)), GetTwigOptions());
 
-if ($SQLLink->count() === 0)
+$StaticRepositoryPaths = array();
+foreach (glob($BaseDirectory . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT) as $Value)
 {
-	$Template->BeginTag('h2', array('style' => 'text-align: center;'));
-		$Template->Append('It\'s lonely in here; did someone remove all of my entries?');
-	$Template->EndLastTag();
-	return;
+	$StaticRepositoryPaths[] = basename($Value);
 }
 
-$Template->BeginTag('section', array('class' => 'boundedbox'));
-	$MinimumDuration = 100;
-	foreach ($Response as $Value)
-	{
-		$MinimumDuration = rand($MinimumDuration, 1000);
-		PluginItemTemplate::AddCondensedPluginItem($MinimumDuration, $Value, $Template);
-	}
-$Template->EndLastTag();
+Session::GetLoggedInDetails($Details);
+$Templater->display('Condensed Plugins.html', array('StaticRepositoryPaths' => $StaticRepositoryPaths, 'LoginDetails' => $Details));
 ?>

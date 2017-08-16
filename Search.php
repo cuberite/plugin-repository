@@ -1,13 +1,17 @@
 <?php
 session_start();
 
-require_once 'functions.php';
-require_once 'helpers/templater.php';
-require_once 'helpers/imagehelper.php';
-require_once 'helpers/meekrodb.php';
-require_once 'templates/pluginitem.php';
+require_once '../composer/vendor/autoload.php';
+require_once 'Globals.php';
+require_once 'Environment Interfaces/meekrodb.php';
+require_once 'Environment Interfaces/Cache.php';
+require_once 'Environment Interfaces/Session.php';
+require_once 'Environment Interfaces/imagehelper.php';
+require_once 'Environment Interfaces/GitHub API/Repositories.php';
+require_once 'Environment Interfaces/GitHub API/Users.php';
 
-$Template = new Templater();
+$BaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::CondensedPlugins;
+$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates', $BaseDirectory)), GetTwigOptions());
 $SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (isset($_POST['Search']) && isset($_POST['Method']))
@@ -19,10 +23,10 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 			$AllPlugins = $SQLLink->query('SELECT * FROM PluginData');
 			foreach ($AllPlugins as $Plugin)
 			{
-				list($AuthorLogin, $AuthorDisplayName) = AccountsHelper::GetDetailsFromID($Plugin['AuthorID']);
+				$Author = GitHubAPI\Users::GetDetailsFromID($Plugin['AuthorID']);
 				if (
-					(stripos($AuthorLogin, $_POST['Query']) !== false) ||
-					(stripos($AuthorDisplayName, $_POST['Query']) !== false)
+					(stripos($Author['login'], $_POST['Query']) !== false) ||
+					(stripos($Author['name'], $_POST['Query']) !== false)
 				)
 				{
 					$Response[] = $Plugin;
@@ -35,7 +39,7 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 			$AllPlugins = $SQLLink->query('SELECT * FROM PluginData');
 			foreach ($AllPlugins as $Plugin)
 			{
-				list($RepositoryName) = GitHubAPI::GetCachedRepositoryMetadata($Plugin['RepositoryID']);
+				list($RepositoryName) = GitHubAPI\Repositories::GetMetadata($Plugin['RepositoryID']);
 				if (stripos($RepositoryName, $_POST['Query']) !== false)
 				{
 					$Response[] = $Plugin;
@@ -44,31 +48,33 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 			break;
 		}
 		case 'RepositoryID':
-		{			
-			$Response = $SQLLink->query('SELECT * FROM PluginData WHERE %l = %s', $_POST['Method'], $_POST['Query']);
+		{
+			$Response = $SQLLink->query('SELECT * FROM PluginData WHERE RepositoryID = %s', $_POST['Query']);
 			break;
 		}
-		default: return;
+		default:
+		{
+			http_response_code(400);
+			return;
+		}
 	}
 	
-	if (empty($Response))
-	{
-		$Template->BeginTag('h1', array('style' => 'text-align: center;'));
-			$Template->Append('No matching results were found');
-		$Template->EndLastTag();
-		return;
-	}
-
-	$Template->BeginTag('section', array('class' => 'boundedbox'));
-		$MinimumDuration = 100;
-		foreach ($Response as $Value)
-		{
-			$MinimumDuration = rand($MinimumDuration, 1000);
-			PluginItemTemplate::AddCondensedPluginItem($MinimumDuration, $Value, $Template);
-		}
-	$Template->EndLastTag();
+	Session::GetLoggedInDetails($Details);
+	$Templater->display(
+		'Condensed Plugins.html',
+		array(
+			'StaticRepositoryPaths' => array_map(
+				function($Value)
+				{
+					return $Value['RepositoryID'] . '.html';
+				},
+				$Response
+			),
+			'LoginDetails' => $Details
+		)
+	);
 	return;
 }
 
-$Template->SetRedirect();
+http_response_code(400);
 ?>
