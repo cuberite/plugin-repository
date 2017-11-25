@@ -35,7 +35,6 @@ final class Repositories
 		}
 		catch (\Exception $e)
 		{
-			print_r($e->getMessage());
 			http_response_code(500);
 			die("Fatal error - failed to retrieve required repository metadata.");
 		}
