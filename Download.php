@@ -23,7 +23,7 @@ if (isset($_POST['Download']) && isset($_POST['DownloadType']))
 		http_response_code(404);
 		return;
 	}
-	
+
 	ExpandedPluginModuleGenerator::GenerateAndCache($_GET['RepositoryID']);
 	SetRedirect($_POST['DownloadType']);
 	return;

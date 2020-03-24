@@ -43,10 +43,10 @@ if (isset($_GET['code']))
 		);
 
 		// TODO: better response
-		
+
 		session_unset();
 		session_destroy();
-		
+
 		http_response_code(500);
 		return;
 	}

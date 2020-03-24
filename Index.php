@@ -7,7 +7,7 @@ require_once 'Environment Interfaces/Cache.php';
 require_once 'Environment Interfaces/Session.php';
 
 $BaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::CondensedPlugins;
-$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates', $BaseDirectory)), GetTwigOptions());
+$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $BaseDirectory)), GetTwigOptions());
 
 $StaticRepositoryPaths = array();
 foreach (glob($BaseDirectory . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT) as $Value)
