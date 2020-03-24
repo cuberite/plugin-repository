@@ -9,7 +9,7 @@ final class Comment
 {
 	public $Author;
 	public $Text;
-	
+
 	public function __construct($Details)
 	{
 		$this->Author = unserialize(Cache::GetCacheEntry(CacheType::Users, $Details['AuthorID']));
@@ -21,9 +21,9 @@ final class CommentModuleGenerator
 {
 	public static function GenerateAndCache($RepositoryID)
 	{
-		$Templater = new Twig_Environment(new Twig_Loader_Filesystem('Templates/Modules'));
+		$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader('Templates/Modules'));
 		$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
-		
+
 		$Response = $SQLLink->query('SELECT * FROM Comments WHERE LinkedRepositoryID = %i', $RepositoryID);
 		foreach ($Response as $Comment)
 		{
@@ -32,7 +32,7 @@ final class CommentModuleGenerator
 			{
 				mkdir($Directory);
 			}
-			
+
 			Cache::UpdateCacheEntry(
 				CacheType::Comments,
 				$RepositoryID . DIRECTORY_SEPARATOR . $Comment['UniqueID'] . '.html',

@@ -24,7 +24,7 @@ if (isset($_POST['Submit']))
 		SetRedirect('//login?' . http_build_query(array('login' => 1, 'redirect' => $_SERVER['REQUEST_URI'])));
 		return;
 	}
-	
+
 	$SQLLink->insert(
 		'Comments',
 		array(
@@ -40,7 +40,7 @@ if (isset($_POST['Submit']))
 
 	// TODO: success message
 	//ImmersiveFormTemplate::AddImmersiveDialog('Operation successful', IMMERSIVE_INFO, 'Your comment was successfully added', $Template);
-	
+
 	SetRedirect('//show/' . $_GET['RepositoryID']);
 	return;
 }

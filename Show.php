@@ -35,17 +35,17 @@ if (is_dir($CommentsBaseDirectory))
 			return (int)basename($B, '.html') - (int)basename($A, '.html');
 		}
 	);
-	
+
 	foreach ($Result as $Value)
 	{
 		$StaticCommentPaths[] = basename($Value);
 	}
 
-	$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates', $PluginBaseDirectory, $CommentsBaseDirectory)), GetTwigOptions());
+	$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $PluginBaseDirectory, $CommentsBaseDirectory)), GetTwigOptions());
 }
 else
 {
-	$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates', $PluginBaseDirectory)), GetTwigOptions());
+	$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $PluginBaseDirectory)), GetTwigOptions());
 }
 
 $Templater->display(

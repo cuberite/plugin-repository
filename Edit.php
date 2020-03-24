@@ -19,7 +19,7 @@ if (isset($_POST['Cancel']))
 	return;
 }
 
-$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates')), GetTwigOptions());
+$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates')), GetTwigOptions());
 $SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (!Session::GetLoggedInDetails($Details))

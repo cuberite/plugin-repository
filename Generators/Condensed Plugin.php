@@ -14,14 +14,14 @@ final class CondensedPluginItem
 		$AuthorDetails = GitHubAPI\Users::GetDetailsFromID($AuthorID);
 		$this->AuthorDisplayName = is_null($AuthorDetails['name']) ? $AuthorDetails['login'] : $AuthorDetails['name'];
 		$this->RepositoryID = $RepositoryID;
-		$this->MinimumAnimationDuration = $MinimumAnimationDuration;		
+		$this->MinimumAnimationDuration = $MinimumAnimationDuration;
 		$this->Description = GitHubAPI\Repositories::GetDescription($RepositoryID);
-		
+
 		list($this->RepositoryVersion) = GitHubAPI\Repositories::GetReleases($RepositoryID);
 		list($this->RepositoryName, , , $this->License) = GitHubAPI\Repositories::GetMetadata($RepositoryID);
 		list($this->IconHyperlink, $this->DominantRGB, $this->TextRGB) = GitHubAPI\Repositories::GetIconData($RepositoryID);
 	}
-	
+
 	public $RepositoryID;
 	public $RepositoryName;
 	public $RepositoryVersion;
@@ -38,12 +38,12 @@ final class CondensedPluginModuleGenerator
 {
 	public static function GenerateAndCache($RepositoryID)
 	{
-		$Templater = new Twig_Environment(new Twig_Loader_Filesystem('Templates/Modules'));
+		$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader('Templates/Modules'));
 		$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 		$Response = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE RepositoryID = %i', $RepositoryID);
-		
+
 		$MinimumDuration = rand(100, 1000);
-		
+
 		Cache::UpdateCacheEntry(
 			CacheType::CondensedPlugins,
 			$RepositoryID . '.html',

@@ -11,7 +11,7 @@ require_once 'Environment Interfaces/GitHub API/Repositories.php';
 require_once 'Environment Interfaces/GitHub API/Users.php';
 
 $BaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::CondensedPlugins;
-$Templater = new Twig_Environment(new Twig_Loader_Filesystem(array('Templates', $BaseDirectory)), GetTwigOptions());
+$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $BaseDirectory)), GetTwigOptions());
 $SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
 
 if (isset($_POST['Search']) && isset($_POST['Method']))
@@ -58,7 +58,7 @@ if (isset($_POST['Search']) && isset($_POST['Method']))
 			return;
 		}
 	}
-	
+
 	Session::GetLoggedInDetails($Details);
 	$Templater->display(
 		'Condensed Plugins.html',
