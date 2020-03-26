@@ -1,60 +1,24 @@
 <?php
 session_start();
 
-if (!isset($_GET['RepositoryID']))
+if (!isset($_GET['RepositoryId']))
 {
 	http_response_code(400);
 	return;
 }
 
-require_once '../composer/vendor/autoload.php';
 require_once 'Globals.php';
-require_once 'Environment Interfaces/Cache.php';
+require_once 'Models/Plugin.php';
 require_once 'Environment Interfaces/Session.php';
 
-$PluginBaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::ExpandedPlugins;
-$StaticRepositoryFile = $_GET['RepositoryID'] . '.html';
+$Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
 
-if (!is_file($PluginBaseDirectory . DIRECTORY_SEPARATOR . $StaticRepositoryFile))
-{
-	http_response_code(404);
-	return;
-}
-
-Session::GetLoggedInDetails($Details);
-$StaticCommentPaths = array();
-$CommentsBaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::Comments . DIRECTORY_SEPARATOR . $_GET['RepositoryID'];
-
-if (is_dir($CommentsBaseDirectory))
-{
-	$Result = glob($CommentsBaseDirectory . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT);
-	usort(
-		$Result,
-		function ($A, $B)
-		{
-			return (int)basename($B, '.html') - (int)basename($A, '.html');
-		}
-	);
-
-	foreach ($Result as $Value)
-	{
-		$StaticCommentPaths[] = basename($Value);
-	}
-
-	$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $PluginBaseDirectory, $CommentsBaseDirectory)), GetTwigOptions());
-}
-else
-{
-	$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $PluginBaseDirectory)), GetTwigOptions());
-}
-
-$Templater->display(
-	'Expanded Plugin.html',
-	array(
-		'StaticRepositoryPath' => $StaticRepositoryFile,
-		'LoginDetails' => $Details,
-		'RepositoryID' => $_GET['RepositoryID'],
-		'StaticCommentPaths' => $StaticCommentPaths
-	)
+$Query = DB::queryFirstRow(
+	'SELECT * FROM Authors, PluginData WHERE Authors.AuthorId = PluginData.AuthorId AND RepositoryId = %i',
+	$_GET['RepositoryId']
 );
+$Downloads = DB::query('SELECT Name, Tag, Hyperlink FROM DownloadHyperlinks WHERE RepositoryId = %i', $_GET['RepositoryId']);
+
+$Details = Session::GetLoggedInDetails();
+$Templater->display('Expanded Plugin.html', array('Plugin' => $Query, 'Downloads' => $Downloads, 'LoginDetails' => $Details));
 ?>

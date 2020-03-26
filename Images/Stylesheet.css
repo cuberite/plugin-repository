@@ -1,0 +1,103 @@
+/* The default navigation bar seems to have a rounded border.
+This leads to little areas where white bleeds through so change it back to none. */
+#cuberite-navigation
+{
+	border-radius: 0;
+}
+
+/* Push the default footer towards the bottom of the page no matter what.
+Also serves to vertically-centre page content.
+*/
+#cuberite-main-container
+{
+	/* 117 = height footer + header */
+	min-height: calc(-117px + 100%);
+}
+
+/* Eliminate extra margin around radio labels for compact display when adding plugins. */
+.cuberite-plugin-selection.field
+{
+	margin: 0 !important;
+}
+
+/* Provide a fade in animation for plugin cards. */
+@keyframes CondensedEntryDisplay
+{
+	from
+	{
+		opacity: 0;
+		transform: scale(1.1);
+	}
+	to
+	{
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+.cuberite-condensed-plugin.card
+{
+	animation: CondensedEntryDisplay 300ms;
+}
+
+/* Provide a slide in animation for plugin pages. */
+@keyframes ExpandedEntryDisplay
+{
+	from
+	{
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	to
+	{
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+.cuberite-expanded-plugin:nth-of-type(2)
+{
+	animation: ExpandedEntryDisplay 800ms;
+}
+.cuberite-expanded-plugin:nth-of-type(1)
+{
+	animation: ExpandedEntryDisplay 500ms;
+}
+
+/* Semantic horizontal icon lists seem to be broken.
+The text doesn't go on the same line as the icon. */
+.horizontal.cuberite-expanded-plugin-metadata.list > .item > .content
+{
+	width: auto;
+}
+
+/* The GitHub icon is inexplicably smaller, make it larger. */
+.github.icon
+{
+	font-size: 1.1em;
+}
+
+@media only screen and (max-width: 767px)
+{
+	#cuberite-navigation .item::before
+	{
+		display: none;
+	}
+
+	#cuberite-navigation-container, #cuberite-navigation-login-items
+	{
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	#cuberite-navigation-container .right
+	{
+		margin-left: 0 !important;
+	}
+}
+
+/* Class-specific overrides to colour according to our scheme.
+Also correct some visual issues after the scheme is applied, like text contrast. */
+.inverted.cuberite-theme
+{
+	background: #245A48 !important;
+	background: linear-gradient(220deg, #245d33, #24575D) fixed !important;
+}

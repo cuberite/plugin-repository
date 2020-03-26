@@ -1,51 +1,48 @@
-<header>
-	<h1>
-		<a href="/">
+<nav class="ui inverted cuberite-theme accent menu" id="cuberite-navigation">
+	<div class="ui container" id="cuberite-navigation-container">
+		<a href="{{ constant('WebURI::Home') }}" class="header item">
 			<img
-				src="https://raw.githubusercontent.com/cuberite/cuberite/master/src/Resources/icon_256.png"
+				src="https://raw.githubusercontent.com/cuberite/cuberite/master/src/Resources/icon_48.png"
+				style="margin-right: 1.5em"
 				alt="Cuberite Logo"
+				class="logo"
 			/>
+			<p>Plugin Repository</p>
 		</a>
 
-		<span>Plugin Repository</span>
-	</h1>
-
-	<div class="profileheader">			
 		{% if LoginDetails.LoggedIn %}
-			<img src="{{ LoginDetails.User.avatar_url }}" class="profileimage" alt="Avatar of {{ LoginDetails.User.name }}" />
-			<strong>{{ LoginDetails.User.name }}</strong>
-			<br />
-			<a href="https://github.com/settings/profile">Manage account</a>
-			<br />
-			<a href="/login?logout=1">Logout</a>
+			<a href="{{ constant('WebURI::Add') }}" class="{{ ActiveItems[0] }} item">
+				<i class="ui plus icon"></i>
+				Add a new entry
+			</a>
+		{% endif %}
+
+		{% include 'Modules/Global Search.html' with {'placeholder': 'Search for plugins'} %}
+
+		{% if LoginDetails.LoggedIn %}
+			<div class="right menu" id="cuberite-navigation-login-items">
+				<a href="{{ constant('WebURI::Logout') }}" class="item">
+					<img
+						src="{{ LoginDetails.User.AvatarHyperlink }}"
+						class="ui right spaced avatar image"
+						alt="Avatar of {{ LoginDetails.User.DisplayName }}"
+					/>
+					<strong>{{ LoginDetails.User.DisplayName }}</strong>
+				</a>
+			</div>
 		{% else %}
-			<a href="/login?{{ LoginDetails.LoginRedirectURL }}">
-				<img src="https://www.gravatar.com/avatar/?d=mm" class="profileimage" alt="Generic avatar" title="Log in" />
+			<a
+				class="right item"
+				href="{{ constant('WebURI::Login') }}?{{ LoginDetails.LoginRedirectURL }}"
+			>
+				<img
+					src="/images/avatar.jpg"
+					class="ui right spaced avatar image"
+					alt="Generic avatar"
+					title="Log in"
+				/>
+				<span>Log in via GitHub</span>
 			</a>
 		{% endif %}
 	</div>
-
-	<div class="search">
-		<form action="/search" method="post">
-			<input required placeholder="Search by ID, title, or author" size="25" type="text" name="Query" />
-
-			<select name="Method">
-				<option value="RepositoryID">Unique ID</option>
-				<option selected value="PluginName">Title</option>
-				<option value="AuthorName">Author</option>
-			</select>
-
-			<input type="submit" name="Search" value="Search" />
-		</form>
-	</div>
-
-	<nav>
-		<a href="/">
-			<img src="/images/home.svg" alt="Home button" class="home" title="Home" />
-		</a>
-
-		<a href="/add">
-			<img src="/images/addnew.svg" alt="Add new entry button" class="addnew" title="Add a new entry" />
-		</a>
-	</nav>
-</header>
+</nav>

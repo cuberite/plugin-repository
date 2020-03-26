@@ -1,13 +1,23 @@
 {% extends "Bases/Base.html" %}
 
 {% block MainContent %}
-	<section class="boundedbox">
-		{% for StaticRepositoryPath in StaticRepositoryPaths %}
-			{# Load from intermediate cache. Needed so other things can selectively use condensed plugin modules. #}
-			{{ source(StaticRepositoryPath) }}
+
+<main class="ui {{ (Plugins|length == 0) ? 'middle aligned center aligned' }} grid container" id="cuberite-main-container">
+	<div class="column">
+		{% for Plugin in Plugins %}
+			<div class="ui link cards">
+				{% include 'Modules/Condensed Plugin.html' %}
+			</div>
 		{% else %}
-			<!-- TODO: configurable message for i.e. search -->
-			<h2 style="text-align: center">It's lonely in here; did someone remove all of my entries?</h2>
+			<h2 class="ui icon header">
+				<img class="ui large icon" src="images/empty.svg" alt="Empty results" />
+				<span class="content">
+					Nothing to see here…
+					<span class="sub header">Your query returned no results. Try broadening it?</span>
+				</span>
+			</h2>
 		{% endfor %}
-	</section>
+	</div>
+</main>
+
 {% endblock %}

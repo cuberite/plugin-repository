@@ -1,7 +1,7 @@
 <?php namespace GitHubAPI;
 require_once 'Base.php';
 require_once '../composer/vendor/autoload.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'imagehelper.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Image Helper.php';
 
 final class Repositories
 {
@@ -27,11 +27,11 @@ final class Repositories
 		return $Repositories;
 	}
 
-	public static function GetMetadata($RepositoryID)
+	public static function GetMetadata($RepositoryId)
 	{
 		try
 		{
-			$Data = Repositories::CustomRequest('repositories', $RepositoryID);
+			$Data = Repositories::CustomRequest('repositories', $RepositoryId);
 		}
 		catch (\Exception $e)
 		{
@@ -48,14 +48,14 @@ final class Repositories
 			$License = false;
 		}
 
-		return array($Data['name'], $Data['full_name'], $Data['owner']['login'], $License);
+		return array($Data['name'], $Data['full_name'], $License);
 	}
 
-	public static function GetReadme($RepositoryID)
+	public static function GetReadme($RepositoryId)
 	{
 		try
 		{
-			$Readme = base64_decode(Repositories::CustomRequest('repositories', $RepositoryID, 'readme')['content']);
+			$Readme = base64_decode(Repositories::CustomRequest('repositories', $RepositoryId, 'readme')['content']);
 		}
 		catch (\Exception $NoReadme)
 		{
@@ -65,11 +65,11 @@ final class Repositories
 		return $Readme;
 	}
 
-	public static function GetDescription($RepositoryID)
+	public static function GetDescription($RepositoryId)
 	{
 		try
 		{
-			$LuaInfo = base64_decode(Repositories::CustomRequest('repositories', $RepositoryID, 'contents/Info.lua')['content']);
+			$LuaInfo = base64_decode(Repositories::CustomRequest('repositories', $RepositoryId, 'contents/Info.lua')['content']);
 			$Description = \Vlaswinkel\Lua\Lua::deserialize(explode('=', $LuaInfo, 2)[1])['Description'];
 		}
 		catch (\Exception $NoDescription)
@@ -80,11 +80,11 @@ final class Repositories
 		return $Description;
 	}
 
-	public static function GetScreenshots($RepositoryID)
+	public static function GetScreenshots($RepositoryId)
 	{
 		try
 		{
-			$Screenshots = Repositories::CustomRequest('repositories', $RepositoryID, 'contents/Screenshots');
+			$Screenshots = Repositories::CustomRequest('repositories', $RepositoryId, 'contents/Screenshots');
 		}
 		catch (\Exception $NoImages)
 		{
@@ -94,43 +94,36 @@ final class Repositories
 		return $Screenshots;
 	}
 
-	public static function GetReleases($RepositoryID)
+	public static function GetReleases($RepositoryId)
 	{
 		try
 		{
-			$LatestRelease = Repositories::CustomRequest('repositories', $RepositoryID, 'releases/latest');
+			$LatestRelease = Repositories::CustomRequest('repositories', $RepositoryId, 'releases/latest');
 			$RepositoryVersion = $LatestRelease['name'] . ' (' . $LatestRelease['tag_name'] .')';
-			$RepositoryDownload = $LatestRelease['zipball_url'];
-			$Releases = array_map(
-				function($Release)
-				{
-					return array($Release['name'] . ' (' . $Release['tag_name'] .')', $Release['zipball_url']);
-				},
-				Repositories::CustomRequest('repositories', $RepositoryID, 'releases')
-			);
+			$Releases = Repositories::CustomRequest('repositories', $RepositoryId, 'releases');
 		}
 		catch (\Exception $NoVersion)
 		{
+			// TODO: NULL / empty instead?
 			$RepositoryVersion = false;
-			$RepositoryDownload = false;
-			$Releases = false;
+			$Releases = array();
 		}
 
-		return array($RepositoryVersion, $RepositoryDownload, $Releases);
+		return array($RepositoryVersion, $Releases);
 	}
 
-	public static function GetIconData($RepositoryID)
+	public static function GetIconData($RepositoryId)
 	{
 		$WasIdenticon = false;
 		try
 		{
-			$IconHyperlink = Repositories::CustomRequest('repositories', $RepositoryID, 'contents/Favicon.png')['download_url'];
+			$IconHyperlink = Repositories::CustomRequest('repositories', $RepositoryId, 'contents/Favicon.png')['download_url'];
 		}
 		catch (\Exception $NoIcon)
 		{
 			$WasIdenticon = true;
 			$IdenticonGenerator = new \Identicon\Identicon();
-			$IconHyperlink = $IdenticonGenerator->getImageDataUri(Repositories::GetMetadata($RepositoryID)[0], 150);
+			$IconHyperlink = $IdenticonGenerator->getImageDataUri(Repositories::GetMetadata($RepositoryId)[0], 150);
 		}
 
 		$DominantRGB;
@@ -150,14 +143,14 @@ final class Repositories
 		return array($IconHyperlink, $DominantRGB, $TextRGB);
 	}
 
-	public static function CreateUpdateHook($RepositoryID)
+	public static function CreateUpdateHook($RepositoryId)
 	{
-		return Repositories::GetInstance()->request('/repositories/' . $RepositoryID . '/hooks', \Symfony\Component\HttpFoundation\Request::METHOD_POST, array('name' => 'web', 'active' => true, 'events' => array('push', 'release'), 'config' => array('url' => 'https://cuberiteplugins.azurewebsites.net/processhook', 'secret' => GH_OAUTH_CLIENT_SECRET)))['id'];
+		return Repositories::GetInstance()->request('/repositories/' . $RepositoryId . '/hooks', \Symfony\Component\HttpFoundation\Request::METHOD_POST, array('name' => 'web', 'active' => true, 'events' => array('push', 'release'), 'config' => array('url' => 'https://cuberiteplugins.azurewebsites.net/processhook', 'secret' => GH_OAUTH_CLIENT_SECRET)))['id'];
 	}
 
-	public static function DeleteUpdateHook($RepositoryID, $HookID)
+	public static function DeleteUpdateHook($RepositoryId, $HookId)
 	{
-		Repositories::GetInstance()->request('/repositories/' . $RepositoryID . '/hooks/' . $HookID, \Symfony\Component\HttpFoundation\Request::METHOD_DELETE);
+		Repositories::GetInstance()->request('/repositories/' . $RepositoryId . '/hooks/' . $HookId, \Symfony\Component\HttpFoundation\Request::METHOD_DELETE);
 	}
 }
 ?>
