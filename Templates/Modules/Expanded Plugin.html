@@ -51,25 +51,28 @@
 		</div>
 
 		<aside class="four wide middle aligned column">
-			<form class="ui form" action="/download/{{ Plugin.RepositoryID }}" method="post">
+			<form class="ui form" action="/download/{{ Plugin.RepositoryId }}" method="post">
 				<div class="field">
 					<select name="DownloadType">
 						{% if Plugin.RepositoryVersion == true %}
-						<optgroup label="Latest release">
-							<option value="{{ Plugin.PluginDownload }}">{{ Plugin.RepositoryVersion }}</option>
-						</optgroup>
+							<optgroup label="Latest release">
+								{% set Release = Downloads[1] %}
+								<option value="{{ Release.Hyperlink }}">{{ Release.Name }} ({{ Release.Tag }})</option>
+							</optgroup>
 						{% endif %}
 
 						<optgroup label="Latest commit">
 							{% set Head = Downloads|first %}
-							<option value="{{ Head.Tag }}">{{ Head.Name }}</option>
+							<option value="{{ Head.Hyperlink }}">{{ Head.Name }} ({{ Head.Tag }})</option>
 						</optgroup>
 
-						<optgroup label="Other releases">
-							{% for Release in Downloads|slice(1) %}
-							<option value="{{ Release.Tag }}">{{ Release.Name }}</option>
-							{% endfor %}
-						</optgroup>
+						{% if Plugin.RepositoryVersion == true %}
+							<optgroup label="Other releases">
+								{% for Download in Downloads|slice(2) %}
+								<option value="{{ Download.Hyperlink }}">{{ Download.Name }} ({{ Download.Tag }})</option>
+								{% endfor %}
+							</optgroup>
+						{% endif %}
 					</select>
 				</div>
 
