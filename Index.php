@@ -1,20 +1,16 @@
 <?php
 session_start();
 
-require_once '../composer/vendor/autoload.php';
 require_once 'Globals.php';
-require_once 'Environment Interfaces/Cache.php';
 require_once 'Environment Interfaces/Session.php';
 
-$BaseDirectory = Cache::GetCacheDir() . DIRECTORY_SEPARATOR . CacheType::CondensedPlugins;
-$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates', $BaseDirectory)), GetTwigOptions());
+$Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
 
-$StaticRepositoryPaths = array();
-foreach (glob($BaseDirectory . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT) as $Value)
-{
-	$StaticRepositoryPaths[] = basename($Value);
-}
+$Plugins = DB::query(
+	'SELECT RepositoryId, RepositoryName, RepositoryVersion, DisplayName, License, Description, IconHyperlink
+	FROM Authors, PluginData WHERE Authors.AuthorId = PluginData.AuthorId'
+);
 
-Session::GetLoggedInDetails($Details);
-$Templater->display('Condensed Plugins.html', array('StaticRepositoryPaths' => $StaticRepositoryPaths, 'LoginDetails' => $Details));
+$Details = Session::GetLoggedInDetails();
+$Templater->display('Condensed Plugins.html', array('Plugins' => $Plugins, 'LoginDetails' => $Details));
 ?>

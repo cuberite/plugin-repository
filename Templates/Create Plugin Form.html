@@ -1,36 +1,51 @@
 {% extends "Bases/Standard Form.html" %}
 
 {% block FormContent %}
-	<h2>Add a new entry</h2>
-	<hr style="margin-top: -15px" />
+	<div class="ui top attached message">
+		<h2 class="ui header">
+			<i class="plug icon"></i>
+			<span class="content">
+				Publish your plugin
+				<span class="sub header">Select a personal or organisational GitHub repository.</span>
+			</span>
+		</h2>
+	</div>
 
-	<form action="{{ RedirectLocation }}" method="post">
+	<form class="ui attached form segment" action="{{ constant('WebURI::Add') }}" method="post">
 		{% for RepositoryOwner, Repositories in RepositoryGroup %}
-			<h3>{{ RepositoryOwner }}</h3>
+			<h3 class="ui header">{{ RepositoryOwner }}</h3>
 
 			{% for Repository in Repositories %}
-				<input required type="radio" name="RepositoryID" value="{{ Repository['id'] }}" />
-				<label>
-					<strong>{{ Repository['name'] }}</strong>
-					<em>{{ Repository['description'] }}</em>
-
-					<br />
-				</label>
+				<div class="cuberite-plugin-selection field">
+					<div class="ui radio checkbox">
+						<input required="required" type="radio" name="RepositoryId" id="{{ Repository['id'] }}" value="{{ Repository['id'] }}" />
+						<label for="{{ Repository['id'] }}">
+							<strong>{{ Repository['name'] }}</strong>
+							<em>{{ Repository['description'] }}</em>
+						</label>
+					</div>
+				</div>
 			{% endfor %}
 		{% endfor %}
 
-		<hr />
-		<p>
-			<strong>No organisation?</strong> Ensure that your membership of it is public.
-		</p>
-		<p>
-			<strong>Favicons:</strong> add a Favicon.png file to the base directory.
-			<br />
-			<strong>Description:</strong> add a Info.lua file to the base directory, with a Description field.
-			<br />
-			<strong>Screenshots:</strong> place images into a Screenshots directory.
-		</p>
-
-		<input name="Submit" type="submit" value="Submit entry" />
+		<br />
+		<input class="ui primary button" name="Submit" type="submit" />
+		<input class="ui button" type="reset" />
 	</form>
+
+	<div class="ui bottom attached icon warning message">
+		<i class="question circle outline icon"></i>
+		<div class="content">
+			<p>
+				<strong>No organisation?</strong> Ensure that your membership of it is public.
+			</p>
+			<p>
+				<em>Favicons:</em> add a Favicon.png file to the base directory.
+				<br />
+				<em>Description:</em> add a Info.lua file to the base directory, with a Description field.
+				<br />
+				<em>Screenshots:</em> place images into a Screenshots directory.
+			</p>
+		</div>
+	</div>
 {% endblock %}

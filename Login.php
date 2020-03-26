@@ -3,6 +3,7 @@ session_start();
 
 require_once 'Globals.php';
 require_once 'Environment Interfaces/Session.php';
+require_once 'Environment Interfaces/GitHub API/Users.php';
 
 if (isset($_GET['logout']) && $_GET['logout'])
 {
@@ -31,17 +32,6 @@ if (isset($_GET['code']))
 {
 	if (!Session::ExchangeGitHubToken($_GET['code']))
 	{
-		SetRefresh(
-			$_SERVER['PHP_SELF'] .
-			'?' .
-			http_build_query(
-				array(
-					'login' => 1,
-					'redirect' => $HasRedirect ? $_GET['redirect'] : null
-				)
-			)
-		);
-
 		// TODO: better response
 
 		session_unset();
@@ -50,6 +40,16 @@ if (isset($_GET['code']))
 		http_response_code(500);
 		return;
 	}
+
+	$User = GitHubAPI\Users::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser();
+	$_SESSION['User'] = array(
+		'AuthorId' => $User['id'],
+		'Login' => $User['login'],
+		'DisplayName' => $User['name'],
+		'AvatarHyperlink' => $User['avatar_url']
+	);
+
+	DB::insertUpdate('Authors', $_SESSION['User']);
 
 	if ($HasRedirect)
 	{

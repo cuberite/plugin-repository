@@ -1,37 +1,27 @@
-<a style="text-decoration: none" href="/show/{{ Plugin.RepositoryID }}">
-	<figure
-		class="boundedbox condensedplugin"
-		style="
-			background-color: {{ Plugin.DominantRGB }};
-			color: {{ Plugin.TextRGB }};
-			animation-duration: {{ Plugin.MinimumAnimationDuration }}ms
-		"
-	>
-		<img src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+<a class="cuberite-condensed-plugin card" style="animation-duration: {{ random(100, 1000) }}ms" href="{{ constant('WebURI::Show') }}/{{ Plugin.RepositoryId }}">
+	<figure class="content">
+		<img class="ui right floated mini image" src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+		<figcaption class="header">{{ Plugin.RepositoryName }}</figcaption>
+		<div class="meta">{{ Plugin.DisplayName }}</div>
 
-		<figcaption>
-			<strong>{{ Plugin.RepositoryName }}</strong>
-
+		{% if Plugin.RepositoryVersion == true %}
 			<br />
-	
-			Author: {{ Plugin.AuthorDisplayName }}
-	
-			{% if Plugin.RepositoryVersion == true %}
-				<br />
-				Version: {{ Plugin.RepositoryVersion }}
-			{% endif %}
-	
-			{% if Plugin.License == true %}
-				<br />
-				License: {{ Plugin.License }}
-			{% endif %}
-	
-			{% if Plugin.Description == true %}
-				<p>
-					{{ Plugin.Description }}
-				</p>
-			{% endif %}
-		</figcaption>
+			Version: {{ Plugin.RepositoryVersion }}
+		{% endif %}
 
+		{% if Plugin.Description == true %}
+			<p>
+				{{ Plugin.Description }}
+			</p>
+		{% endif %}
 	</figure>
+
+	{% if Plugin.License == true %}
+		<div class="extra content">
+			<span>
+				<i class="balance scale icon"></i>
+				{{ Plugin.License }}
+			</span>
+		</div>
+	{% endif %}
 </a>

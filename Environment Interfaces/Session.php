@@ -1,9 +1,4 @@
 <?php
-require_once '../composer/vendor/autoload.php';
-require_once 'Globals.php';
-require_once 'Environment Interfaces/Cache.php';
-require_once 'Environment Interfaces/GitHub API/Users.php';
-
 final class LoggedInAccountDetails
 {
 	public $LoggedIn = true;
@@ -28,25 +23,25 @@ final class NotLoggedInAccountDetails
 
 final class Session
 {
-	static function GetLoggedInDetails(&$Details = null)
+	static function GetLoggedInDetails()
 	{
 		if (!isset($_SESSION['OAuthToken']))
 		{
-			$Details = new NotLoggedInAccountDetails();
-			return false;
+			return new NotLoggedInAccountDetails();
 		}
 
-		if (!isset($_SESSION['UserID']))
+		if (!isset($_SESSION['User']))
 		{
+			// Invalid state, User present without OAuthToken
 			session_unset();
 			session_destroy();
 
-			$Details = new NotLoggedInAccountDetails();
-			return false;
+			return new NotLoggedInAccountDetails();
 		}
 
-		$Details = new LoggedInAccountDetails(unserialize(Cache::GetCacheEntry(CacheType::Users, $_SESSION['UserID'])));
-		return true;
+		require_once 'Models/Author.php';
+		$User = $_SESSION['User'];
+		return new LoggedInAccountDetails(new Author($User['AuthorId'], $User['Login'], $User['DisplayName'], $User['AvatarHyperlink']));
 	}
 
 	static function AuthoriseViaGitHub($AdditionalParameters)
@@ -54,7 +49,7 @@ final class Session
 		$_SESSION['OAuthState'] = hash('sha512', session_id());
 
 		SetRedirect(
-			'https://github.com/login/oauth/authorize?' .
+			WebURI::GitHubLogin . '?' .
 			http_build_query(
 				array(
 					'client_id' => GH_OAUTH_CLIENT_ID,
@@ -77,7 +72,7 @@ final class Session
 			return false;
 		}
 
-		$CURLInstance = curl_init('https://github.com/login/oauth/access_token');
+		$CURLInstance = curl_init(WebURI::GitHubExchangeToken);
 		$Headers[] = 'Accept: application/json';
 		$Headers[] = 'User-Agent: Cuberite Plugin Repository';
 
@@ -106,10 +101,6 @@ final class Session
 		if (isset($Response->access_token))
 		{
 			$_SESSION['OAuthToken'] = $Response->access_token;
-			$User = GitHubAPI\Users::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser();
-			$_SESSION['UserID']	= $User['id'];
-			Cache::UpdateCacheEntry(CacheType::Users, $User['id'], serialize($User));
-
 			return true;
 		}
 

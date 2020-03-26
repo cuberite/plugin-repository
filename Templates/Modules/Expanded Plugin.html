@@ -1,74 +1,86 @@
-<article class="boundedbox expandedplugin">
-	<header style="background-color: {{ Plugin.DominantRGB }}; outline-color: {{ Plugin.DominantRGB }}; color: {{ Plugin.TextRGB}}">
-		<figure>
-			<img src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+<article class="ui cuberite-expanded-plugin two column stackable grid">
+	<header class="row">
+		<div class="twelve wide column">
+			<h2 class="ui header">
+				<img class="ui image" src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+				<span class="content">
+					{{ Plugin.RepositoryName }}
+					<span class="sub header">
+						<span class="ui horizontal bulleted list">
+							<span class="item">{{ Plugin.DisplayName }}</span>
+							<span class="item">@{{ Plugin.Login }}</span>
+							<span class="item">Utilities</span>
+						</span>
+					</span>
+				</span>
+			</h2>
 
-			<figcaption>
-				<h2>{{ Plugin.RepositoryName }}</h2>
+			{% if Plugin.Description == true %}
+				<p>
+					{{ Plugin.Description }}
+				</p>
+			{% endif %}
 
-				Author: {{ Plugin.AuthorDisplayName }}
-				<br />
-				Owned by: {{ Plugin.RepositoryOwnerName }}
-
-				{% if Plugin.License == true %}
-					<br />
-					License: {{ Plugin.License }}
+			<nav class="ui horizontal cuberite-expanded-plugin-metadata list">
+				<div class="item" title="THE HUB OF GITS OH YEAAAH">
+					<i class="github icon"></i>
+					<a class="content" href="https://github.com/{{ Plugin.RepositoryFullName }}">View on GitHub</a>
+				</div>
+				<div class="item">
+					<i class="cloud download icon"></i>
+					<span class="content">{{ Plugin.DownloadCount }} downloads</span>
+				</div>
+				<div class="item">
+					<i class="balance icon"></i>
+					<span class="content">{{ Plugin.License }}</span>
+				</div>
+				{% if LoginDetails.User.Login == Plugin.Login %}
+					<div class="item">
+						<i class="pencil icon"></i>
+						<a class="content" href="/edit/{{ Plugin.RepositoryId }}">Edit</a>
+					</div>
 				{% endif %}
+			</nav>
 
-				{% if Plugin.RepositoryVersion == true %}
-					<br />
-					Version: {{ Plugin.RepositoryVersion }}
-				{% endif %}
-
-				<!-- TODO: ratings and categories -->
-
+			{% if Plugin.RepositoryVersion == true %}
 				<br />
-				Downloads: {{ Plugin.DownloadCount }}
-			</figcaption>
-		</figure>
+				Version: {{ Plugin.RepositoryVersion }}
+			{% endif %}
 
-		<nav>
-			<form action="/download/{{ Plugin.RepositoryID }}" method="post">
-				<select name="DownloadType">
-					{% if Plugin.RepositoryVersion == true %}
+			<!-- TODO: ratings and categories -->
+		</div>
+
+		<aside class="four wide middle aligned column">
+			<form class="ui form" action="/download/{{ Plugin.RepositoryID }}" method="post">
+				<div class="field">
+					<select name="DownloadType">
+						{% if Plugin.RepositoryVersion == true %}
 						<optgroup label="Latest release">
 							<option value="{{ Plugin.PluginDownload }}">{{ Plugin.RepositoryVersion }}</option>
 						</optgroup>
-					{% endif %}
+						{% endif %}
 
-					<optgroup label="Latest commit">
-						<option value="https://api.github.com/repos/{{ Plugin.RepositoryFullName}}/zipball">Cutting bleeding edge</option>
-					</optgroup>
+						<optgroup label="Latest commit">
+							{% set Head = Downloads|first %}
+							<option value="{{ Head.Tag }}">{{ Head.Name }}</option>
+						</optgroup>
 
-					<optgroup label="Other releases">
-						{% for Release in Plugin.Releases %}
-							<option value="{{ Release[1] }}">{{ Release[0] }}</option>
-						{% endfor %}
-					</optgroup>
-				</select>
+						<optgroup label="Other releases">
+							{% for Release in Downloads|slice(1) %}
+							<option value="{{ Release.Tag }}">{{ Release.Name }}</option>
+							{% endfor %}
+						</optgroup>
+					</select>
+				</div>
 
-				<button name="Download" type="submit">
-					<img src="/images/download.svg" class="download" alt="Download latest release button" title="Download latest release" />
+				<button class="ui primary fluid labeled icon button" name="Download" type="submit">
+					<i class="download icon"></i>
+					Download
 				</button>
 			</form>
 
-			<div></div>
-			<hr />
-
-			<figure>
-				<a href="https://github.com/{{ Plugin.RepositoryFullName }}">
-					<img src="/images/github.svg" class="github" alt="Link to GitHub repository button" title="Go to repository on GitHub" />
-				</a>
-			</figure>
-
 			<!-- TODO: comment, rate, favourite, report buttons. -->
-
-			<figure>
-				<a href="/edit/{{ Plugin.RepositoryID }}">
-					<img src="/images/edit.svg" class="edit" alt="Edit button" title="Edit" />
-				</a>
-			</figure>
-		</nav>
+		</aside>
 	</header>
 
 	{% if Plugin.Screenshots is not empty %}
@@ -88,11 +100,5 @@
 				</div>
 			{% endfor %}
 		</div>
-
-		<hr />
 	{% endif %}
-
-	{# Parsedown converts this to HTML - output as-is #}
-	{# TODO: maybe make a Twig filter to Parsedown-ify for us? #}
-	{{ Plugin.RepositoryReadme|raw }}
 </article>

@@ -1,22 +1,39 @@
 {% extends "Bases/Base.html" %}
 
 {% block MainContent %}
-	{{ source(StaticRepositoryPath) }}
 
-	<article class="boundedbox expandedplugin" id="comments">
-		{% if LoginDetails.LoggedIn %}
-			<form style="text-align: center" action="/comment/{{ RepositoryID }}" method="post">
-				<textarea required style="margin-top: 15px" rows="10" cols="35" placeholder="Comment on this plugin..." name="Comment"></textarea>
-				<br />
-				<input name="Submit" style="margin: 10px 0px" type="submit" value="Submit comment" />
-			</form>
-			<hr />
-		{% endif %}
+<main class="ui container" id="cuberite-main-container">
+	<div class="ui hidden divider"></div>
 
-		{% for StaticCommentPath in StaticCommentPaths %}
-			{{ source(StaticCommentPath) }}
-		{% else %}
-			<h3 style="text-align: center">No comments yet; make some comments!</h3>
-		{% endfor %}
+	{% include 'Modules/Expanded Plugin.html' %}
+
+	<div class="ui hidden divider"></div>
+
+	{# Parsedown converts this to HTML - output as-is #}
+	{# TODO: maybe make a Twig filter to Parsedown-ify for us? #}
+	<article class="ui cuberite-expanded-plugin raised padded segment">
+		{{ Plugin.Readme|raw }}
 	</article>
+
+	<div class="ui hidden divider"></div>
+
+	<section class="ui cuberite-expanded-plugin text container">
+		<article class="ui comments">
+			{% for StaticCommentPath in StaticCommentPaths %}
+			{{ source(StaticCommentPath) }}
+			{% endfor %}
+
+			{% if LoginDetails.LoggedIn %}
+			<form class="ui reply form" action="/comment/{{ Plugin.RepositoryId }}" method="post">
+				<textarea required="required" class="field" placeholder="Comment on this plugin..." name="Comment"></textarea>
+				<button class="ui labeled icon button" name="Submit" type="submit">
+					<i class="edit icon"></i>
+					Submit comment
+				</button>
+			</form>
+			{% endif %}
+		</article>
+	</section>
+</main>
+
 {% endblock %}

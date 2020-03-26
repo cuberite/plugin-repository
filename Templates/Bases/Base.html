@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link type="text/css" href="/Stylesheets/Main.css" rel="stylesheet" />
+		<link type="text/css" href="/images/semantic.min.css" rel="stylesheet" />
+		<link type="text/css" href="/images/stylesheet.css" rel="stylesheet" />
 		<meta name="viewport" content="width=device-width" />
 		<title>Cuberite Plugins</title>
 	</head>
@@ -9,10 +10,8 @@
 	<body>
 		{% include "Modules/Header.html" %}
 
-		<main id="content">
-			{% block MainContent %}
-			{% endblock %}
-		</main>
+		{% block MainContent %}
+		{% endblock %}
 
 		{% include "Modules/Footer.html" %}
 	</body>
