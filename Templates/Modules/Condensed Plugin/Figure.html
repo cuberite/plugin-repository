@@ -1,0 +1,15 @@
+<figure class="content">
+	<img class="ui right floated mini image" src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+	<figcaption class="header">{{ Plugin.RepositoryName }}</figcaption>
+	<div class="meta">{{ Plugin.DisplayName }}</div>
+
+	{% if Plugin.RepositoryVersion == true %}
+		<div class="ui floating label">v{{ Plugin.RepositoryVersion }}</div>
+	{% endif %}
+
+	{% if Plugin.Description == true %}
+		<p class="description">
+			{{ Plugin.Description }}
+		</p>
+	{% endif %}
+</figure>

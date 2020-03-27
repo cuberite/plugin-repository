@@ -1,20 +1,25 @@
-{% if DialogType == IMMERSIVE_INFO %}
-	{% set Subclass = 'info' %}
-{% elseif DialogType == IMMERSIVE_ERROR %}
-	{% set Subclass = 'error' %}
-{% else %}
-	{% set Subclass = 'form' %}
-{% endif %}
-
-{% embed "Bases/Immersive Form.html" with { 'Subclass' : Subclass } %}
+{% embed "Bases/Immersive Form.html" with { 'Basicness' : 'basic' } %}
 
 {% block FormContent %}
-	<h1>{{ Message }}</h1>
-	<p>{{ Explanation }}</p>
-	<p>
-		<img class="spinner" src="/images/spinner.gif" />
-		Please wait whilst you are redirected
-	</p>
+
+<h2 class="ui inverted icon header">
+	<i class="green check outline circle icon"></i>
+	{{ Message }}
+
+	<span class="sub header">{{ Explanation }}</span>
+</h2>
+
+<br />
+<br />
+
+<div class="content">
+	<div class="ui basic segment">
+		<p class="ui text loader">
+			Please wait whilst you are redirected…
+		</p>
+	</div>
+</div>
+
 {% endblock %}
 
 {% endembed %}

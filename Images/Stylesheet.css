@@ -6,12 +6,24 @@ This leads to little areas where white bleeds through so change it back to none.
 }
 
 /* Push the default footer towards the bottom of the page no matter what.
-Also serves to vertically-centre page content.
-*/
+Also serves to vertically-centre page content. */
 #cuberite-main-container
+{
+	/* 145 = height footer + header */
+	min-height: calc(-145px + 100%);
+}
+
+/* Special case for grid containers which cover more vertical space. */
+#cuberite-main-container.grid
 {
 	/* 117 = height footer + header */
 	min-height: calc(-117px + 100%);
+}
+
+/* Cards have a negative margin which inteferes with footer calculation, delet. */
+#cuberite-main-container > .ui.link.cards
+{
+	margin-bottom: 0;
 }
 
 /* Eliminate extra margin around radio labels for compact display when adding plugins. */

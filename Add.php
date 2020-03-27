@@ -38,7 +38,6 @@ if (isset($_POST['Submit']))
 		array(
 			'Message' => 'Operation successful',
 			'Explanation' => 'The entry was successfully added.',
-			'DialogType' => 1,
 			'LoginDetails' => $AuthorDetails
 		)
 	);
