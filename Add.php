@@ -2,8 +2,10 @@
 session_start();
 
 require_once 'Globals.php';
+require_once 'Models/Author.php';
 require_once 'Models/Plugin.php';
 require_once 'Environment Interfaces/Session.php';
+require_once 'Environment Interfaces/GitHub API/Users.php';
 require_once 'Environment Interfaces/GitHub API/Repositories.php';
 
 $Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
@@ -17,21 +19,19 @@ if (!$AuthorDetails->LoggedIn)
 
 if (isset($_POST['Submit']))
 {
-	$Id = $_POST['RepositoryId'];
-	$HookId = GitHubAPI\Repositories::CreateUpdateHook($Id);
+	$RepositoryId = $_POST['RepositoryId'];
+	$AuthorId = $AuthorDetails->User->AuthorId;
+	$AuthorDetails = GitHubAPI\Users::GetDetailsFromId($AuthorId);
 
-	try
-	{
-		PluginGenerator::GenerateAndStore($Id, $AuthorDetails->User->AuthorId, $HookId);
-	}
-	catch (MeekroDBException $Exception)
-	{
-		GitHubAPI\Repositories::DeleteUpdateHook($Id, $HookId);
+	// Modify database first before creating webhook to avoid race conditions
+	// E.g. hook notification before insert happens, thus missing an update
 
-		// TODO: use $Exception->getMessage() and IMMERSIVE_ERROR
-		http_response_code(500);
-		return;
-	}
+	AuthorGenerator::GenerateAndUpdate($AuthorDetails);
+	PluginGenerator::GenerateAndStore($RepositoryId, $AuthorId);
+	$HookId = GitHubAPI\Repositories::CreateUpdateHook($RepositoryId);
+	PluginGenerator::UpdateWebhook($RepositoryId, $HookId); // TODO: check actually updated
+
+	// TODO: use $Exception->getMessage() and IMMERSIVE_ERROR for error handling
 
 	$Templater->display(
 		'Immersive Dialog.html',
@@ -42,7 +42,7 @@ if (isset($_POST['Submit']))
 		)
 	);
 
-	SetRefresh();
+	SetRefresh(WebURI::Show . '/' . $RepositoryId);
 	return;
 }
 

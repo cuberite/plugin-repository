@@ -24,6 +24,7 @@ if ($Query === null)
 
 $Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
 $Downloads = DB::query('SELECT Name, Tag, Hyperlink FROM DownloadHyperlinks WHERE RepositoryId = %i', $_GET['RepositoryId']);
+$Screenshots = DB::query('SELECT Name, Hyperlink FROM ScreenshotHyperlinks WHERE RepositoryId = %i', $_GET['RepositoryId']);
 $Comments = DB::query(
 	'SELECT Comment, CreationTime, DisplayName, AvatarHyperlink
 	FROM Authors, Comments WHERE Authors.AuthorId = Comments.AuthorId AND RepositoryId = %i', $_GET['RepositoryId']
@@ -35,6 +36,7 @@ $Templater->display(
 	array(
 		'Plugin' => $Query,
 		'Downloads' => $Downloads,
+		'Screenshots' => $Screenshots,
 		'Comments' => $Comments,
 		'LoginDetails' => $Details
 	)

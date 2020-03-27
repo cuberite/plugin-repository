@@ -37,14 +37,14 @@ class Configurator
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS PluginData (
 				RepositoryId INT NOT NULL,
 				AuthorId INT NOT NULL,
-				DownloadCount INT NOT NULL,
-				UpdateHookId INT NOT NULL,
+				DownloadCount INT NOT NULL DEFAULT 0,
+				UpdateHookId INT,
 
 				RepositoryName TEXT NOT NULL,
 				RepositoryFullName TEXT NOT NULL,
-				RepositoryVersion TEXT NOT NULL,
-				License TEXT NOT NULL,
-				Description TEXT NOT NULL,
+				RepositoryVersion TEXT,
+				License TEXT,
+				Description TEXT,
 				Readme TEXT NOT NULL,
 				IconHyperlink TEXT NOT NULL,
 
@@ -80,6 +80,7 @@ class Configurator
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS ScreenshotHyperlinks (
 				LinkId INT AUTO_INCREMENT,
 				RepositoryId INT NOT NULL,
+				Name TEXT NOT NULL,
 				Hyperlink TEXT NOT NULL,
 
 				PRIMARY KEY (LinkId),

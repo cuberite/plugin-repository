@@ -45,7 +45,7 @@ final class Repositories
 		}
 		else
 		{
-			$License = false;
+			$License = null;
 		}
 
 		return array($Data['name'], $Data['full_name'], $License);
@@ -55,14 +55,13 @@ final class Repositories
 	{
 		try
 		{
-			$Readme = base64_decode(Repositories::CustomRequest('repositories', $RepositoryId, 'readme')['content']);
+			return base64_decode(Repositories::CustomRequest('repositories', $RepositoryId, 'readme')['content']);
 		}
 		catch (\Exception $NoReadme)
 		{
-			$Readme = '(the plugin author has not provided a readme)';
+			// TODO: $Readme = '(the plugin author has not provided a readme)';
+			return null;
 		}
-
-		return $Readme;
 	}
 
 	public static function GetDescription($RepositoryId)
@@ -70,28 +69,24 @@ final class Repositories
 		try
 		{
 			$LuaInfo = base64_decode(Repositories::CustomRequest('repositories', $RepositoryId, 'contents/Info.lua')['content']);
-			$Description = \Vlaswinkel\Lua\Lua::deserialize(explode('=', $LuaInfo, 2)[1])['Description'];
+			return \Vlaswinkel\Lua\Lua::deserialize(explode('=', $LuaInfo, 2)[1])['Description'];
 		}
 		catch (\Exception $NoDescription)
 		{
-			$Description = false;
+			return null;
 		}
-
-		return $Description;
 	}
 
 	public static function GetScreenshots($RepositoryId)
 	{
 		try
 		{
-			$Screenshots = Repositories::CustomRequest('repositories', $RepositoryId, 'contents/Screenshots');
+			return Repositories::CustomRequest('repositories', $RepositoryId, 'contents/Screenshots');
 		}
 		catch (\Exception $NoImages)
 		{
-			$Screenshots = false;
+			return array();
 		}
-
-		return $Screenshots;
 	}
 
 	public static function GetReleases($RepositoryId)
@@ -104,8 +99,7 @@ final class Repositories
 		}
 		catch (\Exception $NoVersion)
 		{
-			// TODO: NULL / empty instead?
-			$RepositoryVersion = false;
+			$RepositoryVersion = null;
 			$Releases = array();
 		}
 
