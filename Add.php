@@ -5,7 +5,6 @@ require_once 'Globals.php';
 require_once 'Models/Author.php';
 require_once 'Models/Plugin.php';
 require_once 'Environment Interfaces/Session.php';
-require_once 'Environment Interfaces/GitHub API/Users.php';
 require_once 'Environment Interfaces/GitHub API/Repositories.php';
 
 $Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
@@ -20,14 +19,20 @@ if (!$AuthorDetails->LoggedIn)
 if (isset($_POST['Submit']))
 {
 	$RepositoryId = $_POST['RepositoryId'];
-	$AuthorId = $AuthorDetails->User->AuthorId;
-	$AuthorDetails = GitHubAPI\Users::GetDetailsFromId($AuthorId);
 
 	// Modify database first before creating webhook to avoid race conditions
 	// E.g. hook notification before insert happens, thus missing an update
 
-	AuthorGenerator::GenerateAndUpdate($AuthorDetails);
-	PluginGenerator::GenerateAndStore($RepositoryId, $AuthorId);
+	DB::insertUpdate(
+		'Authors',
+		array(
+			'AuthorId' => $AuthorDetails->User->AuthorId,
+			'Login' => $AuthorDetails->User->Login,
+			'DisplayName' => $AuthorDetails->User->DisplayName,
+			'AvatarHyperlink' => $AuthorDetails->User->AvatarHyperlink
+		)
+	);
+	PluginGenerator::GenerateAndStore($RepositoryId, $AuthorDetails->User->AuthorId);
 	$HookId = GitHubAPI\Repositories::CreateUpdateHook($RepositoryId);
 	PluginGenerator::UpdateWebhook($RepositoryId, $HookId); // TODO: check actually updated
 

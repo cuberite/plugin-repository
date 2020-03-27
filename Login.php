@@ -2,7 +2,6 @@
 session_start();
 
 require_once 'Globals.php';
-require_once 'Models/Author.php';
 require_once 'Environment Interfaces/Session.php';
 require_once 'Environment Interfaces/GitHub API/Users.php';
 
@@ -43,8 +42,15 @@ if (isset($_GET['code']))
 	}
 
 	$User = GitHubAPI\Users::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser();
-	$_SESSION['User'] = AuthorGenerator::GenerateAndUpdate($User);
+	$AuthorDetails = array(
+		'AuthorId' => $User['id'],
+		'Login' => $User['login'],
+		'DisplayName' => $User['name'],
+		'AvatarHyperlink' => $User['avatar_url']
+	);
+	$_SESSION['User'] = $AuthorDetails;
 
+	DB::insertUpdate('Authors', $AuthorDetails);
 	GitHubAPI\Users::PurgeOldUpdateHooks();
 
 	if ($HasRedirect)
