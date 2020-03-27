@@ -1,7 +1,7 @@
 <?php
 require_once 'Globals.php';
-require_once 'Generators/Condensed Plugin.php';
-require_once 'Generators/Expanded Plugin.php';
+require_once 'Models/Plugin.php';
+require_once 'Environment Interfaces/GitHub API/Repositories.php';
 
 // Ensure appropriate header and payload are present
 if (!isset(getallheaders()['X-Hub-Signature']) || !isset($_POST['payload']))
@@ -40,8 +40,7 @@ $Data = json_decode($_POST['payload'], true);
 if (isset($Data['repository']['id']))
 {
 	// Not a ping event
-	CondensedPluginModuleGenerator::GenerateAndCache($Data['repository']['id']);
-	ExpandedPluginModuleGenerator::GenerateAndCache($Data['repository']['id']);
+	PluginGenerator::GenerateAndStore($Data['repository']['id'], null);
 }
 
 http_response_code(204);

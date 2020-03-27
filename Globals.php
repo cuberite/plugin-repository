@@ -6,6 +6,7 @@ if (!($INIParseResult = @parse_ini_file('configuration.ini')))
 }
 
 $_SERVER['SERVER_NAME'] = 'plugins.cuberite.org';
+define('UPDATE_HOOK_ADDRESS', 'https://plugins.cuberite.org/process-hook');
 
 // autoloader dir ... autoloadir hon hon hon
 define('COMPOSER_AUTOLOADIR', join(DIRECTORY_SEPARATOR, array('..\Composer', 'vendor', 'autoload.php')));
@@ -32,7 +33,6 @@ final class WebURI
 	const Login = '/login';
 	const GitHubLogin = 'https://github.com/login/oauth/authorize';
 	const GitHubExchangeToken = 'https://github.com/login/oauth/access_token';
-	const ProcessHook = '/process-hook'; // TODO in addhook
 	const Logout = '/login?logout=1';
 	const Search = '/search';
 	const Show = '/show';
