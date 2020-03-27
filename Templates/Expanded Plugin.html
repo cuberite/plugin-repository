@@ -1,5 +1,13 @@
 {% extends "Bases/Base.html" %}
 
+{% block AdditionalHeadItems %}
+{% if Screenshots|length > 0 %}
+
+<link rel="stylesheet" href="/images/slideshow.css">
+
+{% endif %}
+{% endblock %}
+
 {% block MainContent %}
 
 <main class="ui container" id="cuberite-main-container">
@@ -14,15 +22,13 @@
 
 			{% include 'Modules/Expanded Plugin/Aside.html' %}
 		</header>
-
-		{% include 'Modules/Expanded Plugin/Screenshots.html' %}
 	</article>
 
-	<div class="ui hidden divider"></div>
-
-	{# Parsedown converts this to HTML - output as-is #}
-	{# TODO: maybe make a Twig filter to Parsedown-ify for us? #}
 	<article class="ui cuberite-expanded-plugin raised padded segment">
+		{% include 'Modules/Expanded Plugin/Screenshots.html' %}
+
+		{# Parsedown converts this to HTML - output as-is #}
+		{# TODO: maybe make a Twig filter to Parsedown-ify for us? #}
 		{{ Plugin.Readme|raw }}
 	</article>
 

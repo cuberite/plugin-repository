@@ -49,9 +49,8 @@ if (isset($_POST['DeleteConfirmed' . $RepositoryId]))
 {
 	// TODO: catch thrown exceptions
 	// TODO (future proofing): race condition if author ever changes between the check and the delete
-	DB::delete('PluginData', 'RepositoryId = %i', $RepositoryId);
-
 	GitHubAPI\Repositories::DeleteUpdateHook($RepositoryId, $Query['UpdateHookId']);
+	DB::delete('PluginData', 'RepositoryId = %i', $RepositoryId);
 
 	$Templater->display(
 		'Immersive Dialog.html',

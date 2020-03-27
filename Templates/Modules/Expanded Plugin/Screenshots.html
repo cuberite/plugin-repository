@@ -1,12 +1,10 @@
-{% if Plugin.Screenshots is not empty %}
-
-<link rel="stylesheet" href="/Stylesheets/Slideshow.css">
+{% if Screenshots|length > 0 %}
 
 <div class="slideshow" data-transition="fade">
-	{% for Screenshot in Plugin.Screenshots %}
+	{% for Screenshot in Screenshots %}
 		<input name="slideshow" type="radio" id="slideshow-item-{{ loop.index }}" class="slideshow--bullet" {{ (loop.index0 == 0) ? 'checked="checked"' : '' }} />
 		<div class="slideshow--item">
-			<img src="{{ Screenshot['download_url'] }}" alt="Screenshot {{ loop.index }}" title="{{ Screenshot['name'] }}" />
+			<img src="{{ Screenshot.Hyperlink }}" alt="Screenshot {{ loop.index }}" title="{{ Screenshot.Name }}" />
 
 			{% set PreviousID = ((((loop.index0 - 1) % loop.length) + loop.length) % loop.length) + 1 %}
 			<label for="slideshow-item-{{ PreviousID }}" class="slideshow--nav slideshow--nav-previous">Go to slide {{ PreviousID }}</label>
