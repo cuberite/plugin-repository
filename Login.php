@@ -43,7 +43,9 @@ if (isset($_GET['code']))
 	}
 
 	$User = GitHubAPI\Users::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser();
-	$_SESSION['User'] = AuthorGenerator::GenerateAndUpdate($AuthorDetails);
+	$_SESSION['User'] = AuthorGenerator::GenerateAndUpdate($User);
+
+	GitHubAPI\Users::PurgeOldUpdateHooks();
 
 	if ($HasRedirect)
 	{
