@@ -1,13 +1,19 @@
-<section>
-	<img
-		class="profileimage"
-		style="margin-right: 5px"
-		src="{{ Comment.Author.avatar_url }}"
-		alt="Avatar of {{ Comment.Author.name }}"
-		title="Author of comment: {{ Comment.Author.name }}"
-	/>
+<section class="comment">
+	<a class="avatar">
+		<img
+			src="{{ Comment.AvatarHyperlink }}"
+			alt="Avatar of {{ Comment.DisplayName }}"
+			title="Author of comment: {{ Comment.DisplayName }}"
+		/>
+	</a>
 
-	<span style="vertical-align: middle">
-		{{ Comment.Text|escape }}
-	</span>
+	<div class="content">
+		<a class="author">{{ Comment.DisplayName }}</a>
+		<div class="metadata">
+			<span class="date">{{ Comment.CreationTime|date('Y-m-d H:i T') }}</span>
+		</div>
+		<div class="text">
+			{{ Comment.Comment|escape }}
+		</div>
+	</div>
 </section>

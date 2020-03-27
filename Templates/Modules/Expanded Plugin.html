@@ -26,26 +26,29 @@
 					<i class="github icon"></i>
 					<a class="content" href="https://github.com/{{ Plugin.RepositoryFullName }}">View on GitHub</a>
 				</div>
-				<div class="item">
-					<i class="cloud download icon"></i>
-					<span class="content">{{ Plugin.DownloadCount }} downloads</span>
-				</div>
-				<div class="item">
-					<i class="balance icon"></i>
-					<span class="content">{{ Plugin.License }}</span>
-				</div>
 				{% if LoginDetails.User.Login == Plugin.Login %}
 					<div class="item">
 						<i class="pencil icon"></i>
 						<a class="content" href="/edit/{{ Plugin.RepositoryId }}">Edit</a>
 					</div>
 				{% endif %}
+				<div class="item">
+					<i class="cloud download icon"></i>
+					<span class="content">{{ Plugin.DownloadCount }} downloads</span>
+				</div>
+				{% if Plugin.License == true %}
+					<div class="item">
+						<i class="balance scale icon"></i>
+						<span class="content">{{ Plugin.License }}</span>
+					</div>
+				{% endif %}
+				{% if Plugin.RepositoryVersion == true %}
+					<div class="item">
+						<i class="tag icon"></i>
+						<span class="content">v{{ Plugin.RepositoryVersion }}</span>
+					</div>
+				{% endif %}
 			</nav>
-
-			{% if Plugin.RepositoryVersion == true %}
-				<br />
-				Version: {{ Plugin.RepositoryVersion }}
-			{% endif %}
 
 			<!-- TODO: ratings and categories -->
 		</div>

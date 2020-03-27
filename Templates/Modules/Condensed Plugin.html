@@ -5,23 +5,24 @@
 		<div class="meta">{{ Plugin.DisplayName }}</div>
 
 		{% if Plugin.RepositoryVersion == true %}
-			<br />
-			Version: {{ Plugin.RepositoryVersion }}
+			<div class="ui floating label">v{{ Plugin.RepositoryVersion }}</div>
 		{% endif %}
 
 		{% if Plugin.Description == true %}
-			<p>
+			<p class="description">
 				{{ Plugin.Description }}
 			</p>
 		{% endif %}
 	</figure>
 
-	{% if Plugin.License == true %}
-		<div class="extra content">
-			<span>
-				<i class="balance scale icon"></i>
-				{{ Plugin.License }}
-			</span>
-		</div>
-	{% endif %}
+	<div class="extra content">
+		<span>
+			<i class="comments icon"></i>
+			{{ CommentCounts[Plugin.RepositoryId] ?? 'No' }} comments
+		</span>
+		<span class="right floated">
+			<i class="cloud download icon"></i>
+			{{ Plugin.DownloadCount }} downloads
+		</span>
+	</div>
 </a>

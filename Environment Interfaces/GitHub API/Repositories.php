@@ -99,7 +99,7 @@ final class Repositories
 		try
 		{
 			$LatestRelease = Repositories::CustomRequest('repositories', $RepositoryId, 'releases/latest');
-			$RepositoryVersion = $LatestRelease['name'] . ' (' . $LatestRelease['tag_name'] .')';
+			$RepositoryVersion = $LatestRelease['tag_name'];
 			$Releases = Repositories::CustomRequest('repositories', $RepositoryId, 'releases');
 		}
 		catch (\Exception $NoVersion)
