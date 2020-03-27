@@ -80,6 +80,18 @@ Also serves to vertically-centre page content. */
 	animation: ExpandedEntryDisplay 500ms;
 }
 
+/* Format tables with borders. */
+.cuberite-expanded-plugin > table
+{
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+.cuberite-expanded-plugin > table th, .cuberite-expanded-plugin > table td
+{
+	border: 1px solid #DDD;
+	padding: 6px 13px;
+}
+
 /* Semantic horizontal icon lists seem to be broken.
 The text doesn't go on the same line as the icon. */
 .horizontal.cuberite-expanded-plugin-metadata.list > .item > .content
