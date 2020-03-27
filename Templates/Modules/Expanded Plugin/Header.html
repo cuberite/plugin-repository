@@ -4,7 +4,9 @@
 		{{ Plugin.RepositoryName }}
 		<span class="sub header">
 			<span class="ui horizontal bulleted list">
-				<span class="item">{{ Plugin.DisplayName }}</span>
+				{% if Plugin.DisplayName is not null %}
+					<span class="item">{{ Plugin.DisplayName }}</span>
+				{% endif %}
 				<span class="item">@{{ Plugin.Login }}</span>
 				<span class="item">Utilities</span>
 			</span>
@@ -12,7 +14,7 @@
 	</span>
 </h2>
 
-{% if Plugin.Description == true %}
+{% if Plugin.Description is not null %}
 	<p>
 		{{ Plugin.Description }}
 	</p>

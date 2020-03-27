@@ -7,8 +7,8 @@ require_once 'Environment Interfaces/Session.php';
 $Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
 
 $Plugins = DB::query(
-	'SELECT RepositoryId, DownloadCount, RepositoryName, RepositoryVersion, DisplayName, Description, IconHyperlink
-	FROM Authors, PluginData WHERE Authors.AuthorId = PluginData.AuthorId'
+	'SELECT RepositoryId, DownloadCount, RepositoryName, RepositoryVersion, Description, IconHyperlink, Login, DisplayName
+	FROM Authors, PluginData WHERE Authors.AuthorId = PluginData.AuthorId ORDER BY DownloadCount DESC'
 );
 $Counts = array_column(DB::query('SELECT RepositoryId, COUNT(*) AS Count FROM Comments GROUP BY RepositoryId'), 'Count', 'RepositoryId');
 

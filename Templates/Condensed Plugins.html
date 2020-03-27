@@ -20,7 +20,7 @@
 <main class="ui container" id="cuberite-main-container">
 	<div class="ui hidden divider"></div>
 
-	<div class="ui link cards">
+	<div class="ui centered link cards">
 		{% for Plugin in Plugins %}
 			<a class="cuberite-condensed-plugin card" style="animation-duration: {{ random(100, 1000) }}ms" href="{{ constant('WebURI::Show') }}/{{ Plugin.RepositoryId }}">
 				{% include 'Modules/Condensed Plugin/Figure.html' %}

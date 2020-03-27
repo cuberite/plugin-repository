@@ -59,7 +59,6 @@ final class Repositories
 		}
 		catch (\Exception $NoReadme)
 		{
-			// TODO: $Readme = '(the plugin author has not provided a readme)';
 			return null;
 		}
 	}

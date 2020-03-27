@@ -22,7 +22,7 @@ class Configurator
 		$Query = $SQLLink->query('CREATE TABLE IF NOT EXISTS Authors (
 				AuthorId INT AUTO_INCREMENT,
 				Login TEXT NOT NULL,
-				DisplayName TEXT NOT NULL,
+				DisplayName TEXT,
 				AvatarHyperlink TEXT NOT NULL,
 				PRIMARY KEY (AuthorId)
 			)'
@@ -45,7 +45,7 @@ class Configurator
 				RepositoryVersion TEXT,
 				License TEXT,
 				Description TEXT,
-				Readme TEXT NOT NULL,
+				Readme TEXT,
 				IconHyperlink TEXT NOT NULL,
 
 				PRIMARY KEY (RepositoryId),
@@ -198,7 +198,7 @@ if (isset($_POST['Submit']))
 			<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
 				<label>Database hostname:	</label>
 				<input autofocus required placeholder="localhost" type="text" name="DBHostname"/><br/>
-				
+
 				<label>Database port:	</label>
 				<input autofocus required placeholder="3306" type="text" name="DBPort"/><br/>
 

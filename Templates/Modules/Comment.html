@@ -8,7 +8,7 @@
 	</a>
 
 	<div class="content">
-		<a class="author">{{ Comment.DisplayName }}</a>
+		<a class="author">{{ Comment.DisplayName ?? Comment.Login }}</a>
 		<div class="metadata">
 			<span class="date">{{ Comment.CreationTime|date('Y-m-d H:i T') }}</span>
 		</div>
