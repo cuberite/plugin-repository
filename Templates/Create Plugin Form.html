@@ -16,6 +16,14 @@
 	{% for RepositoryOwner, Repositories in RepositoryGroup %}
 		<h3 class="ui header">{{ RepositoryOwner }}</h3>
 
+		<aside class="ui left rail" id="cuberite-add-plugin-rail">
+			<div class="ui sticky fixed">
+				<a class="ui basic icon button" href="#submit-anchor">
+					<i class="angle double down icon"></i>
+				</a>
+			</div>
+		</aside>
+
 		{% for Repository in Repositories %}
 			<div class="cuberite-plugin-selection field">
 				<div class="ui radio checkbox">
@@ -30,8 +38,10 @@
 	{% endfor %}
 
 	<br />
-	<input class="ui primary button" name="Submit" type="submit" />
-	<input class="ui button" type="reset" />
+	<a id="submit-anchor">
+		<input class="ui primary button" name="Submit" type="submit" />
+		<input class="ui button" type="reset" />
+	</a>
 </form>
 
 <div class="ui bottom attached icon warning message">

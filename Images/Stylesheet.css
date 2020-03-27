@@ -26,6 +26,12 @@ Also serves to vertically-centre page content. */
 	margin-bottom: 0;
 }
 
+/* Reduce width of "go to bottom" rail when adding plugins. */
+#cuberite-add-plugin-rail
+{
+	width: auto;
+}
+
 /* Eliminate extra margin around radio labels for compact display when adding plugins. */
 .cuberite-plugin-selection.field
 {
