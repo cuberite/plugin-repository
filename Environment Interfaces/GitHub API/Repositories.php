@@ -139,7 +139,7 @@ final class Repositories
 
 	public static function CreateUpdateHook($RepositoryId)
 	{
-		return Repositories::GetInstance()->request('/repositories/' . $RepositoryId . '/hooks', \Symfony\Component\HttpFoundation\Request::METHOD_POST, array('name' => 'web', 'active' => true, 'events' => array('push', 'release'), 'config' => array('url' => 'https://cuberiteplugins.azurewebsites.net/processhook', 'secret' => GH_OAUTH_CLIENT_SECRET)))['id'];
+		return Repositories::GetInstance()->request('/repositories/' . $RepositoryId . '/hooks', \Symfony\Component\HttpFoundation\Request::METHOD_POST, array('name' => 'web', 'active' => true, 'events' => array('push', 'release'), 'config' => array('url' => UPDATE_HOOK_ADDRESS, 'secret' => GH_OAUTH_CLIENT_SECRET)))['id'];
 	}
 
 	public static function DeleteUpdateHook($RepositoryId, $HookId)
