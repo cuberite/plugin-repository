@@ -97,6 +97,7 @@ class Configurator
 				CommentId INT AUTO_INCREMENT,
 				RepositoryId INT NOT NULL,
 				Comment TEXT NOT NULL,
+				CreationTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				AuthorId INT NOT NULL,
 
 				PRIMARY KEY (CommentId),

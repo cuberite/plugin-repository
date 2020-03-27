@@ -16,7 +16,7 @@ final class PluginGenerator
 		list($IconHyperlink, $DominantRGB, $TextRGB) = GitHubAPI\Repositories::GetIconData($RepositoryId);
 
 		$DownloadHyperlinks = array_map(
-			function($Release)
+			function($Release) use ($RepositoryId)
 			{
 				// Synced with database names
 				return array('RepositoryId' => $RepositoryId, 'Name' => $Release['name'], 'Tag' => $Release['tag_name'], 'Hyperlink' => $Release['zipball_url']);

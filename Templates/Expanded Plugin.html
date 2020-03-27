@@ -19,8 +19,8 @@
 
 	<section class="ui cuberite-expanded-plugin text container">
 		<article class="ui comments">
-			{% for StaticCommentPath in StaticCommentPaths %}
-			{{ source(StaticCommentPath) }}
+			{% for Comment in Comments %}
+				{% include 'Modules/Comment.html' %}
 			{% endfor %}
 
 			{% if LoginDetails.LoggedIn %}
