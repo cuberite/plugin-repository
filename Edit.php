@@ -1,83 +1,82 @@
 <?php
 session_start();
 
-require_once '../composer/vendor/autoload.php';
 require_once 'Globals.php';
-require_once 'Environment Interfaces/meekrodb.php';
 require_once 'Environment Interfaces/Session.php';
 require_once 'Environment Interfaces/GitHub API/Repositories.php';
 
-if (!isset($_GET['RepositoryID']))
+if (!isset($_GET['RepositoryId']))
 {
 	http_response_code(400);
 	return;
 }
 
+$RepositoryId = $_GET['RepositoryId'];
+
 if (isset($_POST['Cancel']))
 {
-	SetRedirect('//show/' . $_GET['RepositoryID']);
+	SetRedirect(WebURI::Show . '/' . $RepositoryId);
 	return;
 }
 
-$Templater = new \Twig\Environment(new \Twig\Loader\FilesystemLoader(array('Templates')), GetTwigOptions());
-$SQLLink = new MeekroDB(DB_ADDRESS, DB_USERNAME, DB_PASSWORD, DB_PLUGINSDATABASENAME);
-
-if (!Session::GetLoggedInDetails($Details))
+$Details = Session::GetLoggedInDetails();
+if (!$Details->LoggedIn)
 {
-	SetRedirect('//login?' . http_build_query(array('login' => 1, 'redirect' => $_SERVER['REQUEST_URI'])));
+	SetRedirect(WebURI::Login . '?' . http_build_query(array('login' => 1, 'redirect' => $_SERVER['REQUEST_URI'])));
 	return;
 }
 
-$Query = $SQLLink->queryFirstRow('SELECT * FROM PluginData WHERE RepositoryID = %i', $_GET['RepositoryID']);
+$Query = DB::queryFirstRow(
+	'SELECT AuthorId, DownloadCount, UpdateHookId, RepositoryName, RepositoryFullName, Description, IconHyperlink
+	FROM PluginData WHERE RepositoryId = %i',
+	$RepositoryId
+);
 if ($Query === null)
 {
 	http_response_code(404);
 	return;
 }
 
-if ($Details->User['id'] !== (int)$Query['AuthorID'])
+if ($Details->User->AuthorId !== (int)$Query['AuthorId'])
 {
 	http_response_code(403);
 	return;
 }
 
-if (isset($_POST['DeleteConfirmed' . $_GET['RepositoryID']]))
+$Templater = new \Twig\Environment(GetTwigLoader(), GetTwigOptions());
+
+if (isset($_POST['DeleteConfirmed' . $RepositoryId]))
 {
 	// TODO: catch thrown exceptions
 	// TODO (future proofing): race condition if author ever changes between the check and the delete
-	$SQLLink->query('DELETE FROM PluginData WHERE RepositoryID = %i', $_GET['RepositoryID']);
+	DB::delete('PluginData', 'RepositoryId = %i', $RepositoryId);
 
-	GitHubAPI\Repositories::DeleteUpdateHook($_GET['RepositoryID'], $Query['UpdateHookID']);
-	Cache::DeleteCache(CacheType::CondensedPlugins, $_GET['RepositoryID'] . '.html');
-	Cache::DeleteCache(CacheType::ExpandedPlugins, $_GET['RepositoryID'] . '.html');
+	GitHubAPI\Repositories::DeleteUpdateHook($RepositoryId, $Query['UpdateHookId']);
 
 	$Templater->display(
 		'Immersive Dialog.html',
 		array(
 			'Message' => 'Operation successful',
 			'Explanation' => 'The entry was successfully deleted.',
-			'DialogType' => IMMERSIVE_INFO,
 			'LoginDetails' => $Details
 		)
 	);
+
 	SetRefresh();
 	return;
 }
 
-if (isset($_POST['Delete' . $_GET['RepositoryID']]))
-{
-	$Templater->display(
-		'Immersive Confirmation Dialog.html',
-		array(
-			'Message' => 'Plugin deletion confirmation',
-			'Explanation' => 'This action will reset all ratings and comments. Are you sure?',
-			'AcceptRedirectLocation' => '/edit/' . $_GET['RepositoryID'],
-			'ConfirmationButtonName' => 'DeleteConfirmed' . $_GET['RepositoryID'],
-			'LoginDetails' => $Details
-		)
-	);
-	return;
-}
+$Templater->display(
+	'Immersive Confirmation Dialog.html',
+	array(
+		'Message' => 'Plugin deletion confirmation',
+		'AcceptRedirectLocation' => WebURI::Edit . '/' . $RepositoryId,
+		'ConfirmationButtonName' => 'DeleteConfirmed' . $RepositoryId,
+		'LoginDetails' => $Details,
 
-$Templater->display('Edit Plugin Form.html', array('RepositoryID' => $_GET['RepositoryID'], 'LoginDetails' => $Details));
+		'ContentTemplate' => 'Modules/Delete Plugin Content.html',
+		'Explanation' => 'This action will reset all ratings and comments. Are you sure?',
+		'Plugin' => $Query
+	)
+);
 ?>

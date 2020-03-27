@@ -1,16 +1,18 @@
-{% embed "Bases/Immersive Form.html" with { 'Subclass' : 'form' } %}
-	{% block FormContent %}
-		<h1>{{ Message }}</h1>
-		<p>{{ Explanation }}</p>
+{% embed "Bases/Immersive Form.html" %}
 
-		<form action="{{ AcceptRedirectLocation }}" method="post">
-			<br />
-			<br />
+{% block FormContent %}
 
-			<div class="submit">
-				<input type="submit" name="{{ ConfirmationButtonName }}" value="Yes" />
-				<input type="submit" name="Cancel" value="No" />
-			</div>
-		</form>
-	{% endblock %}
+<h1 class="header">
+	{{ Message }}
+</h1>
+
+{% include ContentTemplate %}
+
+<form class="actions" action="{{ AcceptRedirectLocation }}" method="post">
+	<input class="ui red button" type="submit" name="{{ ConfirmationButtonName }}" value="Yes" />
+	<input class="ui button" type="submit" name="Cancel" value="No" />
+</form>
+
+{% endblock %}
+
 {% endembed %}

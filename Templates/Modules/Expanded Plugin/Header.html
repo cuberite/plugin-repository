@@ -1,0 +1,19 @@
+<h2 class="ui header">
+	<img class="ui image" src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+	<span class="content">
+		{{ Plugin.RepositoryName }}
+		<span class="sub header">
+			<span class="ui horizontal bulleted list">
+				<span class="item">{{ Plugin.DisplayName }}</span>
+				<span class="item">@{{ Plugin.Login }}</span>
+				<span class="item">Utilities</span>
+			</span>
+		</span>
+	</span>
+</h2>
+
+{% if Plugin.Description == true %}
+	<p>
+		{{ Plugin.Description }}
+	</p>
+{% endif %}

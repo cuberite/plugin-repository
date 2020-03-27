@@ -5,7 +5,18 @@
 <main class="ui container" id="cuberite-main-container">
 	<div class="ui hidden divider"></div>
 
-	{% include 'Modules/Expanded Plugin.html' %}
+	<article class="ui cuberite-expanded-plugin two column stackable grid">
+		<header class="row">
+			<div class="twelve wide column">
+				{% include 'Modules/Expanded Plugin/Header.html' %}
+				{% include 'Modules/Expanded Plugin/Navigation.html' %}
+			</div>
+
+			{% include 'Modules/Expanded Plugin/Aside.html' %}
+		</header>
+
+		{% include 'Modules/Expanded Plugin/Screenshots.html' %}
+	</article>
 
 	<div class="ui hidden divider"></div>
 
@@ -24,13 +35,7 @@
 			{% endfor %}
 
 			{% if LoginDetails.LoggedIn %}
-			<form class="ui reply form" action="/comment/{{ Plugin.RepositoryId }}" method="post">
-				<textarea required="required" class="field" placeholder="Comment on this plugin..." name="Comment"></textarea>
-				<button class="ui labeled icon button" name="Submit" type="submit">
-					<i class="edit icon"></i>
-					Submit comment
-				</button>
-			</form>
+				{% include 'Modules/Reply.html' %}
 			{% endif %}
 		</article>
 	</section>

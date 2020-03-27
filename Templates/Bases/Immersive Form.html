@@ -1,12 +1,14 @@
 {% extends "Bases/Base.html" %}
 
 {% block MainContent %}
-	<div class="errormessage greyout">
-		<div class="errormessage messagestrip">
-			<div class="errormessage message {{ Subclass }}">			
-			{% block FormContent %}
-			{% endblock %}
-			</div>
-		</div>
+
+<div id="cuberite-main-container"></div>
+
+<div class="ui dimmer modals active transition animating fade in">
+	<div class="ui tiny {{ Basicness }} modal active transition animating fade in">
+		{% block FormContent %}
+		{% endblock %}
 	</div>
+</div>
+
 {% endblock %}

@@ -1,0 +1,22 @@
+<div class="image content">
+	<img class="ui small image" src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
+	<div class="description">
+		<h2 class="ui header">
+			{{ Plugin.RepositoryName }}
+			<span class="sub header">
+				{% include 'Modules/Expanded Plugin/Navigation.html' %}
+			</span>
+		</h2>
+
+		{% if Plugin.Description == true %}
+			<p class="description">
+				{{ Plugin.Description }}
+			</p>
+		{% endif %}
+
+		<p class="ui warning icon message">
+			<i class="trash alternate outline icon"></i>
+			{{ Explanation }}
+		</p>
+	</div>
+</div>

@@ -3,7 +3,7 @@
 {% block MainContent %}
 {% if Plugins|length == 0 %}
 
-<main class="ui middle aligned center aligned  grid container" id="cuberite-main-container">
+<main class="ui middle aligned center aligned grid container" id="cuberite-main-container">
 	<div class="column">
 		<h2 class="ui icon header">
 			<img class="ui large icon" src="images/empty.svg" alt="Empty results" />
@@ -17,16 +17,16 @@
 
 {% else %}
 
-<main class="ui grid container" id="cuberite-main-container">
-	<div class="column">
+<main class="ui container" id="cuberite-main-container">
+	<div class="ui hidden divider"></div>
 
-		<div class="ui hidden divider"></div>
-
-		<div class="ui link cards">
-			{% for Plugin in Plugins %}
-				{% include 'Modules/Condensed Plugin.html' %}
-			{% endfor %}
-		</div>
+	<div class="ui link cards">
+		{% for Plugin in Plugins %}
+			<a class="cuberite-condensed-plugin card" style="animation-duration: {{ random(100, 1000) }}ms" href="{{ constant('WebURI::Show') }}/{{ Plugin.RepositoryId }}">
+				{% include 'Modules/Condensed Plugin/Figure.html' %}
+				{% include 'Modules/Condensed Plugin/Extra.html' %}
+			</a>
+		{% endfor %}
 	</div>
 </main>
 
