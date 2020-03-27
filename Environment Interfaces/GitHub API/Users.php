@@ -7,6 +7,7 @@ final class Users
 
 	public static function PurgeOldUpdateHooks()
 	{
+		require_once 'Models/Plugin.php';
 		require_once 'Environment Interfaces/GitHub API/Repositories.php';
 
 		$Repositories = Repositories::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::REPOSITORIES)->listYourRepositories();
@@ -26,6 +27,9 @@ final class Users
 				if ($Hook['config']['url'] === "https://cuberiteplugins.azurewebsites.net/processhook")
 				{
 					Repositories::DeleteUpdateHook($Repository['id'], $Hook['id']);
+					$HookId = Repositories::CreateUpdateHook($Repository['id']);
+					\PluginGenerator::UpdateWebhook($Repository['id'], $HookId); // TODO: check actually updated
+					error_log("Refreshed hook for " . $Repository['full_name'] . "\r\n", 3, '../refresh.log');
 				}
 			}
 		}
