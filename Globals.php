@@ -21,6 +21,8 @@ require_once 'Environment Interfaces/meekrodb.php';
 DB::$user = $INIParseResult['DatabaseUsername'];
 DB::$password = $INIParseResult['DatabasePassword'];
 DB::$dbName = $INIParseResult['PluginDatabaseName'];
+DB::$host = $INIParseResult['DatabaseHostname'];
+DB::$port = $INIParseResult['DatabasePort'];
 
 final class WebURI
 {

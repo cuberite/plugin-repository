@@ -3,7 +3,7 @@ class Configurator
 {
 	private static function CreateDatabase()
 	{
-		$SQLLink = new mysqli($_POST['DBAddress'], $_POST['DBUsername'], $_POST['DBPassword']);
+		$SQLLink = new mysqli($_POST['DBHostname'], $_POST['DBUsername'], $_POST['DBPassword'], '', $_POST['DBPort']);
 		if ($SQLLink->connect_errno)
 		{
 			echo 'Failure connecting to database: ' . $SQLLink->error;
@@ -121,14 +121,15 @@ class Configurator
 		{
 			$Configuration =
 '[SQL]
-DatabaseAddress=' . $_POST['DBAddress'] . '
-DatabaseUsername=' . $_POST['DBUsername'] . '
-DatabasePassword=' . $_POST['DBPassword'] . '
-PluginDatabaseName=' . $_POST['DBPluginDatabaseName'] . '
+DatabaseHostname="' . $_POST['DBHostname'] . '"
+DatabasePort="' . $_POST['DBPort'] . '"
+DatabaseUsername="' . $_POST['DBUsername'] . '"
+DatabasePassword="' . $_POST['DBPassword'] . '"
+PluginDatabaseName="' . $_POST['DBPluginDatabaseName'] . '"
 
 [GitHub]
-GitHubClientId=' . $_POST['GHClientID'] . '
-GitHubClientSecret=' . $_POST['GHClientSecret'];
+GitHubClientId="' . $_POST['GHClientID'] . '"
+GitHubClientSecret="' . $_POST['GHClientSecret'] . '"';
 
 			if (!($Handle = fopen('configuration.ini', 'w')) || !fwrite($Handle, $Configuration))
 			{
@@ -180,7 +181,7 @@ if (isset($_POST['Submit']))
 				padding: 10px;
 				padding-top: 0px;
 				width: 350px;
-				height: 250px;
+				height: 270px;
 				top: calc(50% - 200px / 2);
 				left: calc(50% - 350px / 2);
 				position: absolute;
@@ -195,8 +196,11 @@ if (isset($_POST['Submit']))
 		<div id="configuration-box">
 			<h2>Configuration</h2>
 			<form method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
-				<label>Database address:	</label>
-				<input autofocus required placeholder="localhost" type="text" name="DBAddress"/><br/>
+				<label>Database hostname:	</label>
+				<input autofocus required placeholder="localhost" type="text" name="DBHostname"/><br/>
+				
+				<label>Database port:	</label>
+				<input autofocus required placeholder="3306" type="text" name="DBPort"/><br/>
 
 				<label>Database username:	</label>
 				<input type="text" required name="DBUsername"/><br/>
