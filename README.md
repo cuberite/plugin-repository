@@ -2,4 +2,4 @@
 
 A repository for Cuberite plugins.
 
-Demonstration: https://cuberiteplugins.azurewebsites.net/
+Demonstration: https://plugins.cuberite.org
