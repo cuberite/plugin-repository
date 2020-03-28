@@ -1,8 +1,8 @@
 /* The default navigation bar seems to have a rounded border.
 This leads to little areas where white bleeds through so change it back to none. */
-#cuberite-navigation
+.cuberite-navigation
 {
-	border-radius: 0;
+	border-radius: 0 !important;
 }
 
 /* Push the default footer towards the bottom of the page no matter what.

@@ -5,6 +5,8 @@ if (!($INIParseResult = @parse_ini_file('configuration.ini')))
 	die;
 }
 
+header('Content-Type: application/xhtml+xml; charset=UTF-8');
+
 $_SERVER['SERVER_NAME'] = 'plugins.cuberite.org';
 define('UPDATE_HOOK_ADDRESS', 'https://plugins.cuberite.org/process-hook');
 

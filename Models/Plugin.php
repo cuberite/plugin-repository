@@ -4,8 +4,7 @@ final class PluginGenerator
 	public static function GenerateAndStore($RepositoryId, $AuthorId)
 	{
 		$Description = GitHubAPI\Repositories::GetDescription($RepositoryId);
-		$RawReadme = GitHubAPI\Repositories::GetReadme($RepositoryId);
-		$Readme = is_null($RawReadme) ? null : (new \Parsedown())->text($RawReadme);
+		$Readme = GitHubAPI\Repositories::GetReadme($RepositoryId);
 		$ScreenshotFiles = GitHubAPI\Repositories::GetScreenshots($RepositoryId);
 
 		list($RepositoryVersion, $Releases) = GitHubAPI\Repositories::GetReleases($RepositoryId);

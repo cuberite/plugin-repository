@@ -1,6 +1,6 @@
-<figure class="content">
+<article class="content">
 	<img class="ui right floated mini image" src="{{ Plugin.IconHyperlink }}" alt="{{ Plugin.RepositoryName }}" />
-	<figcaption class="header">{{ Plugin.RepositoryName }}</figcaption>
+	<h3 class="header">{{ Plugin.RepositoryName }}</h3>
 	<div class="meta">{{ Plugin.DisplayName ?? Plugin.Login }}</div>
 
 	{% if Plugin.RepositoryVersion == true %}
@@ -12,4 +12,4 @@
 			{{ Plugin.Description }}
 		</p>
 	{% endif %}
-</figure>
+</article>

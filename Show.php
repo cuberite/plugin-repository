@@ -30,6 +30,23 @@ $Comments = DB::query(
 	FROM Authors, Comments WHERE Authors.AuthorId = Comments.AuthorId AND RepositoryId = %i', $_GET['RepositoryId']
 );
 
+$Templater->addFilter(
+	new \Twig\TwigFilter(
+		'parsedown',
+		function($Markdown)
+		{
+			if ($Markdown === null)
+			{
+				return null;
+			}
+			
+			$Parser = new \Parsedown();
+			$Parser->setSafeMode(true);
+			return $Parser->text($Markdown);
+		}
+	)	
+);
+
 $Details = Session::GetLoggedInDetails();
 $Templater->display(
 	'Expanded Plugin.html',

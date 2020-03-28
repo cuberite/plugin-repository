@@ -25,18 +25,21 @@
 	</article>
 
 	{% set MaybeCentre = Plugin.Readme is null ? 'center aligned' %}
-	<article class="ui cuberite-expanded-plugin raised padded {{ MaybeCentre }} segment">
+	<article class="ui cuberite-expanded-plugin raised padded {{ MaybeCentre }} segment" style="overflow-x: auto">
 		{% include 'Modules/Expanded Plugin/Screenshots.html' %}
 
-		{# Parsedown converts this to HTML - output as-is #}
-		{# TODO: maybe make a Twig filter to Parsedown-ify for us? #}
-		{{ (Plugin.Readme ?? '<i>(the plugin author has not provided a readme)</i>')|raw }}
+		{% if Plugin.Readme is null %}
+			<i>(the plugin author has not provided a readme)</i>
+		{% else %}
+			{# Parsedown converts this to HTML - output as-is #}
+			{{ Plugin.Readme|parsedown|raw }}
+		{% endif %}
 	</article>
 
 	<div class="ui hidden divider"></div>
 
 	<section class="ui cuberite-expanded-plugin text container">
-		<article class="ui comments">
+		<div class="ui comments">
 			{% for Comment in Comments %}
 				{% include 'Modules/Comment.html' %}
 			{% endfor %}
@@ -44,7 +47,7 @@
 			{% if LoginDetails.LoggedIn %}
 				{% include 'Modules/Reply.html' %}
 			{% endif %}
-		</article>
+		</div>
 	</section>
 </main>
 

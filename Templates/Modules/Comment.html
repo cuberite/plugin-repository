@@ -1,4 +1,4 @@
-<section class="comment">
+<div class="comment">
 	<a class="avatar">
 		<img
 			src="{{ Comment.AvatarHyperlink }}"
@@ -10,10 +10,10 @@
 	<div class="content">
 		<a class="author">{{ Comment.DisplayName ?? Comment.Login }}</a>
 		<div class="metadata">
-			<span class="date">{{ Comment.CreationTime|date('Y-m-d H:i T') }}</span>
+			<time datetime="{{ Comment.CreationTime }}" class="date">{{ Comment.CreationTime|date('Y-m-d H:i T') }}</time>
 		</div>
 		<div class="text">
 			{{ Comment.Comment|escape }}
 		</div>
 	</div>
-</section>
+</div>
