@@ -24,7 +24,8 @@ final class Users
 
 			foreach ($Hooks as $Hook)
 			{
-				if ($Hook['config']['url'] === "https://cuberiteplugins.azurewebsites.net/processhook")
+				$Config = $Hook['config'];
+				if (isset($Config['url']) && ($Config['url'] === "https://cuberiteplugins.azurewebsites.net/processhook"))
 				{
 					Repositories::DeleteUpdateHook($Repository['id'], $Hook['id']);
 					$HookId = Repositories::CreateUpdateHook($Repository['id']);

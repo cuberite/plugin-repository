@@ -7,21 +7,42 @@ final class Repositories
 {
 	use GitHubAPIProvider;
 
+	private static function SanitiseRepositories($Repositories)
+	{
+		$Repositories = array_filter(
+			$Repositories,
+			function($Repository)
+			{
+				//echo var_dump(Repositories::CustomRequest('repositories', $Repository['id'], 'collaborators/' . $_SESSION['User']['Login'] . '/permission'));
+				// Can't change webhooks in archived repositories
+				return !($Repository['archived'] || $Repository['disabled']);
+			}
+		);
+
+		usort(
+			$Repositories,
+			function($Lhs, $Rhs)
+			{
+				return strcasecmp($Lhs['name'], $Rhs['name']);
+			}
+		);
+
+		return $Repositories;
+	}
+
 	public static function GetAllCurrentUserRepositories()
 	{
-		$Repositories = array('❣ me :)' => Repositories::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::REPOSITORIES)->listYourRepositories());
+		$Repositories = array(
+			'❣ me :)' => Repositories::SanitiseRepositories(
+				Repositories::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::REPOSITORIES)->listYourRepositories()
+			)
+		);
 
 		foreach (Repositories::CustomRequest('user', Repositories::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::USERS)->getUser()['id'], 'orgs') as $Organisation)
 		{
-			$RepositoryGroup = Repositories::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::REPOSITORIES)->listOrganizationRepositories($Organisation['login']);
-			usort(
-				$RepositoryGroup,
-				function($Lhs, $Rhs)
-				{
-					return strcasecmp($Lhs['name'], $Rhs['name']);
-				}
+			$Repositories['🏢 ' . $Organisation['login']] = Repositories::SanitiseRepositories(
+				Repositories::GetInstance()->getReceiver(\FlexyProject\GitHub\Client::REPOSITORIES)->listOrganizationRepositories($Organisation['login'])
 			);
-			$Repositories['🏢 ' . $Organisation['login']] = $RepositoryGroup;
 		}
 
 		return $Repositories;
@@ -143,6 +164,12 @@ final class Repositories
 
 	public static function DeleteUpdateHook($RepositoryId, $HookId)
 	{
+		if ($HookId === null)
+		{
+			// TODO: temporary until all hooks refreshed
+			return;
+		}
+
 		Repositories::GetInstance()->request('/repositories/' . $RepositoryId . '/hooks/' . $HookId, \Symfony\Component\HttpFoundation\Request::METHOD_DELETE);
 	}
 }

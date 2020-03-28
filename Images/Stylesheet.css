@@ -57,6 +57,12 @@ Also serves to vertically-centre page content. */
 	animation: CondensedEntryDisplay 300ms;
 }
 
+/* The condensed plugin cards uses <h3> which adds a margin, delet. */
+.cuberite-condensed-plugin > .content > .header
+{
+	margin-bottom: 0;
+}
+
 /* Provide a slide in animation for plugin pages. */
 @keyframes ExpandedEntryDisplay
 {
