@@ -4,7 +4,7 @@
 	<div class="meta">{{ Plugin.DisplayName ?? Plugin.Login }}</div>
 
 	{% if Plugin.RepositoryVersion == true %}
-		<div class="ui floating label">v{{ Plugin.RepositoryVersion }}</div>
+		<div class="ui floating label">{{ Plugin.RepositoryVersion }}</div>
 	{% endif %}
 
 	{% if Plugin.Description == true %}
